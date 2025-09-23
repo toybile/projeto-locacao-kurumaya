@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    font-family: "Palatino Linotype", serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background-color: white;
+    padding: clamp(1.5rem, 10%, 10rem);
+    border-radius: 23px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: clamp(15rem, 60vw, 45rem);
+    height: clamp(30rem, 50vw, 43rem);
+}
+.form_group {
+    margin: 10px 0 10px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+}
+#form_birthday {
+    margin: 20px 0 20px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.container > h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+    text-align: center;
+    color: #333;
+}
+
+#form1 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    margin: 6% 0 0 0;
+}
+
+label {
+    font-size: 1rem;
+    color: #333;
+}
+
+input {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+button {
+    width: 100%;
+    padding: 5%;
+    margin: 12% 0 0 0;
+    font-size: 1.1rem;
+    color: white;
+    background-color: #f700ff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+button:hover {
+    background-color: #ce22a3;
+}

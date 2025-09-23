@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kurumaya</title>
 
-    <link rel="stylesheet" href="./style/index.css">
+    <link rel="stylesheet" href="./static/css/message.css">
 </head>
 <body>
     <header>
-        <h1 id="title">Kurumaya</h1>
+        <h1 id="title"><a href="index.html">Kurumaya</a></h1>
 
         <div id="div_perfil">
             <button id="button_perfil"><svg fill="#000000" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M 28.0117 27.3672 C 33.0508 27.3672 37.3867 22.8672 37.3867 17.0078 C 37.3867 11.2187 33.0274 6.9297 28.0117 6.9297 C 22.9961 6.9297 18.6367 11.3125 18.6367 17.0547 C 18.6367 22.8672 22.9961 27.3672 28.0117 27.3672 Z M 13.2930 49.0703 L 42.7305 49.0703 C 46.4101 49.0703 47.7226 48.0156 47.7226 45.9531 C 47.7226 39.9062 40.1523 31.5625 28.0117 31.5625 C 15.8477 31.5625 8.2774 39.9062 8.2774 45.9531 C 8.2774 48.0156 9.5898 49.0703 13.2930 49.0703 Z"></path></g></svg></button>
@@ -19,8 +19,16 @@
 
     <main>
         <div id="div_point-point-point">
-            <button id="button_point-point-point"><h1>...</h1></button>
+            <button id="button_point-point-point"><img src="https://cdn-icons-png.flaticon.com/512/0/859.png" alt=""></button>
         </div>
+        
+        <nav id="menu_nav">
+            <a href=""><h1>Frota</h1></a>
+            <a href=""><h1>Soluções</h1></a>
+            <a href=""><h1>Contato</h1></a>
+            <a href=""><h1>FAQ</h1></a>
+        </nav>
+        <hr>
 
         <div id="div_central_texts">
             <div id="div_slogan">
@@ -40,5 +48,18 @@
             <img src="https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp?" alt="">
         </div>
     </main>
+    
+    <script>
+        const buttonnav = document.getElementById("button_point-point-point");
+        const nav = document.getElementById("menu_nav");
+
+        buttonnav.addEventListener("click", () => {
+            if (nav.style.display === "none" || nav.style.display === "") {
+                nav.style.display = "flex";
+            } else {
+                nav.style.display = "none";
+            }
+        });
+    </script>
 </body>
 </html>
