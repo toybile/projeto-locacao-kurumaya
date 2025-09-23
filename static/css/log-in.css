@@ -15,34 +15,35 @@ body {
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     background-color: white;
     padding: clamp(1.5rem, 10%, 10rem);
     border-radius: 23px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: clamp(15rem, 60vw, 25rem);
-    height: clamp(30rem, 50vw, 30rem);
+    height: auto;
+} .container > h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+    text-align: center;
+    color: #333;
 }
+
 .form_group {
     margin: 10px 0 10px 0;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(2, 1fr);
-}
-
-.container > h1 {
-    font-size: clamp(2rem, 10vw, 3rem);
-    text-align: center;
-    color: #333;
-    padding: 0 0 15px 0;
+} .form_group > label, input {
+    width: 100%;
+    height: auto;
 }
 
 form {
     display: flex;
     flex-direction: column;
-    gap: 13px;
+    gap: 1rem;
 }
 
 label {
