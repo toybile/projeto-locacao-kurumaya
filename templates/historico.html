@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Aluguéis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Histórico de Aluguéis</h1>
+        <nav>
+            <a href="{{ url_for('frota') }}">Frota</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="history-container">
+            <p>Carregando histórico...</p>
+        </div>
+    </main>
+
+<script src="{{ url_for('static', filename='historico.js') }}"></script>
+</body>
+</html>
