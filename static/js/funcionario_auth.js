@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
       password: document.getElementById("password_func").value,
     };
 
-    const res = await fetch("/api/funcionarios/login", {
+    const res = await fetch("/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(json.message);
 
     if (res.ok) {
-      window.location.href = "/frota";
+      window.location.href = "/funcionario";
     }
   });
 });

@@ -9,8 +9,22 @@ CLIENTS = []
 VEHICLES = []
 USERS = {
     # Funcionário padrão
-    'admin@example.com': {'password': '123456', 'name': 'Admin', 'type': 'staff'}
+    'admin@example.com': {'password': '123456', 'name': 'Admin', 'type': 'staff'},
+
+    # Funcionários adicionados
+    'guilherme.bilibio@gmail.com': {
+        'password': 'toybife',
+        'name': 'Guilherme Bilibio',
+        'type': 'staff'
+    },
+
+    'henrique.daisuke@gmail.com': {
+        'password': '123456',
+        'name': 'Henrique Daisuke',
+        'type': 'staff'
+    }
 }
+
 
 next_client_id = 1
 next_vehicle_id = 1
@@ -21,13 +35,25 @@ seeded = False
 #   Helpers
 # ========================
 
-def login_required(f):
+def client_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        if not session.get('user'):
+        user = session.get('user')
+        if not user or user['type'] != 'client':
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return wrapper
+
+
+def staff_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        user = session.get('user')
+        if not user or user['type'] != 'staff':
+            return redirect(url_for('login_funcionario'))
+        return f(*args, **kwargs)
+    return wrapper
+
 
 
 # ========================
@@ -42,9 +68,9 @@ def index():
 def login():
     return render_template('login.html')
 
-@app.route('/login_funcionario')
+@app.route('/funcionario/login')
 def login_funcionario():
-    return render_template('login_funcionario.html')
+    return render_template('funcionario/login.html')
 
 @app.route('/cadastro')
 def cadastro():
@@ -70,14 +96,15 @@ def auth_login():
             'type': user['type']
         }
 
-        # Funcionário -> vai para clientes
+        # Funcionário -> dashboard de funcionário
         if user['type'] == 'staff':
             return jsonify({'ok': True, 'redirect': url_for('clientes_page')})
 
-        # Cliente -> frota
+        # Cliente -> frota do cliente
         return jsonify({'ok': True, 'redirect': url_for('frota')})
 
     return jsonify({'ok': False, 'error': 'Credenciais inválidas'})
+
 
 
 @app.route('/auth/cadastro', methods=['POST'])
@@ -121,17 +148,22 @@ def logout():
 # ========================
 
 @app.route('/frota')
-@login_required
+@client_required
 def frota():
     return render_template('frota.html')
 
+@app.route('/funcionario')
+@staff_required
+def funcionario_page():
+    return render_template('/funcionario/menufuncionario.html')
+
 @app.route('/clientes')
-@login_required
+@staff_required
 def clientes_page():
     return render_template('clientes.html')
 
 @app.route('/veiculos')
-@login_required
+@staff_required
 def veiculos_page():
     return render_template('veiculos.html')
 
