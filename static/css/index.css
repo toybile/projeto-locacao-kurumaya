@@ -2,189 +2,343 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Palatino Linotype";
+    font-family: "Palatino Linotype", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 html, body {
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
-/* Header responsivo */
+/* ===== CORES BASE ===== */
+:root {
+    --roxo-escuro: #471471;
+    --roxo: #5a1f8c;
+    --rosa: #bd3a7c;
+    --vermelho: #b6291f;
+    --fundo-main: #2b0f22;
+    --texto-claro: #f3f3f3;
+    --texto-suave: #ddd;
+    --botao-primario: #ff4f7d;
+    --botao-primario-hover: #ff6a92;
+    --preto-transparente: rgba(0,0,0,0.25);
+}
+
+/* ===== HEADER ===== */
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
-    padding: 2vh 4vw 3vh 4vw;
+    background-image: linear-gradient(
+        to right,
+        #7b4ae0 0%,      /* roxo mais claro e vivo na esquerda */
+        var(--roxo) 30%,
+        var(--rosa) 65%,
+        var(--vermelho) 100%
+    );
+    padding: 1.5rem 4vw;
     flex-wrap: wrap;
+    row-gap: 1rem;
 }
 
 #title {
-    font-size: clamp(2rem, 5vw, 4rem);
-    color: darkgrey;
+    font-size: clamp(2rem, 5vw, 3rem);
+}
+
+#title a {
+    color: var(--texto-claro);
+    text-decoration: none;
 }
 
 #div_perfil {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    width: auto;
+    gap: 0.3rem;
+}
+
+/* Contêiner para os dois botões (Entrar + Criar conta) */
+#div_botoes_header {
+    display: flex;
+    gap: 0.6rem;
+}
+
+/* Botão Entrar (mantido) */
+#button_perfil {
+    padding: 0.45rem 1.3rem;
+    border-radius: 999px;
+    border: 1px solid var(--texto-claro);
+    background-color: transparent;
+    color: var(--texto-claro);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+/* Novo botão Criar conta, com destaque de preenchimento */
+#button_criar {
+    padding: 0.45rem 1.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--texto-claro);
+    background: linear-gradient(to right, var(--botao-primario), var(--rosa));
+    color: #fff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+#button_perfil:hover {
+    background-color: var(--texto-claro);
+    color: var(--roxo-escuro);
+    transform: translateY(-1px);
+}
+
+#button_criar:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.texto-funcionario {
     margin-top: 0;
-    margin-bottom: 0;
-    height: auto;
+    font-size: 0.85rem;
 }
 
+.texto-funcionario a {
+    color: var(--texto-suave);
+    text-decoration: underline;
+}
+
+/* Linha preta abaixo do header */
 #line_title {
-    background-color: black;
+    background-color: #000;
     width: 100%;
-    height: 0.7vh;
+    height: 0.35rem;
 }
 
-nav {
-    background-color: #47346a;
+/* ===== NAV ===== */
+#menu_nav {
+    background-color: #2f2147;
     width: 100%;
-    min-height: 9vh;
+    min-height: 3rem;
     display: flex;
     justify-content: center;
-    gap: 1.2rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
-}
-nav a{
-    color: #bd3a7c;
-    font-size: clamp(1rem, 2.5vw, 2.2rem);
+    padding: 0.8rem 4vw;
 }
 
-/* Slogan centralizado e responsivo */
+#menu_nav a {
+    color: var(--texto-suave);
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 0.15rem;
+}
+
+#menu_nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--rosa), var(--vermelho));
+    transition: width 0.2s ease;
+}
+
+#menu_nav a:hover::after {
+    width: 100%;
+}
+
+/* ===== MAIN / HERO ===== */
+main {
+    /* Roxo surgindo no topo esquerdo e vermelho escuro no canto inferior direito */
+    background-image:
+        radial-gradient(
+            circle at top left,
+            var(--roxo) 0%,
+            var(--fundo-main) 35%,
+            transparent 60%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            #b6291f 0%,       /* vermelho da paleta mais evidente no canto */
+            #5a1414 35%,      /* vermelho escuro/vinho */
+            #1b0814 80%       /* fecha bem escuro no fundo */
+        );
+
+    min-height: calc(100vh - 4rem);
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+/* Hero com texto + imagem */
+#hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;           /* ajustado em @media min-width: 900px */
+    justify-content: center;
+    padding: 6vh 4vw 8vh 4vw;
+    gap: 3.5rem;
+}
+
+/* Texto central maior e mais pra baixo + direita */
 #div_central_texts {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 2rem;
-    margin: 6vh 4vw;
-    max-width: 600px;
+    gap: 2.4rem;
+    max-width: 680px;
+    color: var(--texto-claro);
+    margin-left: clamp(3rem, 10vw, 7rem);
+    margin-top: 3rem;
 }
 
+/* Tamanho dos textos centrais aumentado */
 #div_slogan > h1 {
-    color: darkgrey;
-    font-size: clamp(1.2rem, 4vw, 2.5rem);
+    font-size: clamp(2.1rem, 5.2vw, 3.4rem);
+    text-shadow: 0 2px 6px var(--preto-transparente);
 }
 
+/* Botão do slogan */
 #div_button_slogan {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 35px;
-    background-color: black;
-    height: auto;
-    width: auto;
-    padding: 1rem 2rem;
+    display: inline-flex;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--botao-primario), var(--rosa));
+    padding: 1rem 2.2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+
 #div_button_slogan > button {
     background-color: transparent;
     border: none;
-}
-#div_button_slogan > button > h1 {
-    color: white;
-    font-size: clamp(1rem, 3vw, 2.2rem);
-}
-
-/* Imagem do carro adaptável */
-#img_car {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    margin: 3vh 4vw;
-}
-#img_car > img {
-    max-width: 100%;
-    width: 45vw;
-    height: auto;
-}
-
-/* Botão hamburguer adaptável */
-#div_point-point-point {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: auto;
-    width: auto;
-}
-#button_point-point-point {
-    border: none;
-    background-color: transparent;
-    padding: 1%;
-    z-index: 5;
-}
-#button_point-point-point img {
-    height: 2.5rem;
-    width: 2.5rem;
-    z-index: -2;
-}
-
-#menu_links {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-#menu_links a {
-    text-decoration: none;
-    color: black;
-    padding: 5px;
-}
-#menu_links a:hover {
-    background-color: #f0f0f0;
-}
-
-/* Main background responsivo */
-main {
-    background-image: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
-    min-height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
     align-items: flex-start;
-    justify-content: space-between;
 }
 
-/* Media queries para telas menores */
-@media (max-width: 900px) {
+#div_button_slogan > button span {
+    color: #fff;
+    font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+    line-height: 1.2;
+}
+
+#div_button_slogan:hover {
+    background: linear-gradient(to right, var(--botao-primario-hover), var(--rosa));
+    transform: translateY(-1px);
+    transition: all 0.15s ease-in-out;
+}
+
+/* Imagem bem maior, sem borda, mais ao centro e mais baixa */
+#img_car {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex: 1;
+    padding-top: 2rem;
+}
+
+#img_car > img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Desktop médio/grande */
+@media (min-width: 900px) {
+    #hero {
+        align-items: flex-start;
+    }
+
     #img_car {
-        justify-content: center;
-        margin: 3vh auto;
+        margin-top: 3rem;
     }
-    #img_car > img {
-        width: 75vw;
-    }
-    #div_central_texts {
-        max-width: 90vw;
-        margin: 4vh auto;
-        align-items: center;
-    }
+}
+
+/* Tablet / telas médias */
+@media (max-width: 900px) {
     header {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    #hero {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-top: 4vh;
+    }
+
+    #div_central_texts {
+        max-width: 90vw;
+        align-items: center;
+        margin-left: 0;
+        margin-top: 2rem;
+    }
+
+    #div_button_slogan > button {
+        align-items: center;
+    }
+
+    #img_car {
+        justify-content: center;
+        padding-top: 1.5rem;
+        margin-top: 0;
+    }
+
+    #img_car > img {
+        width: min(90vw, 720px);
+    }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
-    nav {
-        gap: 0.5rem;
-        min-height: 7vh;
+    #div_slogan > h1 {
+        font-size: clamp(1.8rem, 7vw, 2.4rem);
     }
-    #div_slogan > h1,
-    #div_button_slogan > button > h1 {
-        font-size: clamp(1rem, 5vw, 1.5rem);
+
+    #div_central_texts {
+        margin-top: 2.5rem;
     }
+
     #img_car > img {
-        width: 95vw;
+        width: 100vw;
+    }
+}
+
+/* Telas muito pequenas */
+@media (max-width: 420px) {
+    header {
+        padding-inline: 5vw;
+    }
+
+    #div_perfil {
+        align-items: flex-start;
+    }
+
+    #button_perfil {
+        width: auto;
+        text-align: center;
+    }
+
+    #div_button_slogan {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #div_botoes_header {
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 }
