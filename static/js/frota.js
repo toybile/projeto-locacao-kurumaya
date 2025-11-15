@@ -18,47 +18,50 @@ async function loadVehicles() {
 
         const statusClass = v.status === "available" ? "available" : "rented";
         const statusText = v.status === "available" ? "Disponível" : "Alugado";
+        const buttonText = v.status === "available" ? "Alugar" : "Devolver";
 
         card.innerHTML = `
-            <div>
-                <h3>${v.model} (${v.year})</h3>
-                <p>Placa: <strong>${v.plate}</strong></p>
-                <p>Status: <span class="status ${statusClass}">${statusText}</span></p>
-            </div>
+        <div>
+            <h3>${v.model} (${v.year})</h3>
+            <p>Placa: <strong>${v.plate}</strong></p>
+            <p>Preço: <strong>R$ ${v.price},00 / dia</strong></p>
+            <p>Status: <span class="status ${statusClass}">${statusText}</span></p>
+        </div>
 
-            <button data-id="${v.id}">
-                ${v.status === "available" ? "Alugar" : "Devolver"}
-            </button>
-        `;
+        <a href="/veiculo/${v.id}" class="btnDetails">Ver detalhes</a>
+    `;
+
+
 
         container.appendChild(card);
     });
 
-    addButtonEvents();
+    attachRentButtons();
 }
 
-function addButtonEvents() {
-    const buttons = document.querySelectorAll(".vehicle_card button");
-
-    buttons.forEach(btn => {
+function attachRentButtons() {
+    document.querySelectorAll(".rentBtn").forEach(btn => {
         btn.addEventListener("click", async () => {
-            const id = btn.getAttribute("data-id");
+            const id = Number(btn.dataset.id);
+            const action = btn.innerText === "Alugar" ? "rented" : "available";
 
-            const newStatus = btn.innerText === "Alugar" ? "rented" : "available";
-
-            await fetch("/api/vehicles", {
+            const response = await fetch("/api/vehicles", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id: Number(id),
-                    status: newStatus
-                })
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ id, status: action })
             });
 
-            loadVehicles();
+            const result = await response.json();
+
+            if (!result.ok) {
+                alert("Erro ao alterar status do veículo.");
+                return;
+            }
+
+            loadVehicles(); // atualiza a tela
         });
     });
 }
 
-// Carrega tudo ao entrar na página
+// carregar automaticamente
 loadVehicles();

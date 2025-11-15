@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamento</title>
+    <link rel="stylesheet" href="/static/css/pagamento.css">
+</head>
+<body data-id="{{ vehicle.id }}">
+
+    <h1>Confirmação de Aluguel</h1>
+
+    <div id="info">
+        <p><strong>Modelo:</strong> <span id="car-model"></span></p>
+        <p><strong>Placa:</strong> <span id="car-plate"></span></p>
+        <p><strong>Preço por dia:</strong> R$ <span id="car-price"></span></p>
+
+        <label>Dias de aluguel:</label>
+        <input type="number" id="dias" min="1" value="1">
+
+        <p><strong>Total:</strong> R$ <span id="total">0</span></p>
+
+        <button id="pagarBtn">Finalizar Pagamento</button>
+    </div>
+
+    <script src="/static/js/pagamento.js"></script>
+</body>
+</html>
