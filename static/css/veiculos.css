@@ -1,0 +1,139 @@
+/* ====== Layout geral ====== */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6fa;
+    color: #333;
+}
+
+/* ====== Topbar ====== */
+.topbar {
+    background: #1a73e8;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.topbar nav a {
+    color: #fff;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: opacity .2s;
+}
+
+.topbar nav a:hover {
+    opacity: 0.7;
+}
+
+.topbar nav .logout {
+    color: #ffdddd;
+}
+
+/* ====== Conteúdo ====== */
+.content {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+h2 {
+    margin-top: 0;
+    color: #222;
+    border-left: 4px solid #1a73e8;
+    padding-left: 10px;
+}
+
+/* ====== Formulário ====== */
+.form {
+    margin-bottom: 40px;
+}
+
+.form_group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border 0.2s;
+}
+
+input:focus {
+    border-color: #1a73e8;
+    outline: none;
+}
+
+button[type="submit"] {
+    background: #1a73e8;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background .2s;
+}
+
+button[type="submit"]:hover {
+    background: #1765c1;
+}
+
+/* ====== Lista de veículos ====== */
+.vehicle_list {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.vehicle_item {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0;
+}
+
+.vehicle_item:last-child {
+    border-bottom: none;
+}
+
+.vehicle_item strong {
+    color: #1a73e8;
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 600px) {
+
+    .topbar {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .topbar nav a {
+        margin-left: 10px;
+        font-size: 14px;
+    }
+
+    .content {
+        margin: 20px;
+        padding: 20px;
+    }
+}
