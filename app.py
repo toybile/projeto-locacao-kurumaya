@@ -165,7 +165,7 @@ def clientes_page():
 @app.route('/veiculos')
 @staff_required
 def veiculos_page():
-    return render_template('veiculos.html')
+    return render_template('/funcionario/veiculos.html')
 
 
 # ========================
@@ -238,6 +238,25 @@ def api_vehicles():
                 return jsonify({'ok': True, 'vehicle': v})
 
         return jsonify({'ok': False, 'error': 'Veículo não encontrado'}), 404
+    
+@app.route("/api/veiculos/<int:vid>", methods=["DELETE"])
+@staff_required
+def delete_veiculo(vid):
+    global VEHICLES
+
+    # Procura o veículo na lista
+    vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
+
+    if not vehicle:
+        return jsonify({"error": "Veículo não encontrado"}), 404
+
+    # Remove
+    VEHICLES = [v for v in VEHICLES if v["id"] != vid]
+
+    return jsonify({"message": "Veículo removido com sucesso"}), 200
+
+
+
 
 
 # ========================
