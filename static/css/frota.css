@@ -1,52 +1,132 @@
-.content {
-    width: 90%;
-    max-width: 900px;
-    margin: 40px auto;
+/* ====== Reset e fonte ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
 }
 
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
+    color: #47346a;
+}
+
+/* ====== Topbar ====== */
+.topbar {
+    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
+    color: darkgrey;
+    padding: 2vh 4vw 2vh 4vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #47346a22;
+}
+
+.topbar h1 {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    margin: 0;
+    color: darkgrey;
+    text-shadow: 1px 1px 6px #47346a44;
+}
+
+.topbar nav {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.topbar nav a {
+    color: #fff; /* deixa o texto branco para máximo contraste */
+    background: #bd3a7c; /* fundo magenta chamativo da paleta */
+    font-weight: bold;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    text-decoration: none;
+    transition: background 0.14s, color 0.15s;
+}
+.topbar nav a:hover {
+    background: #8c27c7; /* fundo roxo ao passar mouse */
+    color: #fff;
+}
+
+.topbar nav .logout {
+    color: #fff !important; /* texto sempre branco */
+    background: #b6291f !important; /* fundo vinho forte */
+}
+/* ====== Conteúdo ====== */
+.content {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 32px;
+    border-radius: 14px;
+    box-shadow: 0 3px 14px rgba(73,52,106,0.10);
+}
+
+h2 {
+    margin-top: 0;
+    color: #8c27c7;
+    border-left: 5px solid #bd3a7c;
+    padding-left: 12px;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px #47346a15;
+    margin-bottom: 22px;
+}
+
+/* ====== Lista da Frota ====== */
 .vehicle_list {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: 25px;
-}
-
-.vehicle_card {
-    border: 1px solid #d0d0d0;
+    margin-top: 20px;
+    background: #faf6fb;
+    border: 1px solid #bd3a7c33;
+    border-radius: 13px;
     padding: 18px;
-    border-radius: 8px;
-    background: #fafafa;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    box-shadow: 0 2px 8px #bd3a7c14;
+    min-height: 60px;
+    color: #47346a;
 }
 
-.vehicle_card h3 {
-    margin: 0 0 5px 0;
+.vehicle_list p {
+    color: #bd3a7c;
+    font-size: 1.1rem;
+    margin: 0;
 }
 
-.status {
-    font-weight: bold;
-}
-
-.status.available {
-    color: green;
-}
-
-.status.rented {
-    color: red;
-}
-
-.vehicle_card button {
-    background: #0055ff;
-    color: white;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.vehicle_card button:hover {
-    background: #003fcc;
+/* ====== Responsividade ====== */
+@media (max-width: 700px) {
+    .topbar {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 2vh 2vw;
+    }
+    .topbar h1 {
+        font-size: clamp(1.1rem, 7vw, 1.45rem);
+    }
+    .content {
+        margin: 16px;
+        padding: 14px;
+        border-radius: 8px;
+    }
+    .topbar nav {
+        gap: 0.7rem;
+    }
+    .topbar nav a {
+        font-size: 1rem;
+        padding: 0.4rem 0.7rem;
+        margin-left: 0;
+    }
+    h2 {
+        font-size: 1.1rem;
+        padding-left: 7px;
+    }
+    .vehicle_list {
+        padding: 10px;
+    }
 }
