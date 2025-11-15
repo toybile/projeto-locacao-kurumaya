@@ -42,6 +42,10 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/login_funcionario')
+def login_funcionario():
+    return render_template('login_funcionario.html')
+
 @app.route('/cadastro')
 def cadastro():
     return render_template('signin.html')
@@ -65,9 +69,16 @@ def auth_login():
             'name': user['name'],
             'type': user['type']
         }
+
+        # Funcionário -> vai para clientes
+        if user['type'] == 'staff':
+            return jsonify({'ok': True, 'redirect': url_for('clientes_page')})
+
+        # Cliente -> frota
         return jsonify({'ok': True, 'redirect': url_for('frota')})
 
     return jsonify({'ok': False, 'error': 'Credenciais inválidas'})
+
 
 @app.route('/auth/cadastro', methods=['POST'])
 def auth_cadastro():

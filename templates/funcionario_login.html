@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login — Funcionário</title>
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body>
+  <main class="auth_page">
+    <div class="container">
+
+      <h1>Login — Funcionário</h1>
+
+      <form id="form-login-funcionario">
+
+        <div class="form_group">
+          <label for="email_func">E-mail</label>
+          <input type="email" id="email_func" required>
+        </div>
+
+        <div class="form_group">
+          <label for="password_func">Senha</label>
+          <input type="password" id="password_func" required>
+        </div>
+
+        <button type="submit">Entrar</button>
+
+      </form>
+
+      <p><a href="/cliente/login">Login de Cliente</a></p>
+
+    </div>
+  </main>
+
+  <script src="/static/js/funcionario_auth.js"></script>
+</body>
+</html>
