@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurumaya - Sistema de Locação</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topo">
+        <div class="logo-area">
+            <!-- Aqui vocês podem trocar pela imagem real do logo -->
+            <div class="logo-carro">🚗</div>
+            <div class="logo-texto">
+                <h1>Kurumaya</h1>
+                <span>Locação de Veículos</span>
+            </div>
+        </div>
+        <nav class="menu">
+            <a href="#clientes">Clientes</a>
+            <a href="#veiculos">Veículos</a>
+            <a href="#frota">Frota</a>
+            <a href="#locacao">Simular Locação</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Seção cadastro de clientes -->
+        <section id="clientes" class="card">
+            <h2>Cadastro de Clientes</h2>
+            <form id="formCliente">
+                <div class="linha-form">
+                    <label for="nomeCliente">Nome completo</label>
+                    <input type="text" id="nomeCliente" required>
+                </div>
+                <div class="linha-form">
+                    <label for="cnhCliente">CNH</label>
+                    <input type="text" id="cnhCliente" required>
+                </div>
+                <div class="linha-form">
+                    <label for="telefoneCliente">Telefone</label>
+                    <input type="tel" id="telefoneCliente" required>
+                </div>
+                <div class="linha-form">
+                    <label for="emailCliente">E-mail</label>
+                    <input type="email" id="emailCliente">
+                </div>
+                <button type="submit" class="btn-principal">Salvar Cliente</button>
+            </form>
+
+            <h3>Clientes cadastrados</h3>
+            <table class="tabela" id="tabelaClientes">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CNH</th>
+                        <th>Telefone</th>
+                        <th>E-mail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- preenchido via JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção cadastro de veículos -->
+        <section id="veiculos" class="card">
+            <h2>Cadastro de Veículos</h2>
+            <form id="formVeiculo">
+                <div class="linha-form">
+                    <label for="marcaVeiculo">Marca</label>
+                    <input type="text" id="marcaVeiculo" required>
+                </div>
+                <div class="linha-form">
+                    <label for="modeloVeiculo">Modelo</label>
+                    <input type="text" id="modeloVeiculo" required>
+                </div>
+                <div class="linha-form">
+                    <label for="anoVeiculo">Ano</label>
+                    <input type="number" id="anoVeiculo" min="1980" max="2100" required>
+                </div>
+                <div class="linha-form">
+                    <label for="placaVeiculo">Placa</label>
+                    <input type="text" id="placaVeiculo" required>
+                </div>
+                <div class="linha-form">
+                    <label for="corVeiculo">Cor</label>
+                    <input type="text" id="corVeiculo">
+                </div>
+                <div class="linha-form">
+                    <label for="kmVeiculo">Quilometragem</label>
+                    <input type="number" id="kmVeiculo" min="0" step="0.1">
+                </div>
+                <div class="linha-form">
+                    <label for="valorDiaria">Valor da diária (R$)</label>
+                    <input type="number" id="valorDiaria" min="0" step="0.01" required>
+                </div>
+                <button type="submit" class="btn-principal">Salvar Veículo</button>
+            </form>
+        </section>
+
+        <!-- Painel da frota -->
+        <section id="frota" class="card">
+            <h2>Painel da Frota</h2>
+            <table class="tabela" id="tabelaVeiculos">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Ano</th>
+                        <th>Placa</th>
+                        <th>Cor</th>
+                        <th>Km</th>
+                        <th>Diária (R$)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- preenchido via JS -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Simulação de locação (parte 1: sem persistência em BD) -->
+        <section id="locacao" class="card">
+            <h2>Simular Locação</h2>
+            <form id="formLocacao">
+                <div class="linha-form">
+                    <label for="clienteLocacao">Cliente (CNH)</label>
+                    <select id="clienteLocacao" required>
+                        <!-- opções via JS -->
+                    </select>
+                </div>
+                <div class="linha-form">
+                    <label for="veiculoLocacao">Veículo (Placa)</label>
+                    <select id="veiculoLocacao" required>
+                        <!-- opções via JS -->
+                    </select>
+                </div>
+                <div class="linha-form">
+                    <label for="diasPrevistos">Dias previstos</label>
+                    <input type="number" id="diasPrevistos" min="1" required>
+                </div>
+                <div class="linha-form">
+                    <label for="valorCaucao">Valor da caução (R$)</label>
+                    <input type="number" id="valorCaucao" min="0" step="0.01" required>
+                </div>
+                <button type="button" id="btnCalcular" class="btn-secundario">
+                    Calcular Valor Estimado
+                </button>
+                <div id="resultadoLocacao" class="resultado"></div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="rodape">
+        <p>Kurumaya &copy; 2025 - Projeto acadêmico</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

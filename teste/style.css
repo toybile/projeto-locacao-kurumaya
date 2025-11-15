@@ -1,0 +1,260 @@
+
+/* Paleta baseada na identidade Kurumaya:
+   Vermelho (primária), roxo (secundária), rosa (terciária) */
+
+:root {
+    --cor-vermelho: #c0122f;
+    --cor-roxo: #5b2a86;
+    --cor-rosa: #f28cab;
+    --cor-fundo: #0f0b16;
+    --cor-cartao: #1c1228;
+    --cor-texto: #f5f5f5;
+    --cor-borda: #3b264f;
+    --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --fonte-principal: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    --fonte-secundaria: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: radial-gradient(circle at top, #2b163d, var(--cor-fundo));
+    color: var(--cor-texto);
+    font-family: var(--fonte-secundaria);
+    min-height: 100vh;
+}
+
+/* Topo e logo */
+
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: linear-gradient(90deg, var(--cor-roxo), var(--cor-vermelho));
+    box-shadow: var(--sombra-suave);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-carro {
+    font-size: 32px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.logo-texto h1 {
+    font-family: var(--fonte-principal);
+    font-size: 28px;
+    color: var(--cor-rosa);
+}
+
+.logo-texto span {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Menu */
+
+.menu {
+    display: flex;
+    gap: 16px;
+}
+
+.menu a {
+    color: var(--cor-texto);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.menu a:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Estrutura principal */
+
+main {
+    max-width: 1100px;
+    margin: 24px auto 40px;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Cards / seções */
+
+.card {
+    background: linear-gradient(135deg, #1c1228, #261634);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: var(--sombra-suave);
+    border: 1px solid var(--cor-borda);
+}
+
+.card h2 {
+    font-family: var(--fonte-principal);
+    color: var(--cor-rosa);
+    margin-bottom: 12px;
+}
+
+.card h3 {
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: var(--cor-rosa);
+    font-size: 18px;
+}
+
+/* Formulários */
+
+.linha-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+input,
+select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--cor-borda);
+    background: #150d20;
+    color: var(--cor-texto);
+    outline: none;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--cor-rosa);
+    box-shadow: 0 0 0 1px rgba(242, 140, 171, 0.4);
+}
+
+/* Botões */
+
+.btn-principal,
+.btn-secundario {
+    border: none;
+    cursor: pointer;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+
+.btn-principal {
+    background: linear-gradient(90deg, var(--cor-vermelho), var(--cor-rosa));
+    color: #fff;
+}
+
+.btn-secundario {
+    background: linear-gradient(90deg, var(--cor-roxo), var(--cor-rosa));
+    color: #fff;
+}
+
+.btn-principal:hover,
+.btn-secundario:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.05);
+}
+
+/* Tabelas */
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.tabela th,
+.tabela td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    text-align: left;
+}
+
+.tabela thead {
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.tabela tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+/* Status da frota */
+
+.status-disponivel {
+    color: #6ee7b7;
+    font-weight: 600;
+}
+
+.status-alugado {
+    color: #f97373;
+    font-weight: 600;
+}
+
+/* Resultado da simulação */
+
+.resultado {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+}
+
+/* Rodapé */
+
+.rodape {
+    text-align: center;
+    padding: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* Responsividade simples */
+
+@media (max-width: 720px) {
+    .topo {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 16px;
+    }
+
+    .menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    main {
+        margin-top: 16px;
+    }
+}

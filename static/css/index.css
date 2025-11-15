@@ -10,51 +10,106 @@ html, body {
     width: 100%;
 }
 
-main {
-    background-image: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
-    width: 100vw;
-    height: 100vh;
+/* Header responsivo */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
+    padding: 2vh 4vw 3vh 4vw;
+    flex-wrap: wrap;
 }
 
 #title {
-    margin: 2vh 0 0 4vw;
-    font-size: 400%;
+    font-size: clamp(2rem, 5vw, 4rem);
     color: darkgrey;
-}
-#line_title {
-    background-color: black;
-    width: 100vw;
-    height: 1vh;
-}
-
-header {
-    display: flex;
-    flex-direction: line;
-    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
-    padding-bottom: 3vh;
 }
 
 #div_perfil {
-    position: relative;
-    margin-top: 2vh;
-    margin-bottom: 0,5vh;
-    left: 66vw;
-    height: 6vh;
-    width: 6vw;
-}
-#button_perfil {
-    height: 100%;
-    width: 100%;
-    border: none;
-    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: auto;
 }
 
+#line_title {
+    background-color: black;
+    width: 100%;
+    height: 0.7vh;
+}
+
+nav {
+    background-color: #47346a;
+    width: 100%;
+    min-height: 9vh;
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+nav a{
+    color: #bd3a7c;
+    font-size: clamp(1rem, 2.5vw, 2.2rem);
+}
+
+/* Slogan centralizado e responsivo */
+#div_central_texts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    margin: 6vh 4vw;
+    max-width: 600px;
+}
+
+#div_slogan > h1 {
+    color: darkgrey;
+    font-size: clamp(1.2rem, 4vw, 2.5rem);
+}
+
+#div_button_slogan {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 35px;
+    background-color: black;
+    height: auto;
+    width: auto;
+    padding: 1rem 2rem;
+}
+#div_button_slogan > button {
+    background-color: transparent;
+    border: none;
+}
+#div_button_slogan > button > h1 {
+    color: white;
+    font-size: clamp(1rem, 3vw, 2.2rem);
+}
+
+/* Imagem do carro adaptável */
+#img_car {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    margin: 3vh 4vw;
+}
+#img_car > img {
+    max-width: 100%;
+    width: 45vw;
+    height: auto;
+}
+
+/* Botão hamburguer adaptável */
 #div_point-point-point {
-    position: absolute;
-    top: 10vh;
-    right: 2.6vw;
-    height: 8vh;
-    width: 8vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: auto;
+    width: auto;
 }
 #button_point-point-point {
     border: none;
@@ -63,48 +118,9 @@ header {
     z-index: 5;
 }
 #button_point-point-point img {
-    margin-top: 3vh;
-    height: 90%;
-    width: 90%;
+    height: 2.5rem;
+    width: 2.5rem;
     z-index: -2;
-}
-
-#div_central_texts {
-    position: absolute;
-    top: 35vh;
-    left: 8vw;
-}
-#div_slogan > h1{
-    color: darkgrey;
-    font-size: 300%;
-}
-#div_button_slogan {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 5.5% 0 0 0;
-    border-radius: 35px;
-    background-color: black;
-    height: 11.5vh;
-    width: 23vw;
-}
-#div_button_slogan > button {
-    background-color: transparent;
-    border: none;
-}
-#div_button_slogan > button > h1 {
-    color: white;
-    font-size: 270%;
-}
-
-#img_car {
-    position: absolute;
-    top: 21.5vh;
-    right: 0;
-    z-index: 1;
-}
-#img_car > img {
-    width: 60vw;
 }
 
 #menu_links {
@@ -113,7 +129,6 @@ header {
     background-color: white;
     border: 1px solid #ccc;
     padding: 10px;
-  
     margin-top: 5px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
@@ -124,20 +139,52 @@ header {
     color: black;
     padding: 5px;
 }
-
 #menu_links a:hover {
     background-color: #f0f0f0;
 }
 
-nav {
-    background-color: #47346a;
-    width: 100%;
-    height: 9vh;
+/* Main background responsivo */
+main {
+    background-image: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
+    min-height: 100vh;
+    width: 100vw;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
 }
-nav a{
-    color: #bd3a7c;
-    margin: 1.5%;
-    width: clamp(1rem, 10rem, 20rem);
+
+/* Media queries para telas menores */
+@media (max-width: 900px) {
+    #img_car {
+        justify-content: center;
+        margin: 3vh auto;
+    }
+    #img_car > img {
+        width: 75vw;
+    }
+    #div_central_texts {
+        max-width: 90vw;
+        margin: 4vh auto;
+        align-items: center;
+    }
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    nav {
+        gap: 0.5rem;
+        min-height: 7vh;
+    }
+    #div_slogan > h1,
+    #div_button_slogan > button > h1 {
+        font-size: clamp(1rem, 5vw, 1.5rem);
+    }
+    #img_car > img {
+        width: 95vw;
+    }
 }
