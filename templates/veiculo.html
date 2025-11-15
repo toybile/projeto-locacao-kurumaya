@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes do Veículo</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>Detalhes do Veículo</h1>
+
+<div class="vehicle_details">
+    <h2>{{ vehicle.model }} ({{ vehicle.year }})</h2>
+
+    <p><strong>Placa:</strong> {{ vehicle.plate }}</p>
+    <p><strong>Preço por dia:</strong> R$ {{ vehicle.price }},00</p>
+
+    <p>
+        <strong>Status:</strong>
+        {% if vehicle.status == "available" %}
+            <span class="status available">Disponível</span>
+        {% elif vehicle.status == "reserved" %}
+            <span class="status reserved">Reservado</span>
+        {% else %}
+            <span class="status rented">Alugado</span>
+        {% endif %}
+    </p>
+
+    {% if vehicle.status == "available" %}
+        <a href="/pagamento/{{ vehicle.id }}" class="btn">Alugar agora</a>
+    {% else %}
+        <p>Este veículo não está disponível para aluguel no momento.</p>
+    {% endif %}
+</div>
+
+<a href="/frota" class="btn_back">← Voltar para a frota</a>
+
+</body>
+</html>
