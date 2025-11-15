@@ -1,0 +1,52 @@
+.form_box {
+    border: 1px solid #ccc;
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+    flex-wrap: wrap;
+}
+
+.form_group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.client_list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.client_card {
+    border: 1px solid #d0d0d0;
+    padding: 16px;
+    border-radius: 8px;
+    background: #fdfdfd;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.client_card .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.client_card button {
+    background: #c62828;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.client_card button:hover {
+    background: #a71f1f;
+}

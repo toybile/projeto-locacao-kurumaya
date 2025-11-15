@@ -1,0 +1,52 @@
+.content {
+    width: 90%;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.vehicle_list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.vehicle_card {
+    border: 1px solid #d0d0d0;
+    padding: 18px;
+    border-radius: 8px;
+    background: #fafafa;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vehicle_card h3 {
+    margin: 0 0 5px 0;
+}
+
+.status {
+    font-weight: bold;
+}
+
+.status.available {
+    color: green;
+}
+
+.status.rented {
+    color: red;
+}
+
+.vehicle_card button {
+    background: #0055ff;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.vehicle_card button:hover {
+    background: #003fcc;
+}
