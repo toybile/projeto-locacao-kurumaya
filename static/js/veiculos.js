@@ -77,13 +77,10 @@ async function loadVehicles() {
 
 async function deletarVeiculo(id) {
     if (!confirm("Tem certeza que quer remover?")) return;
-
-    const req = await fetch(`/api/veiculos/${id}`, {
-        method: "DELETE"
-    });
-
+    
+    const req = await fetch(`/api/vehicles/${id}`, { method: "DELETE" });
     const res = await req.json();
-
+    
     if (req.ok) {
         alert("Veículo removido com sucesso!");
         loadVehicles();
@@ -91,4 +88,5 @@ async function deletarVeiculo(id) {
         alert(res.error);
     }
 }
+
 
