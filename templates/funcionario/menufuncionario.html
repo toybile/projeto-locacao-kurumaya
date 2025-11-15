@@ -1,83 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurumaya</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Veículos — Kurumaya</title>
 
-    <!-- CSS original -->
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/funcionario/menufuncionario.css">
 </head>
 
 <body>
 
-    <!-- ===== HEADER ===== -->
-    <header>
-        <h1 id="title"><a href="/">Kurumaya</a></h1>
+<header class="topbar">
+    <h1>Kurumaya — Veículos</h1>
+    <nav>
+        <a href="/frota">Frota (Cliente)</a>
+        <a class="logout" href="/logout">Sair</a>
+    </nav>
+</header>
 
-        <div id="div_perfil">
-            <a href="/login">
-                <button id="button_perfil"> ... </button>
-            </a>
+<main class="content">
 
-            <p style="margin-top:10px; font-size:14px;">
-                <a href="/funcionario/login" style="color:white; text-decoration:underline;">
-                    É funcionário? Logue aqui.
-                </a>
-            </p>
-        </div>
+    <!-- Bloco de boas-vindas -->
+    <div class="welcome-section">
+        <h1>Parabéns, você é um funcionário!</h1>
+    </div>
 
-    </header>
+    <!-- Bloco de menu com botões grandes -->
+    <div class="menu-section">
+        <a href="/clientes" class="btn-menu">
+            <span>👥</span>
+            <span>Clientes</span>
+        </a>
+        <a href="/veiculos" class="btn-menu">
+            <span>🚗</span>
+            <span>Veículos</span>
+        </a>
+    </div>
 
-    <div id="line_title"><h1></h1></div>
+</main>
 
-    <!-- ===== MAIN ===== -->
-    <main>
-
-        <!-- Botão hamburguer -->
-        <div id="div_point-point-point">
-            <button id="button_point-point-point">
-                <img src="https://cdn-icons-png.flaticon.com/512/0/859.png" alt="">
-            </button>
-        </div>
-
-        <!-- MENU -->
-        <nav id="menu_nav">
-            <a href="veiculos"><h1>Veículos</h1></a>
-            <a href="/solucoes"><h1>Soluções</h1></a>
-            <a href="/contato"><h1>Contato</h1></a>
-            <a href="/faq"><h1>FAQ</h1></a>
-            <a href="/login"><h1>Entrar</h1></a>
-            <a href="/cadastro"><h1>Criar Conta</h1></a>
-        </nav>
-
-        <hr>
-
-        <!-- SLOGAN -->
-        <div id="div_central_texts">
-            <div id="div_slogan">
-                <h1>Deseja alugar um carro,</h1>
-                <h1>com a certeza de que fez a escolha certa?</h1>
-            </div>
-
-            <!-- Botão para ver os modelos -->
-            <div id="div_button_slogan">
-                <button onclick="window.location.href='/frota'">
-                    <h1>Veja o melhor modelo</h1>
-                    <h1>para você!</h1>
-                </button>
-            </div>
-        </div>
-
-        <!-- IMAGEM DO CARRO -->
-        <div id="img_car">
-            <img src="https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp?" alt="">
-        </div>
-
-    </main>
-
-    <!-- Scripts -->
-    <script src="/static/js/menu.js"></script>
+<script src="/static/js/veiculos.js"></script>
 
 </body>
 </html>

@@ -11,10 +11,10 @@
 <body>
 
     <!-- ===== HEADER ===== -->
-    <header>
-        <h1 id="title"><a href="/">Kurumaya</a></h1>
+    <header class="animate-fade-in">
+        <h1 id="title" class="animate-slide-left"><a href="/">Kurumaya</a></h1>
 
-        <div id="div_perfil">
+        <div id="div_perfil" class="animate-slide-right">
             <div id="div_botoes_header">
                 <a href="/login">
                     <button id="button_perfil">Entrar</button>
@@ -33,32 +33,31 @@
         </div>
     </header>
 
-    <div id="line_title"><h1></h1></div>
+    <div id="line_title" class="animate-expand"><h1></h1></div>
 
     <!-- ===== MAIN ===== -->
     <main>
 
         <!-- MENU -->
-        <nav id="menu_nav">
-            <a href="/frota="><h1>Frota</h1></a>
-            <a href="/solucoes"><h1>Soluções</h1></a>
-            <a href="/contato"><h1>Contato</h1></a>
-            <a href="/faq"><h1>FAQ</h1></a>
-            <a href="{{ url_for('historico') }}">Histórico de aluguéis</a>
+        <nav id="menu_nav" class="animate-fade-in-delayed">
+            <a href="/frota" class="menu-item"><h1>Frota</h1></a>
+            <a href="/solucoes" class="menu-item"><h1>Soluções</h1></a>
+            <a href="/contato" class="menu-item"><h1>Contato</h1></a>
+            <a href="/faq" class="menu-item"><h1>FAQ</h1></a>
         </nav>
 
         <hr>
 
         <!-- CONTEÚDO PRINCIPAL -->
         <section id="hero">
-            <div id="div_central_texts">
+            <div id="div_central_texts" class="animate-slide-up">
                 <div id="div_slogan">
-                    <h1>Deseja alugar um carro,</h1>
-                    <h1>com a certeza de que fez a escolha certa?</h1>
+                    <h1 class="text-line-1">Deseja alugar um carro,</h1>
+                    <h1 class="text-line-2">com a certeza de que fez a escolha certa?</h1>
                 </div>
 
                 <!-- Botão para ver os modelos -->
-                <div id="div_button_slogan">
+                <div id="div_button_slogan" class="pulse-effect">
                     <button onclick="window.location.href='/frota'">
                         <span>Veja o melhor modelo</span>
                         <span>para você!</span>
@@ -67,14 +66,14 @@
             </div>
 
             <!-- IMAGEM DO CARRO -->
-            <div id="img_car">
+            <div id="img_car" class="animate-slide-right-slow floating">
                 <img src="https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp?" alt="Carro Volkswagen Nivus">
             </div>
         </section>
 
     </main>
 
-    <!-- Scripts (opcional, se não usar, pode remover essa linha) -->
+    <!-- Scripts -->
     <script src="/static/js/menu.js"></script>
 
 </body>
