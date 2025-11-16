@@ -19,11 +19,14 @@
                 <a href="/solucoes" class="menu-item">Soluções</a>
                 <a href="/contato" class="menu-item">Contato</a>
                 <a href="/faq" class="menu-item">FAQ</a>
+                <a href="{{ url_for('devolucao_cliente_page') }}">Devolução</a>
+                <a href="{{ url_for('historico') }}">Histórico de aluguéis</a>
             </div>
             <div id="div_perfil">
                 <div id="div_botoes_header">
                     <a href="/login"><button id="button_perfil">Entrar</button></a>
                     <a href="/cadastro"><button id="button_criar">Criar conta</button></a>
+                    <a class="logout" href="/logout">Sair</a>
                 </div>
                 <p class="texto-funcionario">
                     <a href="/funcionario/login">É funcionário? Logue aqui.</a>
