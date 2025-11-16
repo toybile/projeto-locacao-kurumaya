@@ -106,6 +106,14 @@ def pagamento(vid):
 def historico():
     return render_template("historico.html")
 
+@app.route("/clientes")
+@staff_required
+def clientes_admin():
+    return render_template("funcionario/clientes.html")
+
+
+
+
 # =====================================
 #   AUTENTICAÇÃO
 # =====================================
@@ -129,11 +137,11 @@ def auth_login():
 @app.route("/auth/cadastro", methods=["POST"])
 def auth_cadastro():
     global USERS
-
     data = request.form or request.json
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
+    phone = data.get("phone", "")  # Aceita telefone opcional
 
     if not name or not email or not password:
         return jsonify({"ok": False, "error": "Todos os campos são obrigatórios"})
@@ -141,10 +149,17 @@ def auth_cadastro():
     if email in USERS:
         return jsonify({"ok": False, "error": "Email já cadastrado"})
 
-    USERS[email] = {"name": name, "password": password, "type": "client"}
+    USERS[email] = {
+        "name": name,
+        "password": password,
+        "type": "client",
+        "phone": phone
+    }
     session["user"] = {"email": email, "name": name, "type": "client"}
 
     return jsonify({"ok": True, "redirect": "/frota"})
+
+
 
 @app.route("/logout")
 def logout():
@@ -227,9 +242,11 @@ def delete_vehicle(vid):
 def rentals_history():
     user = session.get("user")
     email = user["email"]
-
+    
+    # Filtra aluguéis do cliente logado
     user_rentals = [r for r in RENTALS if r["client_email"] == email]
-
+    
+    # Junta informações do veículo
     result = []
     for r in user_rentals:
         vehicle = next((v for v in VEHICLES if v["id"] == r["vehicle_id"]), None)
@@ -245,8 +262,10 @@ def rentals_history():
                 "days": r["days"],
                 "total": r["total"]
             })
-
+    
     return jsonify(result)
+
+
 
 # =====================================
 #   API — INICIAR ALUGUEL (RESERVA)
@@ -290,6 +309,7 @@ def pay_vehicle():
     total = vehicle["price"] * days
     vehicle["status"] = "rented"
 
+    # ✅ Nomes de campos CORRETOS (com underscore)
     RENTALS.append({
         "rental_id": next_rental_id,
         "vehicle_id": vid,
@@ -298,9 +318,27 @@ def pay_vehicle():
         "total": total,
         "date": datetime.now().isoformat()
     })
+    
     next_rental_id += 1
 
     return jsonify(ok=True, total=total)
+
+
+@app.route("/api/clients", methods=["GET"])
+@staff_required
+def api_clients():
+    # Filtra apenas usuários do tipo "client" de USERS
+    clients_list = []
+    for email, user_data in USERS.items():
+        if user_data.get("type") == "client":
+            clients_list.append({
+                "email": email,
+                "name": user_data.get("name"),
+                "phone": user_data.get("phone", "Não informado")
+            })
+    return jsonify(clients_list)
+
+
 
 # =====================================
 #   SEED

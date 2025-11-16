@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Aluguéis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
@@ -9,7 +10,7 @@
     <header>
         <h1>Histórico de Aluguéis</h1>
         <nav>
-            <a href="{{ url_for('frota') }}">Frota</a>
+            <a href="{{ url_for('frota') }}">Voltar para Frota</a>
             <a href="{{ url_for('logout') }}">Sair</a>
         </nav>
     </header>
@@ -20,6 +21,6 @@
         </div>
     </main>
 
-<script src="{{ url_for('static', filename='historico.js') }}"></script>
+<script src="{{ url_for('static', filename='js/historico.js') }}"></script>
 </body>
 </html>
