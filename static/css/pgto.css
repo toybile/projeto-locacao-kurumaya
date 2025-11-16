@@ -1,0 +1,127 @@
+/* ===== Reset e Fonte ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
+    color: #47346a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* ===== Título ===== */
+h1 {
+    color: darkgrey;
+    margin: 46px 0 18px 0;
+    font-size: clamp(1.7rem, 5vw, 2.3rem);
+    text-shadow: 1px 1px 4px #47346a44;
+}
+
+/* ===== Card de Info/Pagamento ===== */
+#info {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 3px 15px rgba(140,39,199,0.09);
+    max-width: 435px;
+    padding: 36px 28px 26px 28px;
+    margin-bottom: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+#info p {
+    color: #47346a;
+    font-size: 1.05rem;
+    margin: 0;
+}
+
+#info strong {
+    color: #bd3a7c;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* ===== Input Dias ===== */
+label {
+    color: #8c27c7;
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 1.03rem;
+}
+
+input[type="number"] {
+    padding: 10px;
+    width: 100%;
+    max-width: 120px;
+    font-size: 1.05rem;
+    border: 1.2px solid #bd3a7c88;
+    border-radius: 7px;
+    background: #f3f0f9;
+    color: #47346a;
+    margin-bottom: 6px;
+    margin-left: 4px;
+    transition: border 0.17s;
+}
+
+input[type="number"]:focus {
+    border-color: #8c27c7;
+    outline: none;
+}
+
+/* ===== Valor Total ===== */
+#total {
+    color: #b6291f;
+    font-weight: bold;
+    font-size: 1.17rem;
+}
+
+/* ===== Botão de Pagamento ===== */
+button#pagarBtn {
+    background: linear-gradient(to right, #8c27c7, #bd3a7c);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.07rem;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 0;
+    width: 99%;
+    margin-top: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #bd3a7c19;
+    letter-spacing: 2px;
+    transition: background 0.16s;
+}
+
+button#pagarBtn:hover {
+    background: linear-gradient(to right, #b6291f, #8c27c7);
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 500px) {
+    h1 {
+        font-size: 1.13rem;
+        margin: 32px 0 13px 0;
+    }
+    #info {
+        max-width: 97vw;
+        padding: 18px 7px 18px 7px;
+        border-radius: 9px;
+        gap: 9px;
+    }
+    label, #info strong {
+        font-size: 0.98rem;
+    }
+    button#pagarBtn {
+        font-size: 1rem;
+        border-radius: 7px;
+        padding: 10px 0;
+    }
+}
