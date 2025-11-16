@@ -1,197 +1,3 @@
-/* ====== Reset e fonte ====== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
-    color: #47346a;
-}
-
-:root {
-    --roxo-escuro: #471471;
-    --roxo: #5a1f8c;
-    --rosa: #bd3a7c;
-    --vermelho: #b6291f;
-    --fundo-main: #2b0f22;
-    --texto-claro: #f3f3f3;
-    --texto-suave: #ddd;
-    --botao-primario: #ff4f7d;
-    --botao-primario-hover: #ff6a92;
-    --preto-transparente: rgba(0,0,0,0.25);
-}
-
-.headerbar {
-    background-image: linear-gradient(
-        to right,
-        #7b4ae0 0%,
-        var(--roxo) 30%,
-        var(--rosa) 65%,
-        var(--vermelho) 100%
-    );
-    padding: 1.2rem 3vw 1.05rem 3vw;
-    position: relative;
-}
-
-.headerbar::before {
-    content: "";
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
-    animation: shine 3s ease-in-out infinite;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2vw;
-    width: 100%;
-}
-
-#title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: bold;
-    color: var(--texto-claro);
-    min-width: 180px;
-}
-
-#title a {
-    color: var(--texto-claro);
-    text-decoration: none;
-    font-family: "Palatino Linotype", serif;
-}
-
-#menu_nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2.2rem;
-    background: linear-gradient(
-        to right,
-        rgba(0,0,0,0.18),
-        rgba(0,0,0,0.10)
-    );
-    border-radius: 2.5rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    padding: 0.6rem 2.4rem 0.6rem 2rem;
-    flex: 1 1 auto;
-    min-width: 350px;
-    max-width: 740px;
-    font-weight: bold;
-}
-
-#menu_nav .menu-item {
-    color: #fff;
-    font-size: 1.32rem;
-    text-decoration: none;
-    font-family: "Palatino Linotype", serif;
-    letter-spacing: 0.02em;
-    position: relative;
-    transition: color 0.24s, transform 0.2s;
-}
-
-#menu_nav .menu-item:hover {
-    color: #ffe9fe;
-    transform: translateY(-2px);
-}
-
-#menu_nav .menu-item::after {
-    content: "";
-    position: absolute;
-    left: 0; bottom: 0; width: 0; height: 2px;
-    background: linear-gradient(to right, var(--rosa), var(--vermelho));
-    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-
-#menu_nav .menu-item:hover::after {
-    width: 100%;
-}
-
-#div_perfil {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.3rem;
-}
-
-#div_botoes_header {
-    display: flex;
-    gap: 0.6rem;
-}
-
-#button_perfil, #button_criar {
-    min-width: 80px;
-    padding: 0.44rem 1.25rem;
-    font-size: 1.03rem;
-    font-family: inherit;
-    border-radius: 999px;
-    border: 1px solid var(--texto-claro);
-    background: transparent;
-    color: var(--texto-claro);
-    cursor: pointer;
-    transition: background 0.22s, color 0.22s, transform 0.14s;
-}
-
-#button_criar {
-    background: linear-gradient(to right, var(--botao-primario), var(--rosa));
-    color: #fff;
-    border: 1px solid #fff2;
-    margin-left: 0.5rem;
-}
-
-#button_perfil:hover {
-    background: var(--texto-claro);
-    color: var(--roxo-escuro);
-}
-
-#button_criar:hover {
-    background: linear-gradient(to right, var(--botao-primario-hover), var(--rosa));
-    filter: brightness(1.13);
-}
-
-.texto-funcionario {
-    margin-top: 3px;
-    font-size: 0.91rem;
-}
-
-.texto-funcionario a {
-    color: var(--texto-suave);
-    text-decoration: underline;
-    transition: color 0.17s;
-}
-
-.texto-funcionario a:hover {
-    color: #fff;
-}
-
-@keyframes shine {
-    0%   { left: -100%; }
-    100% { left: 100%; }
-}
-
-@media (max-width: 900px) {
-    .header-content { flex-direction: column; align-items: stretch; gap: 1vw; }
-    #menu_nav { margin: 10px 0; padding: 0.8rem 1.1rem; max-width: 98vw; font-size: 1rem; }
-    #div_perfil { align-items: flex-end; }
-}
-
-@media (max-width: 600px) {
-    .header-content { gap: 0; }
-    #title { font-size: 1.5rem; min-width: 110px; }
-    #menu_nav { padding: 0.8rem 0.64rem; font-size: 1rem; }
-}
-
-@media (max-width: 420px) {
-    #div_botoes_header { flex-wrap: wrap; justify-content: flex-start; }
-    #menu_nav { justify-content: center; }
-}
-
-/* ====== Conteúdo ====== */
 .content {
     max-width: 1300px;
     margin: 40px auto;
@@ -199,6 +5,7 @@ body {
     padding: 40px;
     border-radius: 14px;
     box-shadow: 0 3px 14px rgba(73,52,106,0.15);
+    animation: fadeInUp 0.6s ease-out 0.4s backwards;
 }
 
 h2 {
@@ -209,9 +16,31 @@ h2 {
     font-size: 1.8rem;
     text-shadow: 1px 1px 2px #47346a15;
     margin-bottom: 30px;
+    animation: slideInLeft 0.5s ease-out;
 }
 
-/* ====== Grid de Veículos 3x3 ====== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .vehicle-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -226,14 +55,19 @@ h2 {
     color: #bd3a7c;
     font-size: 1.2rem;
     padding: 40px;
+    animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* ====== Card de Veículo ====== */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 .vehicle-card {
     background: linear-gradient(135deg, #faf6fb 0%, #f5f0f8 100%);
     border: 2px solid #bd3a7c33;
     border-radius: 16px;
-    padding: 0; /* sem padding geral, vamos usar por seção */
+    padding: 0;
     box-shadow: 0 4px 12px rgba(189, 58, 124, 0.12);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
@@ -245,7 +79,6 @@ h2 {
     animation: fadeInCard 0.4s ease-out backwards;
 }
 
-/* Animação de entrada dos cards */
 @keyframes fadeInCard {
     from {
         opacity: 0;
@@ -257,7 +90,6 @@ h2 {
     }
 }
 
-/* Delay sequencial para cada card */
 .vehicle-card:nth-child(1) { animation-delay: 0.05s; }
 .vehicle-card:nth-child(2) { animation-delay: 0.1s; }
 .vehicle-card:nth-child(3) { animation-delay: 0.15s; }
@@ -294,7 +126,6 @@ h2 {
     border-color: #8c27c7;
 }
 
-/* ====== Imagem do veículo ====== */
 .vehicle-image {
     width: 100%;
     height: 210px;
@@ -302,14 +133,14 @@ h2 {
     overflow: hidden;
     position: relative;
     background: linear-gradient(135deg, #e0d5f0 0%, #f0e5f5 100%);
-    margin: 0; /* sem margem negativa */
+    margin: 0;
 }
 
 .vehicle-image img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;        /* cobre toda a área */
+    object-fit: cover;
     object-position: center;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -346,14 +177,12 @@ h2 {
     letter-spacing: 1px;
 }
 
-/* Aplica padding só nas áreas de texto */
 .vehicle-card-header,
 .vehicle-info,
 .vehicle-price {
     padding-inline: 20px;
 }
 
-/* ====== Header do card ====== */
 .vehicle-card-header {
     display: flex;
     justify-content: space-between;
@@ -371,7 +200,6 @@ h2 {
     margin: 0;
 }
 
-/* ====== Status ====== */
 .vehicle-status {
     padding: 4px 12px;
     border-radius: 20px;
@@ -400,7 +228,6 @@ h2 {
     color: #fff;
 }
 
-/* ====== Infos ====== */
 .vehicle-info {
     display: flex;
     flex-direction: column;
@@ -423,7 +250,6 @@ h2 {
     color: #47346a;
 }
 
-/* ====== Preço ====== */
 .vehicle-price {
     margin-top: 8px;
     padding-top: 12px;
@@ -435,7 +261,6 @@ h2 {
     padding-bottom: 18px;
 }
 
-/* ====== Controles de Paginação ====== */
 .pagination-controls {
     display: flex;
     justify-content: center;
@@ -485,96 +310,78 @@ h2 {
     text-align: center;
 }
 
-/* ====== Responsividade ====== */
-
-/* Tablet */
 @media (max-width: 1024px) {
     .vehicle-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
-
     .content {
         padding: 30px;
     }
 }
 
-/* Mobile */
+@media (max-width: 900px) {
+    .header-content { flex-direction: column; align-items: stretch; gap: 1vw; }
+    #menu_nav { margin: 10px 0; padding: 0.8rem 1.1rem; max-width: 98vw; font-size: 1rem; }
+    #div_perfil { align-items: flex-end; }
+}
+
 @media (max-width: 700px) {
-    .topbar {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-        padding: 2vh 2vw;
-    }
-
-    .topbar h1 {
-        font-size: clamp(1.1rem, 7vw, 1.45rem);
-    }
-
-    .topbar nav {
-        gap: 0.7rem;
-    }
-
-    .topbar nav a {
-        font-size: 0.9rem;
-        padding: 0.5rem 0.8rem;
-    }
-
     .content {
         margin: 16px;
         padding: 20px;
         border-radius: 8px;
     }
-
     h2 {
         font-size: 1.3rem;
         padding-left: 8px;
         margin-bottom: 20px;
     }
-
     .vehicle-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-
     .vehicle-card {
-        padding: 0; /* continua sem padding geral */
+        padding: 0;
         border-radius: 14px;
     }
-
     .vehicle-image {
         height: 190px;
         border-radius: 14px 14px 0 0;
         margin: 0;
     }
-
     .vehicle-card-header,
     .vehicle-info,
     .vehicle-price {
         padding-inline: 16px;
     }
-
     .vehicle-name {
         font-size: 1.1rem;
     }
-
     .vehicle-price {
         font-size: 1.2rem;
     }
-
     .pagination-btn {
         width: 45px;
         height: 45px;
         font-size: 1.3rem;
     }
-
     .page-info {
         font-size: 1rem;
     }
 }
 
-/* Acessibilidade: reduzir movimento */
+@media (max-width: 600px) {
+    .header-content { gap: 0; }
+    #title { font-size: 1.5rem; min-width: 110px; }
+    #menu_nav { padding: 0.8rem 0.64rem; font-size: 1rem; }
+}
+
+@media (max-width: 420px) {
+    #div_botoes_header { flex-wrap: wrap; justify-content: flex-start; }
+    #menu_nav { justify-content: center; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
