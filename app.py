@@ -69,7 +69,6 @@ def cadastro():
     return render_template("signin.html")
 
 @app.route("/frota")
-@client_required
 def frota():
     return render_template("frota.html")
 
@@ -524,7 +523,7 @@ def seed_data():
     if seeded:
         return
     seeded = True
-    
+
     VEHICLES = [
         {
             "id": 1,
