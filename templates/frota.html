@@ -25,8 +25,20 @@
 
     <h2>Lista da Frota</h2>
 
-    <div id="vehiclesList" class="vehicle_list">
-        <p>Carregando veículos...</p>
+    <!-- Grid de veículos 3x3 (cards serão inseridos via JS) -->
+    <div id="vehiclesList" class="vehicle-grid">
+        <p class="loading-text">Carregando veículos...</p>
+    </div>
+
+    <!-- Controles de paginação (mostra setas e info de página) -->
+    <div class="pagination-controls" id="paginationControls" style="display: none;">
+        <button id="prevPage" class="pagination-btn" disabled>
+            <span>←</span>
+        </button>
+        <span class="page-info" id="pageInfo">Página 1 de 1</span>
+        <button id="nextPage" class="pagination-btn" disabled>
+            <span>→</span>
+        </button>
     </div>
 
 </main>

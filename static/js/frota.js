@@ -1,67 +1,145 @@
+// Configuração de paginação
+const VEHICLES_PER_PAGE = 9;
+let currentPage = 1;
+let allVehicles = [];
+
+// Mapeamento de status
+const STATUS_MAP = {
+    'available': { label: 'Disponível', class: 'status-disponivel' },
+    'rented': { label: 'Alugado', class: 'status-alugado' },
+    'reserved': { label: 'Reservado', class: 'status-reservado' },
+    'maintenance': { label: 'Manutenção', class: 'status-manutencao' }
+};
+
+// Função para carregar veículos
 async function loadVehicles() {
-    const container = document.getElementById("vehiclesList");
-    container.innerHTML = "<p>Carregando...</p>";
+    try {
+        const response = await fetch('/api/vehicles');
+        
+        if (!response.ok) {
+            throw new Error('Erro ao carregar veículos');
+        }
+        
+        allVehicles = await response.json();
+        
+        renderCurrentPage();
+        updatePaginationControls();
+    } catch (error) {
+        console.error('Erro ao carregar veículos:', error);
+        document.getElementById('vehiclesList').innerHTML = 
+            '<p class="loading-text" style="color: #b6291f;">Erro ao carregar veículos. Tente novamente mais tarde.</p>';
+    }
+}
 
-    const res = await fetch("/api/vehicles");
-    const vehicles = await res.json();
-
-    if (!vehicles.length) {
-        container.innerHTML = "<p>Nenhum veículo cadastrado.</p>";
+// Renderiza a página atual
+function renderCurrentPage() {
+    const vehiclesList = document.getElementById('vehiclesList');
+    
+    if (allVehicles.length === 0) {
+        vehiclesList.innerHTML = '<p class="loading-text">Nenhum veículo encontrado.</p>';
         return;
     }
 
-    container.innerHTML = "";
+    const startIndex = (currentPage - 1) * VEHICLES_PER_PAGE;
+    const endIndex = startIndex + VEHICLES_PER_PAGE;
+    const vehiclesToShow = allVehicles.slice(startIndex, endIndex);
 
-    vehicles.forEach(v => {
-        const card = document.createElement("div");
-        card.className = "vehicle_card";
-
-        const statusClass = v.status === "available" ? "available" : "rented";
-        const statusText = v.status === "available" ? "Disponível" : "Alugado";
-        const buttonText = v.status === "available" ? "Alugar" : "Devolver";
-
-        card.innerHTML = `
-        <div>
-            <h3>${v.model} (${v.year})</h3>
-            <p>Placa: <strong>${v.plate}</strong></p>
-            <p>Preço: <strong>R$ ${v.price},00 / dia</strong></p>
-            <p>Status: <span class="status ${statusClass}">${statusText}</span></p>
+    vehiclesList.innerHTML = vehiclesToShow.map((vehicle, index) => {
+        const statusInfo = STATUS_MAP[vehicle.status] || { label: 'Desconhecido', class: 'status-manutencao' };
+        
+        return `
+        <div class="vehicle-card" style="animation-delay: ${index * 0.05}s" onclick="viewVehicleDetails(${vehicle.id})">
+            <div class="vehicle-image">
+                <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" 
+                     onerror="this.src='/static/img/default-car.jpg'">
+                <div class="vehicle-overlay">
+                    <span class="view-details">Ver detalhes</span>
+                </div>
+            </div>
+            
+            <div class="vehicle-card-header">
+                <h3 class="vehicle-name">${vehicle.brand} ${vehicle.model}</h3>
+                <span class="vehicle-status ${statusInfo.class}">
+                    ${statusInfo.label}
+                </span>
+            </div>
+            
+            <div class="vehicle-info">
+                <div class="vehicle-info-item">
+                    <span class="vehicle-info-label">Ano:</span>
+                    <span class="vehicle-info-value">${vehicle.year}</span>
+                </div>
+                <div class="vehicle-info-item">
+                    <span class="vehicle-info-label">Placa:</span>
+                    <span class="vehicle-info-value">${vehicle.plate}</span>
+                </div>
+                <div class="vehicle-info-item">
+                    <span class="vehicle-info-label">Categoria:</span>
+                    <span class="vehicle-info-value">${vehicle.category}</span>
+                </div>
+            </div>
+            
+            <div class="vehicle-price">
+                R$ ${parseFloat(vehicle.price).toFixed(2).replace('.', ',')}/dia
+            </div>
         </div>
-
-        <a href="/veiculo/${v.id}" class="btnDetails">Ver detalhes</a>
-    `;
-
-
-
-        container.appendChild(card);
-    });
-
-    attachRentButtons();
+        `;
+    }).join('');
 }
 
-function attachRentButtons() {
-    document.querySelectorAll(".rentBtn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-            const id = Number(btn.dataset.id);
-            const action = btn.innerText === "Alugar" ? "rented" : "available";
+// Atualiza controles de paginação
+function updatePaginationControls() {
+    const totalPages = Math.ceil(allVehicles.length / VEHICLES_PER_PAGE);
+    const paginationControls = document.getElementById('paginationControls');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    const pageInfo = document.getElementById('pageInfo');
 
-            const response = await fetch("/api/vehicles", {
-                method: "PUT",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ id, status: action })
-            });
+    if (totalPages <= 1) {
+        paginationControls.style.display = 'none';
+        return;
+    }
 
-            const result = await response.json();
+    paginationControls.style.display = 'flex';
+    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
 
-            if (!result.ok) {
-                alert("Erro ao alterar status do veículo.");
-                return;
-            }
-
-            loadVehicles(); // atualiza a tela
-        });
-    });
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
 }
 
-// carregar automaticamente
-loadVehicles();
+// Navegar para página anterior
+function goToPreviousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        renderCurrentPage();
+        updatePaginationControls();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// Navegar para próxima página
+function goToNextPage() {
+    const totalPages = Math.ceil(allVehicles.length / VEHICLES_PER_PAGE);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderCurrentPage();
+        updatePaginationControls();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// Ver detalhes do veículo
+function viewVehicleDetails(vehicleId) {
+    window.location.href = `/veiculo/${vehicleId}`;
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    
+    if (prevBtn) prevBtn.addEventListener('click', goToPreviousPage);
+    if (nextBtn) nextBtn.addEventListener('click', goToNextPage);
+    
+    loadVehicles();
+});
