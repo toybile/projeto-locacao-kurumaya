@@ -187,6 +187,41 @@ html, body {
     background: linear-gradient(to right, var(--botao-primario-hover), var(--rosa));
     filter: brightness(1.13);
 }
+#button_sair {
+    background: linear-gradient(135deg, #ff6961 0%, #b6291f 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: bold;
+    position: relative;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+#button_sair::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6961, #b6291f);
+    opacity: 0;
+    filter: blur(8px);
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+#button_sair:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(182, 41, 31, 0.5);
+    animation: shake 0.5s ease-in-out;
+}
+
+#button_sair:hover::after {
+    opacity: 0.8;
+}
+
+#button_sair:active {
+    transform: translateY(-1px) scale(1.02);
+    animation: exitPulse 0.3s ease-out;
+}
 .texto-funcionario {
     margin-top: 3px;
     font-size: 0.91rem;
