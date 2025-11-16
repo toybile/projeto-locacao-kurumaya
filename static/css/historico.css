@@ -1,0 +1,119 @@
+/* ====== Reset e fonte ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
+    color: #47346a;
+}
+
+/* ====== Header ====== */
+header {
+    width: 100%;
+    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
+    color: darkgrey;
+    padding: 2.5vh 4vw 2vh 4vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-bottom: 2px solid #47346a22;
+}
+
+header h1 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    margin-bottom: 14px;
+    color: darkgrey;
+    text-shadow: 1px 1px 6px #47346a44;
+}
+
+header nav {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+header nav a {
+    color: #fff;
+    background: #bd3a7c;
+    font-weight: bold;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    text-decoration: none;
+    transition: background 0.14s, color 0.15s;
+    text-shadow: 0 1px 3px #47346a55;
+}
+header nav a:hover,
+header nav a:focus {
+    background: #8c27c7;
+    color: #fff;
+}
+header nav a:last-child {
+    background: #b6291f;
+}
+header nav a:last-child:hover,
+header nav a:last-child:focus {
+    background: #a12013;
+}
+
+/* ====== Conteúdo ====== */
+main {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 32px 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 14px rgba(73,52,106,0.10);
+    min-height: 250px;
+}
+
+#history-container {
+    background: #faf6fb;
+    border: 1px solid #bd3a7c33;
+    border-radius: 13px;
+    box-shadow: 0 1px 6px #bd3a7c13;
+    padding: 24px 16px;
+    color: #47346a;
+    min-height: 60px;
+    font-size: 1.07rem;
+}
+
+#history-container p {
+    color: #bd3a7c;
+    margin: 0;
+}
+
+/* ====== Responsividade ====== */
+@media (max-width: 700px) {
+    header {
+        padding: 2vh 2vw;
+        align-items: center;
+        text-align: center;
+    }
+    header h1 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    main {
+        margin: 14px;
+        padding: 12px 7px;
+    }
+    #history-container {
+        padding: 12px 5px;
+    }
+    header nav {
+        gap: 0.5rem;
+    }
+    header nav a {
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
+        min-width: 100px;
+        text-align: center;
+    }
+}
