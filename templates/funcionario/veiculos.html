@@ -27,23 +27,49 @@
 
     <form id="formAddVehicle" class="form">
         <div class="form_group">
-            <label>Placa</label>
+            <label for="plate">Placa</label>
             <input type="text" id="plate" required>
         </div>
 
         <div class="form_group">
-            <label>Modelo</label>
+            <label for="brand">Marca</label>
+            <input type="text" id="brand" required>
+        </div>
+
+        <div class="form_group">
+            <label for="model">Modelo</label>
             <input type="text" id="model" required>
         </div>
 
         <div class="form_group">
-            <label>Ano</label>
+            <label for="year">Ano</label>
             <input type="number" id="year" required>
+        </div>
+
+        <div class="form_group">
+            <label for="category">Categoria</label>
+            <select id="category" required>
+                <option value="">Selecione...</option>
+                <option value="hatch">Hatch</option>
+                <option value="sedan">Sedan</option>
+                <option value="suv">SUV</option>
+                <option value="pickup">Picape</option>
+                <option value="luxury">Luxo</option>
+            </select>
+        </div>
+
+        <div class="form_group">
+            <label for="price">Preço por dia (R$)</label>
+            <input type="number" step="0.01" id="price" required>
+        </div>
+
+        <div class="form_group">
+            <label for="image">URL da imagem</label>
+            <input type="text" id="image" placeholder="https://... (opcional)">
         </div>
 
         <button type="submit">Cadastrar Veículo</button>
     </form>
-
 
     <h2>Lista de Veículos</h2>
 
