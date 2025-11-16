@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
+    color: #47346a;
+    overflow-x: hidden;
+}
+
+:root {
+    --roxo-escuro: #471471;
+    --roxo: #5a1f8c;
+    --rosa: #bd3a7c;
+    --vermelho: #b6291f;
+    --fundo-main: #2b0f22;
+    --texto-claro: #f3f3f3;
+    --texto-suave: #ddd;
+    --botao-primario: #ff4f7d;
+    --botao-primario-hover: #ff6a92;
+    --preto-transparente: rgba(0,0,0,0.25);
+}
+
+.headerbar {
+    background-image: linear-gradient(
+        to right,
+        #7b4ae0 0%,
+        var(--roxo) 30%,
+        var(--rosa) 65%,
+        var(--vermelho) 100%
+    );
+    padding: 1.2rem 3vw 1.05rem 3vw;
+    position: relative;
+    z-index: 0;
+}
+
+.headerbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shine 3s ease-in-out infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2vw;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: bold;
+    color: var(--texto-claro);
+    min-width: 180px;
+    animation: fadeInLeft 0.6s ease-out;
+}
+
+#title a {
+    color: var(--texto-claro);
+    text-decoration: none;
+    font-family: "Palatino Linotype", serif;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+#title a:hover {
+    transform: scale(1.05);
+}
+
+#menu_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.2rem;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.18),
+        rgba(0,0,0,0.10)
+    );
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 0.6rem 2.4rem 0.6rem 2rem;
+    flex: 1 1 auto;
+    min-width: 350px;
+    max-width: 740px;
+    font-weight: bold;
+    animation: fadeInDown 0.6s ease-out 0.2s backwards;
+}
+
+#menu_nav .menu-item {
+    color: #fff;
+    font-size: 1.32rem;
+    text-decoration: none;
+    font-family: "Palatino Linotype", serif;
+    letter-spacing: 0.02em;
+    position: relative;
+    transition: color 0.24s, transform 0.2s;
+}
+
+#menu_nav .menu-item:hover {
+    color: #ffe9fe;
+    transform: translateY(-2px);
+}
+
+#menu_nav .menu-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--rosa), var(--vermelho));
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+#menu_nav .menu-item:hover::after {
+    width: 100%;
+}
+
+#div_perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    animation: fadeInRight 0.6s ease-out 0.3s backwards;
+}
+
+#div_botoes_header {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+#button_perfil, #button_criar, #button_sair {
+    min-width: 80px;
+    padding: 0.44rem 1.25rem;
+    font-size: 1.03rem;
+    font-family: inherit;
+    border-radius: 999px;
+    border: 1px solid var(--texto-claro);
+    background: transparent;
+    color: var(--texto-claro);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+#button_perfil::before,
+#button_criar::before,
+#button_sair::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+#button_perfil:hover::before,
+#button_criar:hover::before,
+#button_sair:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+#button_criar {
+    background: linear-gradient(to right, var(--botao-primario), var(--rosa));
+    color: #fff;
+    border: 1px solid #fff2;
+    margin-left: 0.5rem;
+}
+
+#button_perfil:hover {
+    background: var(--texto-claro);
+    color: var(--roxo-escuro);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+#button_criar:hover {
+    background: linear-gradient(to right, var(--botao-primario-hover), var(--rosa));
+    filter: brightness(1.13);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 79, 125, 0.4);
+}
+
+#button_sair {
+    background: linear-gradient(135deg, #ff6961 0%, #b6291f 100%);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-weight: bold;
+    position: relative;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+#button_sair::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff6961, #b6291f);
+    opacity: 0;
+    filter: blur(8px);
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+#button_sair:hover {
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(182, 41, 31, 0.5);
+    animation: shake 0.5s ease-in-out;
+}
+
+#button_sair:hover::after {
+    opacity: 0.8;
+}
+
+#button_sair:active {
+    transform: translateY(-1px) scale(1.02);
+    animation: exitPulse 0.3s ease-out;
+}
+
+.texto-funcionario {
+    margin-top: 3px;
+    font-size: 0.91rem;
+}
+
+.texto-funcionario a {
+    color: var(--texto-suave);
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+.texto-funcionario a:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#line_title {
+    background-color: #fff;
+    width: 100%;
+    height: 0.25rem;
+    animation: lineTransition 1.2s ease-out 0.5s forwards;
+}
+
+@keyframes lineTransition {
+    from {
+        background-color: #fff;
+    }
+    to {
+        background-color: #000;
+    }
+}
+
+@keyframes shine {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 105, 97, 0.5),
+                    0 0 10px rgba(255, 105, 97, 0.3),
+                    0 0 15px rgba(182, 41, 31, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 10px rgba(255, 105, 97, 0.8),
+                    0 0 20px rgba(255, 105, 97, 0.5),
+                    0 0 30px rgba(182, 41, 31, 0.3);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateY(-3px) scale(1.08) rotate(0deg); }
+    25% { transform: translateY(-3px) scale(1.08) rotate(-3deg); }
+    75% { transform: translateY(-3px) scale(1.08) rotate(3deg); }
+}
+
+@keyframes exitPulse {
+    0% { transform: scale(1.08); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1.02); }
+}

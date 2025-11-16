@@ -1,38 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Detalhes do Veículo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Veículo - Kurumaya</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body>
 
-<h1>Detalhes do Veículo</h1>
+<header class="headerbar">
+    <div class="header-content">
+        <div id="title"><a href="/">Kurumaya</a></div>
+        <div id="menu_nav">
+            <a href="/frota" class="menu-item">Frota</a>
+            <a href="/solucoes" class="menu-item">Soluções</a>
+            <a href="/contato" class="menu-item">Contato</a>
+            <a href="/faq" class="menu-item">FAQ</a>
+        </div>
+        <div id="div_perfil">
+            <div id="div_botoes_header">
+                <a href="/login"><button id="button_perfil">Entrar</button></a>
+                <a href="/cadastro"><button id="button_criar">Criar conta</button></a>
+            </div>
+            <p class="texto-funcionario">
+                <a href="/funcionario/login">É funcionário? Logue aqui.</a>
+            </p>
+        </div>
+    </div>
+</header>
 
-<div class="vehicle_details">
-    <h2>{{ vehicle.model }} ({{ vehicle.year }})</h2>
+<div id="line_title" class="animate-expand"><h1></h1></div>
 
-    <p><strong>Placa:</strong> {{ vehicle.plate }}</p>
-    <p><strong>Preço por dia:</strong> R$ {{ vehicle.price }},00</p>
-
-    <p>
-        <strong>Status:</strong>
+<div class="vehicle_content_centered">
+    <div class="vehicle_img_box">
+        <img src="{{ vehicle.image }}" alt="Imagem do Veículo">
+    </div>
+    <div class="vehicle_details_box">
+        <h2>{{ vehicle.model }} ({{ vehicle.year }})</h2>
+        <p><strong>Placa:</strong> {{ vehicle.plate }}</p>
+        <p><strong>Preço por dia:</strong> R$ {{ vehicle.price }},00</p>
+        <p>
+            <strong>Status:</strong>
+            {% if vehicle.status == "available" %}
+                <span class="status available">Disponível</span>
+            {% elif vehicle.status == "reserved" %}
+                <span class="status reserved">Reservado</span>
+            {% else %}
+                <span class="status rented">Alugado</span>
+            {% endif %}
+        </p>
         {% if vehicle.status == "available" %}
-            <span class="status available">Disponível</span>
-        {% elif vehicle.status == "reserved" %}
-            <span class="status reserved">Reservado</span>
+            <a href="/pagamento/{{ vehicle.id }}" class="btn">Alugar agora</a>
         {% else %}
-            <span class="status rented">Alugado</span>
+            <p>Este veículo não está disponível para aluguel no momento.</p>
         {% endif %}
-    </p>
-
-    {% if vehicle.status == "available" %}
-        <a href="/pagamento/{{ vehicle.id }}" class="btn">Alugar agora</a>
-    {% else %}
-        <p>Este veículo não está disponível para aluguel no momento.</p>
-    {% endif %}
+        <a href="/frota" class="btn_back">← Voltar para a frota</a>
+    </div>
 </div>
-
-<a href="/frota" class="btn_back">← Voltar para a frota</a>
 
 </body>
 </html>
