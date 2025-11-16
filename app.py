@@ -111,6 +111,10 @@ def historico():
 def clientes_admin():
     return render_template("funcionario/clientes.html")
 
+@app.route("/devolucao")
+@client_required
+def devolucao_cliente_page():
+    return render_template("devolucao_cliente.html")
 
 
 
@@ -302,26 +306,37 @@ def pay_vehicle():
     vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
     if not vehicle:
         return jsonify(ok=False, error="Veículo não encontrado")
-
     if vehicle["status"] not in ["available", "reserved"]:
         return jsonify(ok=False, error="Veículo não está disponível")
 
-    total = vehicle["price"] * days
+    daily_price = vehicle["price"]
+    total = daily_price * days
     vehicle["status"] = "rented"
 
-    # ✅ Nomes de campos CORRETOS (com underscore)
+    # caução (ex.: 50% do valor previsto)
+    deposit = total * 0.5
+
     RENTALS.append({
         "rental_id": next_rental_id,
         "vehicle_id": vid,
         "client_email": session["user"]["email"],
         "days": days,
+        "daily_price": daily_price,
         "total": total,
-        "date": datetime.now().isoformat()
+        "deposit": deposit,
+        "start_datetime": datetime.now().isoformat(),
+        "start_km": data.get("start_km", 0),
+        "status": "ongoing",
+        # campos de devolução, preenchidos depois
+        "end_datetime": None,
+        "end_km": None,
+        "final_total": total,
+        "refund": 0
     })
-    
+
     next_rental_id += 1
 
-    return jsonify(ok=True, total=total)
+    return jsonify(ok=True, total=total, deposit=deposit)
 
 
 @app.route("/api/clients", methods=["GET"])
@@ -337,6 +352,165 @@ def api_clients():
                 "phone": user_data.get("phone", "Não informado")
             })
     return jsonify(clients_list)
+
+@app.route("/api/rent/return/preview", methods=["POST"])
+@client_required
+def preview_return():
+    from datetime import datetime
+
+    data = request.json
+    rental_id = data.get("rental_id")
+    end_km = data.get("end_km")
+    damage_value = float(data.get("damage_value", 0) or 0)
+
+    if rental_id is None or end_km is None:
+        return jsonify(ok=False, error="ID do aluguel e km final são obrigatórios"), 400
+
+    KM_LIMIT_PER_RENTAL = 300
+    EXTRA_KM_PRICE = 1.5
+
+    rental = next((r for r in RENTALS if r["rental_id"] == rental_id), None)
+    if not rental:
+        return jsonify(ok=False, error="Aluguel não encontrado"), 404
+
+    user = session.get("user")
+    if not user or user["email"] != rental["client_email"]:
+        return jsonify(ok=False, error="Você não tem permissão para este aluguel"), 403
+
+    if rental.get("status") == "finished":
+        return jsonify(ok=False, error="Este aluguel já foi finalizado"), 400
+
+    start_datetime = datetime.fromisoformat(rental["start_datetime"])
+    end_datetime = datetime.now()
+    days_used = (end_datetime - start_datetime).days
+    if days_used < 1:
+        days_used = 1
+
+    extra_days = max(0, days_used - rental["days"])
+    extra_days_fee = extra_days * rental["daily_price"]
+
+    start_km = float(rental.get("start_km", 0))
+    end_km = float(end_km)
+    total_km = max(0, end_km - start_km)
+    extra_km = max(0, total_km - KM_LIMIT_PER_RENTAL)
+    extra_km_fee = extra_km * EXTRA_KM_PRICE
+
+    damage_fee = damage_value
+
+    base_total = rental["total"]
+    additional_costs = extra_days_fee + extra_km_fee + damage_fee
+    final_total = base_total + additional_costs
+
+    deposit = rental.get("deposit", 0)
+    refund = max(0, deposit - additional_costs)
+
+    return jsonify({
+        "ok": True,
+        "summary": {
+            "rental_id": rental_id,
+            "days_contracted": rental["days"],
+            "days_used": days_used,
+            "extra_days": extra_days,
+            "extra_days_fee": extra_days_fee,
+            "total_km": total_km,
+            "extra_km": extra_km,
+            "extra_km_fee": extra_km_fee,
+            "damage_fee": damage_fee,
+            "base_total": base_total,
+            "final_total": final_total,
+            "deposit": deposit,
+            "refund": refund,
+            "end_km": end_km
+        }
+    })
+
+
+@app.route("/api/rent/return/confirm", methods=["POST"])
+@client_required
+def confirm_return():
+    from datetime import datetime
+
+    data = request.json
+    rental_id = data.get("rental_id")
+    end_km = data.get("end_km")
+    damage_value = float(data.get("damage_value", 0) or 0)
+
+    if rental_id is None or end_km is None:
+        return jsonify(ok=False, error="Dados incompletos"), 400
+
+    KM_LIMIT_PER_RENTAL = 300
+    EXTRA_KM_PRICE = 1.5
+
+    rental = next((r for r in RENTALS if r["rental_id"] == rental_id), None)
+    if not rental:
+        return jsonify(ok=False, error="Aluguel não encontrado"), 404
+
+    user = session.get("user")
+    if not user or user["email"] != rental["client_email"]:
+        return jsonify(ok=False, error="Você não tem permissão para este aluguel"), 403
+
+    if rental.get("status") == "finished":
+        return jsonify(ok=False, error="Este aluguel já foi finalizado"), 400
+
+    vehicle = next((v for v in VEHICLES if v["id"] == rental["vehicle_id"]), None)
+    if not vehicle:
+        return jsonify(ok=False, error="Veículo não encontrado"), 404
+
+    start_datetime = datetime.fromisoformat(rental["start_datetime"])
+    end_datetime = datetime.now()
+    days_used = (end_datetime - start_datetime).days
+    if days_used < 1:
+        days_used = 1
+
+    extra_days = max(0, days_used - rental["days"])
+    extra_days_fee = extra_days * rental["daily_price"]
+
+    start_km = float(rental.get("start_km", 0))
+    end_km = float(end_km)
+    total_km = max(0, end_km - start_km)
+    extra_km = max(0, total_km - KM_LIMIT_PER_RENTAL)
+    extra_km_fee = extra_km * EXTRA_KM_PRICE
+
+    damage_fee = damage_value
+
+    base_total = rental["total"]
+    additional_costs = extra_days_fee + extra_km_fee + damage_fee
+    final_total = base_total + additional_costs
+
+    deposit = rental.get("deposit", 0)
+    refund = max(0, deposit - additional_costs)
+
+    rental.update({
+        "end_datetime": end_datetime.isoformat(),
+        "end_km": end_km,
+        "extra_days": extra_days,
+        "extra_km_fee": extra_km_fee,
+        "damage_fee": damage_fee,
+        "final_total": final_total,
+        "refund": refund,
+        "status": "finished"
+    })
+
+    vehicle["status"] = "available"
+
+    return jsonify({
+        "ok": True,
+        "message": "Aluguel finalizado com sucesso.",
+        "summary": {
+            "days_contracted": rental["days"],
+            "days_used": days_used,
+            "extra_days": extra_days,
+            "extra_days_fee": extra_days_fee,
+            "total_km": total_km,
+            "extra_km": extra_km,
+            "extra_km_fee": extra_km_fee,
+            "damage_fee": damage_fee,
+            "base_total": base_total,
+            "final_total": final_total,
+            "deposit": deposit,
+            "refund": refund
+        }
+    })
 
 
 
