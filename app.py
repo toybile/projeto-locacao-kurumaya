@@ -521,11 +521,10 @@ def confirm_return():
 @app.before_request
 def seed_data():
     global seeded, VEHICLES, next_vehicle_id
-
     if seeded:
         return
     seeded = True
-
+    
     VEHICLES = [
         {
             "id": 1,
@@ -533,9 +532,9 @@ def seed_data():
             "model": "Corolla",
             "brand": "Toyota",
             "year": 2022,
-            "category": "Sedan",
+            "category": "sedan",
             "price": 150,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
             "status": "available"
         },
         {
@@ -544,9 +543,9 @@ def seed_data():
             "model": "Civic",
             "brand": "Honda",
             "year": 2023,
-            "category": "Sedan",
+            "category": "sedan",
             "price": 180,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
             "status": "available"
         },
         {
@@ -555,9 +554,9 @@ def seed_data():
             "model": "HR-V",
             "brand": "Honda",
             "year": 2021,
-            "category": "SUV",
+            "category": "suv",
             "price": 200,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80",
             "status": "available"
         },
         {
@@ -566,9 +565,9 @@ def seed_data():
             "model": "Onix",
             "brand": "Chevrolet",
             "year": 2023,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 120,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80",
             "status": "rented"
         },
         {
@@ -577,9 +576,9 @@ def seed_data():
             "model": "Compass",
             "brand": "Jeep",
             "year": 2022,
-            "category": "SUV",
+            "category": "suv",
             "price": 250,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80",
             "status": "available"
         },
         {
@@ -588,9 +587,9 @@ def seed_data():
             "model": "Gol",
             "brand": "Volkswagen",
             "year": 2020,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 100,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1590362891990-f8ddb41d006d?w=800&q=80",
             "status": "available"
         },
         {
@@ -599,9 +598,9 @@ def seed_data():
             "model": "Nivus",
             "brand": "Volkswagen",
             "year": 2022,
-            "category": "SUV",
+            "category": "suv",
             "price": 190,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1581540222194-0def2dda95b8?w=800&q=80",
             "status": "available"
         },
         {
@@ -610,9 +609,9 @@ def seed_data():
             "model": "Tracker",
             "brand": "Chevrolet",
             "year": 2021,
-            "category": "SUV",
+            "category": "suv",
             "price": 210,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
             "status": "reserved"
         },
         {
@@ -621,9 +620,9 @@ def seed_data():
             "model": "Argo",
             "brand": "Fiat",
             "year": 2022,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 115,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
             "status": "available"
         },
         {
@@ -632,9 +631,9 @@ def seed_data():
             "model": "Cronos",
             "brand": "Fiat",
             "year": 2021,
-            "category": "Sedan",
+            "category": "sedan",
             "price": 130,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
             "status": "available"
         },
         {
@@ -643,9 +642,9 @@ def seed_data():
             "model": "Kicks",
             "brand": "Nissan",
             "year": 2023,
-            "category": "SUV",
+            "category": "suv",
             "price": 220,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80",
             "status": "available"
         },
         {
@@ -654,9 +653,9 @@ def seed_data():
             "model": "Corolla Cross",
             "brand": "Toyota",
             "year": 2023,
-            "category": "SUV",
+            "category": "suv",
             "price": 260,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1606664515524-2134e2f37a85?w=800&q=80",
             "status": "available"
         },
         {
@@ -665,9 +664,9 @@ def seed_data():
             "model": "HB20",
             "brand": "Hyundai",
             "year": 2021,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 110,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1485463611174-f302f6a5c1c9?w=800&q=80",
             "status": "available"
         },
         {
@@ -676,9 +675,9 @@ def seed_data():
             "model": "Creta",
             "brand": "Hyundai",
             "year": 2022,
-            "category": "SUV",
+            "category": "suv",
             "price": 230,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80",
             "status": "rented"
         },
         {
@@ -687,9 +686,9 @@ def seed_data():
             "model": "Renegade",
             "brand": "Jeep",
             "year": 2021,
-            "category": "SUV",
+            "category": "suv",
             "price": 240,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
             "status": "available"
         },
         {
@@ -698,9 +697,9 @@ def seed_data():
             "model": "Sandero",
             "brand": "Renault",
             "year": 2020,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 95,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=800&q=80",
             "status": "available"
         },
         {
@@ -709,9 +708,9 @@ def seed_data():
             "model": "Logan",
             "brand": "Renault",
             "year": 2021,
-            "category": "Sedan",
+            "category": "sedan",
             "price": 115,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80",
             "status": "maintenance"
         },
         {
@@ -720,9 +719,9 @@ def seed_data():
             "model": "Yaris",
             "brand": "Toyota",
             "year": 2022,
-            "category": "Hatch",
+            "category": "hatch",
             "price": 140,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
             "status": "available"
         },
         {
@@ -731,9 +730,9 @@ def seed_data():
             "model": "City",
             "brand": "Honda",
             "year": 2022,
-            "category": "Sedan",
+            "category": "sedan",
             "price": 170,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80",
             "status": "available"
         },
         {
@@ -742,9 +741,9 @@ def seed_data():
             "model": "T-Cross",
             "brand": "Volkswagen",
             "year": 2023,
-            "category": "SUV",
+            "category": "suv",
             "price": 245,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80",
             "status": "available"
         },
         {
@@ -753,13 +752,19 @@ def seed_data():
             "model": "Captur",
             "brand": "Renault",
             "year": 2021,
-            "category": "SUV",
+            "category": "suv",
             "price": 205,
-            "image": "https://www.webmotors.com.br/imagens/prod/348395/VOLKSWAGEN_NIVUS_1.0_200_TSI_TOTAL_FLEX_HIGHLINE_AUTOMATICO_34839515100377384.webp",
+            "image": "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?w=800&q=80",
             "status": "available"
-        },
+        }
     ]
+    
     next_vehicle_id = 22
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
