@@ -73,7 +73,8 @@ async function loadVehicles() {
             const imgSrc = v.image || "/static/img/default-car.jpg";
 
             item.innerHTML = `
-                <img src="${imgSrc}" alt="${v.model}" class="vehicle_image">
+                <img src="${imgSrc}" alt="${v.model}" class="vehicle_image"
+                    onerror="this.onerror=null; this.src='/static/img/default-car.jpg';">
                 <div class="vehicle_info">
                     <h3>${v.brand} ${v.model} (${v.year})</h3>
                     <p><strong>Placa:</strong> ${v.plate}</p>
@@ -83,6 +84,7 @@ async function loadVehicles() {
                     <button class="remove_btn" data-id="${v.id}">Remover</button>
                 </div>
             `;
+
 
             container.appendChild(item);
         });
