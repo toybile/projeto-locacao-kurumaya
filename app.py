@@ -761,6 +761,17 @@ def seed_data():
     next_vehicle_id = 22
 
 
+@app.route("/api/auth/status", methods=["GET"])
+def auth_status():
+    """Retorna o status de login do usuário"""
+    user = session.get("user")
+    if user:
+        return jsonify({
+            "logged_in": True,
+            "name": user["name"],
+            "type": user["type"]
+        })
+    return jsonify({"logged_in": False})
 
 
 
