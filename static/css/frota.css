@@ -12,56 +12,183 @@ body {
     color: #47346a;
 }
 
-/* ====== Topbar ====== */
-.topbar {
-    background-image: linear-gradient(to bottom, #8c27c7 0%, #bd3a7c 50%, #b6291f 100%);
-    color: darkgrey;
-    padding: 2vh 4vw 2vh 4vw;
+:root {
+    --roxo-escuro: #471471;
+    --roxo: #5a1f8c;
+    --rosa: #bd3a7c;
+    --vermelho: #b6291f;
+    --fundo-main: #2b0f22;
+    --texto-claro: #f3f3f3;
+    --texto-suave: #ddd;
+    --botao-primario: #ff4f7d;
+    --botao-primario-hover: #ff6a92;
+    --preto-transparente: rgba(0,0,0,0.25);
+}
+
+.headerbar {
+    background-image: linear-gradient(
+        to right,
+        #7b4ae0 0%,
+        var(--roxo) 30%,
+        var(--rosa) 65%,
+        var(--vermelho) 100%
+    );
+    padding: 1.2rem 3vw 1.05rem 3vw;
+    position: relative;
+}
+
+.headerbar::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+    animation: shine 3s ease-in-out infinite;
+}
+
+.header-content {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    border-bottom: 2px solid #47346a22;
+    justify-content: space-between;
+    gap: 2vw;
+    width: 100%;
 }
 
-.topbar h1 {
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    margin: 0;
-    color: darkgrey;
-    text-shadow: 1px 1px 6px #47346a44;
-}
-
-.topbar nav {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-
-.topbar nav a {
-    color: #fff;
-    background: #bd3a7c;
+#title {
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: bold;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    text-decoration: none;
-    transition: background 0.3s ease, transform 0.2s ease;
+    color: var(--texto-claro);
+    min-width: 180px;
 }
 
-.topbar nav a:hover {
-    background: #8c27c7;
+#title a {
+    color: var(--texto-claro);
+    text-decoration: none;
+    font-family: "Palatino Linotype", serif;
+}
+
+#menu_nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.2rem;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.18),
+        rgba(0,0,0,0.10)
+    );
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    padding: 0.6rem 2.4rem 0.6rem 2rem;
+    flex: 1 1 auto;
+    min-width: 350px;
+    max-width: 740px;
+    font-weight: bold;
+}
+
+#menu_nav .menu-item {
     color: #fff;
+    font-size: 1.32rem;
+    text-decoration: none;
+    font-family: "Palatino Linotype", serif;
+    letter-spacing: 0.02em;
+    position: relative;
+    transition: color 0.24s, transform 0.2s;
+}
+
+#menu_nav .menu-item:hover {
+    color: #ffe9fe;
     transform: translateY(-2px);
 }
 
-.topbar nav .logout {
-    color: #fff !important;
-    background: #b6291f !important;
+#menu_nav .menu-item::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0; width: 0; height: 2px;
+    background: linear-gradient(to right, var(--rosa), var(--vermelho));
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
-.topbar nav .logout:hover {
-    background: #d63a26 !important;
+#menu_nav .menu-item:hover::after {
+    width: 100%;
+}
+
+#div_perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+}
+
+#div_botoes_header {
+    display: flex;
+    gap: 0.6rem;
+}
+
+#button_perfil, #button_criar {
+    min-width: 80px;
+    padding: 0.44rem 1.25rem;
+    font-size: 1.03rem;
+    font-family: inherit;
+    border-radius: 999px;
+    border: 1px solid var(--texto-claro);
+    background: transparent;
+    color: var(--texto-claro);
+    cursor: pointer;
+    transition: background 0.22s, color 0.22s, transform 0.14s;
+}
+
+#button_criar {
+    background: linear-gradient(to right, var(--botao-primario), var(--rosa));
+    color: #fff;
+    border: 1px solid #fff2;
+    margin-left: 0.5rem;
+}
+
+#button_perfil:hover {
+    background: var(--texto-claro);
+    color: var(--roxo-escuro);
+}
+
+#button_criar:hover {
+    background: linear-gradient(to right, var(--botao-primario-hover), var(--rosa));
+    filter: brightness(1.13);
+}
+
+.texto-funcionario {
+    margin-top: 3px;
+    font-size: 0.91rem;
+}
+
+.texto-funcionario a {
+    color: var(--texto-suave);
+    text-decoration: underline;
+    transition: color 0.17s;
+}
+
+.texto-funcionario a:hover {
+    color: #fff;
+}
+
+@keyframes shine {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+}
+
+@media (max-width: 900px) {
+    .header-content { flex-direction: column; align-items: stretch; gap: 1vw; }
+    #menu_nav { margin: 10px 0; padding: 0.8rem 1.1rem; max-width: 98vw; font-size: 1rem; }
+    #div_perfil { align-items: flex-end; }
+}
+
+@media (max-width: 600px) {
+    .header-content { gap: 0; }
+    #title { font-size: 1.5rem; min-width: 110px; }
+    #menu_nav { padding: 0.8rem 0.64rem; font-size: 1rem; }
+}
+
+@media (max-width: 420px) {
+    #div_botoes_header { flex-wrap: wrap; justify-content: flex-start; }
+    #menu_nav { justify-content: center; }
 }
 
 /* ====== Conteúdo ====== */
@@ -106,13 +233,13 @@ h2 {
     background: linear-gradient(135deg, #faf6fb 0%, #f5f0f8 100%);
     border: 2px solid #bd3a7c33;
     border-radius: 16px;
-    padding: 20px;
+    padding: 0; /* sem padding geral, vamos usar por seção */
     box-shadow: 0 4px 12px rgba(189, 58, 124, 0.12);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0;
     position: relative;
     overflow: hidden;
     animation: fadeInCard 0.4s ease-out backwards;
@@ -170,18 +297,20 @@ h2 {
 /* ====== Imagem do veículo ====== */
 .vehicle-image {
     width: 100%;
-    height: 200px;
-    border-radius: 12px 12px 0 0;
+    height: 210px;
+    border-radius: 16px 16px 0 0;
     overflow: hidden;
     position: relative;
     background: linear-gradient(135deg, #e0d5f0 0%, #f0e5f5 100%);
-    margin: -20px -20px 0 -20px;
+    margin: 0; /* sem margem negativa */
 }
 
 .vehicle-image img {
+    display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;        /* cobre toda a área */
+    object-position: center;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -191,10 +320,7 @@ h2 {
 
 .vehicle-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: linear-gradient(
         to bottom,
         transparent 0%,
@@ -220,14 +346,22 @@ h2 {
     letter-spacing: 1px;
 }
 
+/* Aplica padding só nas áreas de texto */
+.vehicle-card-header,
+.vehicle-info,
+.vehicle-price {
+    padding-inline: 20px;
+}
+
 /* ====== Header do card ====== */
 .vehicle-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0 10px 0;
+    padding-top: 14px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #bd3a7c22;
-    margin-top: 12px;
+    margin-top: 0;
 }
 
 .vehicle-name {
@@ -298,6 +432,7 @@ h2 {
     font-weight: bold;
     color: #b6291f;
     text-align: center;
+    padding-bottom: 18px;
 }
 
 /* ====== Controles de Paginação ====== */
@@ -404,12 +539,20 @@ h2 {
     }
 
     .vehicle-card {
-        padding: 16px;
+        padding: 0; /* continua sem padding geral */
+        border-radius: 14px;
     }
 
     .vehicle-image {
-        height: 180px;
-        margin: -16px -16px 0 -16px;
+        height: 190px;
+        border-radius: 14px 14px 0 0;
+        margin: 0;
+    }
+
+    .vehicle-card-header,
+    .vehicle-info,
+    .vehicle-price {
+        padding-inline: 16px;
     }
 
     .vehicle-name {
