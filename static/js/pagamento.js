@@ -48,5 +48,4 @@ document.getElementById("pagarBtn").addEventListener("click", async () => {
     window.location.href = "/frota";
 });
 
-// carregamento inicial
 carregarVeiculo();

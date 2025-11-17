@@ -1,4 +1,4 @@
-// Configuração de paginação
+// Configuração de paginaçãO
 const VEHICLES_PER_PAGE = 9;
 let currentPage = 1;
 let allVehicles = [];
@@ -11,7 +11,6 @@ const STATUS_MAP = {
     'maintenance': { label: 'Manutenção', class: 'status-manutencao' }
 };
 
-// Função para carregar veículos
 async function loadVehicles() {
     try {
         const response = await fetch('/api/vehicles');
@@ -31,7 +30,6 @@ async function loadVehicles() {
     }
 }
 
-// Renderiza a página atual
 function renderCurrentPage() {
     const vehiclesList = document.getElementById('vehiclesList');
     
@@ -87,7 +85,6 @@ function renderCurrentPage() {
     }).join('');
 }
 
-// Atualiza controles de paginação
 function updatePaginationControls() {
     const totalPages = Math.ceil(allVehicles.length / VEHICLES_PER_PAGE);
     const paginationControls = document.getElementById('paginationControls');
@@ -107,7 +104,6 @@ function updatePaginationControls() {
     nextBtn.disabled = currentPage === totalPages;
 }
 
-// Navegar para página anterior
 function goToPreviousPage() {
     if (currentPage > 1) {
         currentPage--;
@@ -117,7 +113,6 @@ function goToPreviousPage() {
     }
 }
 
-// Navegar para próxima página
 function goToNextPage() {
     const totalPages = Math.ceil(allVehicles.length / VEHICLES_PER_PAGE);
     if (currentPage < totalPages) {
@@ -128,12 +123,10 @@ function goToNextPage() {
     }
 }
 
-// Ver detalhes do veículo
 function viewVehicleDetails(vehicleId) {
     window.location.href = `/veiculo/${vehicleId}`;
 }
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     const prevBtn = document.getElementById('prevPage');
     const nextBtn = document.getElementById('nextPage');

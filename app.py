@@ -115,6 +115,13 @@ def clientes_admin():
 def devolucao_cliente_page():
     return render_template("devolucao_cliente.html")
 
+@app.route("/contato")
+def contato():
+    return render_template("contact.html")
+
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
 
 
 # =====================================

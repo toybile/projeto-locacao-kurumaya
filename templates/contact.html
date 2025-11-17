@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - Kurumaya</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <h1 id="title"><a href="/">Kurumaya</a></h1>
+        <nav style="background: rgba(0, 0, 0, 0.2); padding: 0 20px; border-radius: 30px; display: flex; gap: 30px; align-items: center;">
+            <a href="/frota" style="color: white; text-decoration: none; font-size: 1.1rem;">Frota</a>
+            <a href="/contato" style="color: white; text-decoration: none; font-size: 1.1rem;">Contato</a>
+            <a href="/faq" style="color: white; text-decoration: none; font-size: 1.1rem;">FAQ</a>
+        </nav>
+        <div id="divperfil">
+            <div id="divbotoesheader">
+                <a href="/login"><button id="buttonperfil">Entrar</button></a>
+                <a href="/cadastro"><button id="buttoncriar">Criar conta</button></a>
+            </div>
+            <p class="texto-funcionario"><a href="/funcionario/login">É funcionário? Logue aqui.</a></p>
+        </div>
+    </header>
+    
+    <div id="linetitle"><h1></h1></div>
+    
+    <!-- MAIN -->
+    <main>
+        <!-- CONTEÚDO -->
+        <section id="hero">
+            <div id="divcentraltexts">
+                <div id="divslogan">
+                    <h1>Entre em Contato</h1>
+                </div>
+                
+                <div style="color: darkgrey; font-size: 1.2rem; margin-top: 20px;">
+                    <p><strong>Email:</strong> contato@kurumaya.com.br</p>
+                    <p><strong>Telefone:</strong> (11) 91234-5678</p>
+                    <p><strong>Endereço:</strong> Av. das Nações, 1234, Centro, São Paulo - SP</p>
+                    
+                    <h2 style="margin-top: 40px; color: #8c27c7;">Envie uma mensagem</h2>
+                    <form style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+                        <input type="text" placeholder="Seu nome" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+                        <input type="email" placeholder="Seu email" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem;">
+                        <textarea placeholder="Sua mensagem" rows="5" style="padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; resize: vertical;"></textarea>
+                        <button type="submit" disabled style="padding: 15px; background: #8c27c7; color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: not-allowed;">Enviar (exemplo - não funcional)</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/auth_ui.js"></script>
+</body>
+</html>
