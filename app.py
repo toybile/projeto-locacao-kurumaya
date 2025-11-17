@@ -64,7 +64,7 @@ def login():
 def login_funcionario():
     return render_template("funcionario/login.html")
 
-@app.route("/cadastro")
+@app.route("/signin")
 def cadastro():
     return render_template("signin.html")
 

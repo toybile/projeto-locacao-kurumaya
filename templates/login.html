@@ -4,18 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Log-in — Kurumaya</title>
-  <link rel="stylesheet" href="/static/css/global.css">
-  <link rel="stylesheet" href="/static/css/log-in.css">
-  <link rel="stylesheet" href="/static/css/auth.css">
+  <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
+  <a href="javascript:history.back()" class="back-button">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 19l-7-7 7-7"/>
+    </svg>
+  </a>
+
   <main class="auth_page">
     <div class="container small">
       <h1>Log-in</h1>
       <form id="form-login">
         <div class="form_group">
           <label for="email">E-Mail</label>
-          <input type="text" id="email" name="email" required>
+          <input type="email" id="email" name="email" required>
         </div>
         <div class="form_group">
           <label for="password">Password</label>
@@ -26,7 +30,6 @@
       </form>
     </div>
   </main>
-  <script src="/static/js/auth.js"></script>
   <script src="/static/js/auth.js"></script>
 </body>
 </html>
