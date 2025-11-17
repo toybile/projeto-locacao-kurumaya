@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Seleciona os botões (ajusta os seletores pros seus botões reais)
         const loginBtn = document.querySelector('a[href="/login"]');
-        const cadastroBtn = document.querySelector('a[href="/cadastro"]');
+        const cadastroBtn = document.querySelector('a[href="/signin"]');
         const logoutBtn = document.querySelector('a[href="/logout"]');
         const loginFuncBtn = document.querySelector('a[href="/funcionario/login"]');
 

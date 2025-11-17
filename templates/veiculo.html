@@ -5,29 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Veículo - Kurumaya</title>
     <link rel="stylesheet" href="/static/css/dtlh_veiculo.css">
+    <link rel="stylesheet" href="../static/css/header.css">
 </head>
 <body>
 
-<header class="headerbar">
-    <div class="header-content">
-        <div id="title"><a href="/">Kurumaya</a></div>
-        <div id="menu_nav">
-            <a href="/frota" class="menu-item">Frota</a>
-            <a href="/solucoes" class="menu-item">Soluções</a>
-            <a href="/contato" class="menu-item">Contato</a>
-            <a href="/faq" class="menu-item">FAQ</a>
-        </div>
-        <div id="div_perfil">
-            <div id="div_botoes_header">
-                <a href="/login"><button id="button_perfil">Entrar</button></a>
-                <a href="/cadastro"><button id="button_criar">Criar conta</button></a>
+    <header class="headerbar">
+        <div class="header-content">
+            <div id="title"><a href="/">Kurumaya</a></div>
+                <div id="menu_nav">
+                    <a href="/frota" class="menu-item">Frota</a>
+                    <a href="/solucoes" class="menu-item">Soluções</a>
+                    <a href="/contato" class="menu-item">Contato</a>
+                    <a href="/faq" class="menu-item">FAQ</a>
+                    <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
+                    <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
+                </div>
+
+            <div id="div_perfil">
+                <div id="div_botoes_header">
+                    <a href="/login"><button id="button_perfil">Entrar</button></a>
+                    <a href="/signin"><button id="button_criar">Criar conta</button></a>
+                    <a href="/logout"><button id="button_sair">Sair</button></a>
+                </div>
+                <p class="texto-funcionario">
+                    <a href="/funcionario/login">É funcionário? Logue aqui.</a>
+                </p>
             </div>
-            <p class="texto-funcionario">
-                <a href="/funcionario/login">É funcionário? Logue aqui.</a>
-            </p>
         </div>
-    </div>
-</header>
+    </header><div id="line_title" class="animate-expand"></div>
 
 <div id="line_title" class="animate-expand"><h1></h1></div>
 

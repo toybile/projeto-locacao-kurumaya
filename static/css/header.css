@@ -286,7 +286,7 @@ body {
             <div id="div_perfil">
                 <div id="div_botoes_header">
                     <a href="/login"><button id="button_perfil">Entrar</button></a>
-                    <a href="/cadastro"><button id="button_criar">Criar conta</button></a>
+                    <a href="/signin"><button id="button_criar">Criar conta</button></a>
                     <a href="/logout"><button id="button_sair">Sair</button></a>
                 </div>
                 <p class="texto-funcionario">

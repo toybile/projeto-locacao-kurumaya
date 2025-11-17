@@ -65,7 +65,7 @@ def login_funcionario():
     return render_template("funcionario/login.html")
 
 @app.route("/signin")
-def cadastro():
+def signin():
     return render_template("signin.html")
 
 @app.route("/frota")
@@ -401,7 +401,8 @@ def preview_return():
     final_total = base_total + additional_costs
 
     deposit = rental.get("deposit", 0)
-    refund = max(0, deposit - additional_costs)
+    refund = final_total - deposit
+
 
     return jsonify({
         "ok": True,

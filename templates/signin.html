@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign-in</title>
-    <link rel="stylesheet" href="./static/css/signin.css">
+    <link rel="stylesheet" href="/static/css/signin.css">
 </head>
 <body>
-    <a href="javascript:history.back()" class="back-button">
+    <script src="/static/js/back-navigation.js"></script>
+    
+    <a href="javascript:goBack()" class="back-button">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
@@ -16,11 +18,11 @@
     <main>
         <div class="container">
             <h1>Sign-in</h1>
-            <form action="" method="get">
+            <form id="form-signin">
                 <div id="div_form2x2">
                     <div class="form_group">
                         <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" name="fullname" required>
+                        <input type="text" id="fullname" name="name" required>
                     </div>
 
                     <div class="form_group">
@@ -50,10 +52,11 @@
                 </div>
 
                 <button type="submit">Criar</button>
+                <p id="signupMsg" class="msg"></p>
                 <p>Já tem conta? <a href="/login">Entrar</a></p>
             </form>
         </div>
     </main>
-    <script src="../static/js/auth.js"></script>
+    <script src="/static/js/auth.js"></script>
 </body>
 </html>
