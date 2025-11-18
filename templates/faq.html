@@ -4,57 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Kurumaya</title>
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/header.css">
+    <link rel="stylesheet" href="/static/css/faq.css">
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <h1 id="title"><a href="/">Kurumaya</a></h1>
-        <nav style="background: rgba(0, 0, 0, 0.2); padding: 0 20px; border-radius: 30px; display: flex; gap: 30px; align-items: center;">
-            <a href="/frota" style="color: white; text-decoration: none; font-size: 1.1rem;">Frota</a>
-            <a href="/contato" style="color: white; text-decoration: none; font-size: 1.1rem;">Contato</a>
-            <a href="/faq" style="color: white; text-decoration: none; font-size: 1.1rem;">FAQ</a>
-        </nav>
-        <div id="divperfil">
-            <div id="divbotoesheader">
-                <a href="/login"><button id="buttonperfil">Entrar</button></a>
-                <a href="/cadastro"><button id="buttoncriar">Criar conta</button></a>
+    <header class="headerbar">
+        <div class="header-content">
+            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
+            <div id="menu_nav">
+                <a href="/frota" class="menu-item">Frota</a>
+                <a href="/solucoes" class="menu-item">Soluções</a>
+                <a href="/contato" class="menu-item">Contato</a>
+                <a href="/faq" class="menu-item">FAQ</a>
+                <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
+                <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
             </div>
-            <p class="texto-funcionario"><a href="/funcionario/login">É funcionário? Logue aqui.</a></p>
+
+            <div id="div_perfil">
+                <div id="div_botoes_header">
+                    <a href="/login"><button id="button_perfil">Entrar</button></a>
+                    <a href="/signin"><button id="button_criar">Criar conta</button></a>
+                    <a href="/logout"><button id="button_sair">Sair</button></a>
+                </div>
+                <p class="texto-funcionario">
+                    <a href="/funcionario/login">É funcionário? Logue aqui.</a>
+                </p>
+            </div>
         </div>
     </header>
-    
-    <div id="linetitle"><h1></h1></div>
-    
-    <!-- MAIN -->
+    <div id="line_title" class="animate-expand"></div>
+
     <main>
-        <!-- CONTEÚDO -->
         <section id="hero">
             <div id="divcentraltexts">
                 <div id="divslogan">
                     <h1>Perguntas Frequentes (FAQ)</h1>
                 </div>
                 
-                <div style="color: darkgrey; font-size: 1.1rem; margin-top: 30px; line-height: 1.8;">
-                    <h3 style="color: #8c27c7; margin-top: 25px;">Como faço para alugar um veículo?</h3>
+                <div class="faq-item">
+                    <h3>Como faço para alugar um veículo?</h3>
                     <p>Basta criar uma conta, escolher o veículo disponível, reservar e realizar o pagamento diretamente pela plataforma.</p>
-                    
-                    <h3 style="color: #8c27c7; margin-top: 25px;">Quais são os documentos necessários?</h3>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Quais são os documentos necessários?</h3>
                     <p>Você precisa de CNH válida, RG e CPF. No ato da retirada pode ser necessário apresentar documentos originais.</p>
-                    
-                    <h3 style="color: #8c27c7; margin-top: 25px;">Posso cancelar uma reserva?</h3>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Posso cancelar uma reserva?</h3>
                     <p>Sim. Você pode cancelar até 24h antes do início contratado sem custos adicionais.</p>
-                    
-                    <h3 style="color: #8c27c7; margin-top: 25px;">Como funciona a devolução do veículo?</h3>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Como funciona a devolução do veículo?</h3>
                     <p>Devolva o carro pelo sistema acessando o menu "Devolução" e preenchendo as informações de quilometragem, possíveis danos e demais campos.</p>
-                    
-                    <h3 style="color: #8c27c7; margin-top: 25px;">O que acontece se eu ultrapassar o limite de KM?</h3>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>O que acontece se eu ultrapassar o limite de KM?</h3>
                     <p>Será cobrado um valor adicional de R$ 1,50 para cada quilômetro excedente do contrato.</p>
                 </div>
             </div>
         </section>
     </main>
 
+    <script src="/static/js/menu.js"></script>
     <script src="/static/js/auth_ui.js"></script>
 </body>
 </html>
