@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Veículo - Kurumaya</title>
+    <title>{{ vehicle.brand }} {{ vehicle.model }} - Kurumaya</title>
     <link rel="stylesheet" href="/static/css/dtlh_veiculo.css">
-    <link rel="stylesheet" href="../static/css/header.css">
+    <link rel="stylesheet" href="/static/css/base.css">
 </head>
-<body>
 
+<body>
     <header class="headerbar">
         <div class="header-content">
-            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
+            <div id="title"><a href="/"><img src="/static/img/logo.png" alt="Logo" id="logo"></a></div>
             <div id="menu_nav">
                 <a href="/frota" class="menu-item">Frota</a>
                 <a href="/solucoes" class="menu-item">Soluções</a>
@@ -33,37 +33,62 @@
             </div>
         </div>
     </header>
-    <div id="line_title" class="animate-expand"></div>
+    
+    <div id="line_title"></div>
+    
+    <main class="content">
+        <div class="vehicle-container">
+            <div class="vehicle-image-box">
+                <img src="{{ vehicle.image }}" alt="{{ vehicle.brand }} {{ vehicle.model }}" class="vehicle-image" onerror="this.src='/static/img/default-car.jpg'">
+            </div>
 
-<div id="line_title" class="animate-expand"><h1></h1></div>
+            <div class="vehicle-details-box">
+                <h2>{{ vehicle.brand }} {{ vehicle.model }} ({{ vehicle.year }})</h2>
+                
+                <div class="details-group">
+                    <div class="detail-item">
+                        <strong>Placa:</strong>
+                        <span>{{ vehicle.plate }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Categoria:</strong>
+                        <span>{{ vehicle.category|capitalize }}</span>
+                    </div>
+                </div>
 
-<div class="vehicle_content_centered">
-    <div class="vehicle_img_box">
-        <img src="{{ vehicle.image }}" alt="Imagem do Veículo">
-    </div>
-    <div class="vehicle_details_box">
-        <h2>{{ vehicle.model }} ({{ vehicle.year }})</h2>
-        <p><strong>Placa:</strong> {{ vehicle.plate }}</p>
-        <p><strong>Preço por dia:</strong> R$ {{ vehicle.price }},00</p>
-        <p>
-            <strong>Status:</strong>
-            {% if vehicle.status == "available" %}
-                <span class="status available">Disponível</span>
-            {% elif vehicle.status == "reserved" %}
-                <span class="status reserved">Reservado</span>
-            {% else %}
-                <span class="status rented">Alugado</span>
-            {% endif %}
-        </p>
-        {% if vehicle.status == "available" %}
-            <a href="/pagamento/{{ vehicle.id }}" class="btn">Alugar agora</a>
-        {% else %}
-            <p>Este veículo não está disponível para aluguel no momento.</p>
-        {% endif %}
-        <a href="/frota" class="btn_back">← Voltar para a frota</a>
-    </div>
-</div>
-<script src="/static/js/auth_ui.js"></script>
+                <div class="details-group">
+                    <div class="detail-item">
+                        <strong>Preço por dia:</strong>
+                        <span class="price">R$ {{ "%.2f"|format(vehicle.price) }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Status:</strong>
+                        <span class="status status-{{ vehicle.status }}">
+                            {% if vehicle.status == "available" %}
+                                ✓ Disponível
+                            {% elif vehicle.status == "reserved" %}
+                                ⊘ Reservado
+                            {% elif vehicle.status == "rented" %}
+                                ✘ Alugado
+                            {% else %}
+                                ⚙ Manutenção
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
 
+                <div class="actions">
+                    {% if vehicle.status == "available" %}
+                        <a href="/pagamento/{{ vehicle.id }}" class="btn btn-primary">Alugar agora</a>
+                    {% else %}
+                        <p class="unavailable">Este veículo não está disponível.</p>
+                    {% endif %}
+                    <a href="/frota" class="btn btn-secondary">← Voltar para frota</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/auth_ui.js"></script>
 </body>
 </html>

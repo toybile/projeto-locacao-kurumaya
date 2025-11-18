@@ -1,9 +1,9 @@
 main.content {
-    background-image: radial-gradient(circle at top left, #5a1f8c 0%, #2b0f22 35%, transparent 60%),
-        radial-gradient(circle at bottom right, #b6291f 0%, #5a1414 35%, #1b0814 80%);
+    background: radial-gradient(circle at top left, #5a1f8c 0%, #2b0f22 35%, transparent 60%),
+                radial-gradient(circle at bottom right, #b6291f 0%, #5a1414 35%, #1b0814 80%);
     min-height: calc(100vh - 4rem);
     width: 100vw;
-    padding: 4rem 5vw 6rem 5vw;
+    padding: 4rem 5vw 6rem;
     margin: 0;
     max-width: none;
     border-radius: 0;
@@ -25,9 +25,9 @@ main.content {
     text-shadow: 0 4px 12px rgba(189, 58, 124, 0.4);
     animation: floatTitle 3s ease-in-out infinite;
     font-weight: bold;
-    border: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    border: none;
 }
 
 .vehicle-grid {
@@ -35,7 +35,6 @@ main.content {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-bottom: 3rem;
-    min-height: auto;
     max-width: 1400px;
     width: 100%;
 }
@@ -47,80 +46,50 @@ main.content {
     font-size: 1.4rem;
     padding: 60px;
     animation: pulse 1.5s ease-in-out infinite;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
     backdrop-filter: blur(15px);
     border: 2px solid rgba(189, 58, 124, 0.4);
     border-radius: 1.5rem;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
 .vehicle-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
     backdrop-filter: blur(20px);
     border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 1.5rem;
     padding: 0;
-    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.5), 
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 0;
     position: relative;
     overflow: hidden;
     animation: fadeInCard 0.6s ease-out backwards;
 }
 
-@keyframes fadeInCard {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.vehicle-card:nth-child(1) { animation-delay: 0.1s; }
-.vehicle-card:nth-child(2) { animation-delay: 0.15s; }
-.vehicle-card:nth-child(3) { animation-delay: 0.2s; }
-.vehicle-card:nth-child(4) { animation-delay: 0.25s; }
-.vehicle-card:nth-child(5) { animation-delay: 0.3s; }
-.vehicle-card:nth-child(6) { animation-delay: 0.35s; }
-.vehicle-card:nth-child(7) { animation-delay: 0.4s; }
-.vehicle-card:nth-child(8) { animation-delay: 0.45s; }
-.vehicle-card:nth-child(9) { animation-delay: 0.5s; }
-
 .vehicle-card::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-    transition: left 0.7s ease;
+    transform: translateX(-100%);
+    transition: transform 0.7s ease;
 }
 
 .vehicle-card:hover::before {
-    left: 100%;
+    transform: translateX(100%);
 }
 
 .vehicle-card::after {
     content: "";
     position: absolute;
-    top: 0;
     left: 0;
+    top: 0;
     width: 5px;
     height: 100%;
-    background: linear-gradient(to bottom, #bd3a7c, #ff4f7d);
+    background: linear-gradient(180deg, #bd3a7c, #ff4f7d);
     opacity: 0;
     transition: opacity 0.4s ease;
 }
@@ -131,11 +100,9 @@ main.content {
 
 .vehicle-card:hover {
     transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 20px 60px rgba(189, 58, 124, 0.6), 
-                0 0 0 1px rgba(255, 255, 255, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 20px 60px rgba(189, 58, 124, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     border-color: rgba(255, 255, 255, 0.4);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.12) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.12));
 }
 
 .vehicle-image {
@@ -144,13 +111,12 @@ main.content {
     border-radius: 1.5rem 1.5rem 0 0;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(135deg, rgba(140, 39, 199, 0.15) 0%, rgba(189, 58, 124, 0.15) 100%);
+    background: linear-gradient(135deg, rgba(140, 39, 199, 0.15), rgba(189, 58, 124, 0.15));
     margin: 0;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .vehicle-image img {
-    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -165,7 +131,7 @@ main.content {
 .vehicle-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(140, 39, 199, 0.9) 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(140, 39, 199, 0.9) 100%);
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -187,21 +153,13 @@ main.content {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.vehicle-card-header,
-.vehicle-info,
-.vehicle-price {
-    padding-inline: 1.5rem;
-}
-
 .vehicle-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 1.2rem;
-    padding-bottom: 1rem;
+    padding: 1.2rem 1.5rem 1rem;
     border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-    margin-top: 0;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
 }
 
 .vehicle-name {
@@ -248,9 +206,8 @@ main.content {
     flex-direction: column;
     gap: 10px;
     color: #f3f3f3;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+    padding: 1rem 1.5rem;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.1));
 }
 
 .vehicle-info-item {
@@ -270,16 +227,14 @@ main.content {
 }
 
 .vehicle-price {
-    margin-top: 0;
-    padding-top: 1.2rem;
+    padding: 1.2rem 1.5rem 1.5rem;
     border-top: 2px solid rgba(255, 255, 255, 0.15);
     font-size: 1.7rem;
     font-weight: bold;
     color: #fff;
     text-align: center;
-    padding-bottom: 1.5rem;
     text-shadow: 0 3px 10px rgba(255, 106, 146, 0.6);
-    background: linear-gradient(to bottom, transparent, rgba(189, 58, 124, 0.1));
+    background: linear-gradient(180deg, transparent, rgba(189, 58, 124, 0.1));
 }
 
 .pagination-controls {
@@ -289,12 +244,11 @@ main.content {
     gap: 2rem;
     margin-top: 2rem;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
     backdrop-filter: blur(15px);
     border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 1.5rem;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     animation: slideUp 0.6s ease-out 0.5s backwards;
 }
 
@@ -327,9 +281,7 @@ main.content {
 .pagination-btn:disabled {
     background: linear-gradient(135deg, #666, #888);
     cursor: not-allowed;
-    box-shadow: none;
     opacity: 0.4;
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .page-info {
@@ -341,96 +293,55 @@ main.content {
     text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes slideUp {
-    from { 
-        opacity: 0; 
-        transform: translateY(40px); 
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
     }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
+}
+
+@keyframes pulse {
+    50% { opacity: 0.6; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
     }
 }
 
 @keyframes floatTitle {
-    0%, 100% { 
-        transform: translateY(0); 
-    }
-    50% { 
-        transform: translateY(-8px); 
-    }
+    50% { transform: translateY(-8px); }
 }
 
 @media (max-width: 1200px) {
-    .vehicle-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.8rem;
-    }
+    .vehicle-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
 }
 
 @media (max-width: 900px) {
-    main.content {
-        padding: 3rem 4vw 4rem 4vw;
-    }
-    .frota-header {
-        margin-bottom: 2.5rem;
-    }
+    main.content { padding: 3rem 4vw 4rem; }
+    .frota-header { margin-bottom: 2.5rem; }
 }
 
 @media (max-width: 700px) {
-    main.content {
-        padding: 2rem 3vw 3rem 3vw;
-    }
-    .vehicle-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    .vehicle-image {
-        height: 200px;
-    }
-    .vehicle-card-header,
-    .vehicle-info,
-    .vehicle-price {
-        padding-inline: 1.3rem;
-    }
-    .vehicle-name {
-        font-size: 1.2rem;
-    }
-    .vehicle-price {
-        font-size: 1.5rem;
-    }
-    .pagination-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 1.4rem;
-    }
-    .page-info {
-        font-size: 1.1rem;
-        min-width: 120px;
-    }
+    main.content { padding: 2rem 3vw 3rem; }
+    .vehicle-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .vehicle-image { height: 200px; }
+    .vehicle-card-header, .vehicle-info, .vehicle-price { padding-inline: 1.3rem; }
+    .vehicle-name { font-size: 1.2rem; }
+    .vehicle-price { font-size: 1.5rem; }
+    .pagination-btn { width: 48px; height: 48px; font-size: 1.4rem; }
+    .page-info { font-size: 1.1rem; min-width: 120px; }
 }
 
 @media (max-width: 420px) {
-    main.content {
-        padding: 1.5rem 2vw 2.5rem 2vw;
-    }
-    .vehicle-card {
-        border-radius: 1.2rem;
-    }
-    .vehicle-image {
-        height: 180px;
-        border-radius: 1.2rem 1.2rem 0 0;
-    }
-    .pagination-controls {
-        gap: 1.2rem;
-        padding: 1rem;
-    }
+    main.content { padding: 1.5rem 2vw 2.5rem; }
+    .vehicle-card { border-radius: 1.2rem; }
+    .vehicle-image { height: 180px; border-radius: 1.2rem 1.2rem 0 0; }
+    .pagination-controls { gap: 1.2rem; padding: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

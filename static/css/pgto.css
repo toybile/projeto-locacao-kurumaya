@@ -1,127 +1,338 @@
-/* ===== Reset e Fonte ===== */
+:root {
+    --roxo: #5a1f8c;
+    --rosa: #bd3a7c;
+    --vermelho: #b6291f;
+    --teal: #33808d;
+    --texto-claro: #f3f3f3;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Palatino Linotype", Arial, Helvetica, sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
 }
 
 body {
+    font-family: "Palatino Linotype", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: radial-gradient(circle at top left, #5a1f8c 0%, #2b0f22 35%, transparent 60%), 
+                radial-gradient(circle at bottom right, #b6291f 0%, #5a1414 35%, #1b0814 80%);
     min-height: 100vh;
-    background: linear-gradient(to bottom, #7a251d 0%, #7a252d 50%, #7a253d 100%);
-    color: #47346a;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow-x: hidden;
 }
 
-/* ===== Título ===== */
-h1 {
-    color: darkgrey;
-    margin: 46px 0 18px 0;
-    font-size: clamp(1.7rem, 5vw, 2.3rem);
-    text-shadow: 1px 1px 4px #47346a44;
-}
-
-/* ===== Card de Info/Pagamento ===== */
-#info {
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 3px 15px rgba(140,39,199,0.09);
-    max-width: 435px;
-    padding: 36px 28px 26px 28px;
-    margin-bottom: 22px;
+.back-button {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     display: flex;
-    flex-direction: column;
-    gap: 19px;
+    align-items: center;
+    gap: 8px;
 }
 
-#info p {
-    color: #47346a;
-    font-size: 1.05rem;
-    margin: 0;
+.back-button:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-4px);
 }
 
-#info strong {
-    color: #bd3a7c;
-    font-weight: bold;
-    letter-spacing: 1px;
+.payment-container {
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    max-width: 550px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    animation: fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1);
 }
 
-/* ===== Input Dias ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid rgba(189,58,124,0.15);
+}
+
+.security-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+}
+
+h1 {
+    color: #2b0f22;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: #5a1f8c;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.vehicle-info {
+    background: linear-gradient(135deg, rgba(90,31,140,0.08), rgba(189,58,124,0.08));
+    border: 1px solid rgba(90,31,140,0.15);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(90,31,140,0.1);
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-label {
+    color: #5a1f8c;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.info-value {
+    color: #2b0f22;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
 label {
-    color: #8c27c7;
-    font-weight: bold;
-    margin-bottom: 4px;
-    font-size: 1.03rem;
+    display: block;
+    color: #5a1f8c;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.input-wrapper {
+    position: relative;
 }
 
 input[type="number"] {
-    padding: 10px;
     width: 100%;
-    max-width: 120px;
-    font-size: 1.05rem;
-    border: 1.2px solid #bd3a7c88;
-    border-radius: 7px;
-    background: #f3f0f9;
-    color: #47346a;
-    margin-bottom: 6px;
-    margin-left: 4px;
-    transition: border 0.17s;
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 2px solid rgba(90,31,140,0.2);
+    border-radius: 10px;
+    background: #fff;
+    color: #2b0f22;
+    transition: all 0.3s ease;
+    font-family: inherit;
 }
 
 input[type="number"]:focus {
-    border-color: #8c27c7;
     outline: none;
+    border-color: #bd3a7c;
+    box-shadow: 0 0 0 4px rgba(189,58,124,0.1);
 }
 
-/* ===== Valor Total ===== */
-#total {
-    color: #b6291f;
-    font-weight: bold;
-    font-size: 1.17rem;
+.km-input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
-/* ===== Botão de Pagamento ===== */
-button#pagarBtn {
-    background: linear-gradient(to right, #8c27c7, #bd3a7c);
+.km-input-group .form-group {
+    margin-bottom: 0;
+}
+
+.total-section {
+    background: linear-gradient(135deg, #5a1f8c, #bd3a7c);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
     color: #fff;
-    font-weight: bold;
-    font-size: 1.07rem;
+    text-align: center;
+}
+
+.total-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.total-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+.deposit-info {
+    background: rgba(255,193,7,0.1);
+    border: 1px solid rgba(255,193,7,0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.deposit-icon {
+    font-size: 1.5rem;
+}
+
+.deposit-text {
+    color: #5a1f8c;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.deposit-value {
+    font-weight: 700;
+    color: #bd3a7c;
+}
+
+.payment-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #bd3a7c, #5a1f8c);
     border: none;
     border-radius: 10px;
-    padding: 13px 0;
-    width: 99%;
-    margin-top: 12px;
     cursor: pointer;
-    box-shadow: 0 2px 8px #bd3a7c19;
-    letter-spacing: 2px;
-    transition: background 0.16s;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 4px 15px rgba(189,58,124,0.3);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
 }
 
-button#pagarBtn:hover {
-    background: linear-gradient(to right, #b6291f, #8c27c7);
+.payment-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
 }
 
-/* ===== Responsividade ===== */
-@media (max-width: 500px) {
+.payment-button:hover::before {
+    left: 100%;
+}
+
+.payment-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(189,58,124,0.4);
+}
+
+.payment-button:active {
+    transform: translateY(0);
+}
+
+.security-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(90,31,140,0.1);
+}
+
+.security-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: #5a1f8c;
+    font-size: 0.85rem;
+}
+
+.security-icons span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+    
+    .back-button {
+        top: 1rem;
+        left: 1rem;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .payment-container {
+        padding: 2rem 1.5rem;
+    }
+    
     h1 {
-        font-size: 1.13rem;
-        margin: 32px 0 13px 0;
+        font-size: 1.5rem;
     }
-    #info {
-        max-width: 97vw;
-        padding: 18px 7px 18px 7px;
-        border-radius: 9px;
-        gap: 9px;
+    
+    .total-value {
+        font-size: 2rem;
     }
-    label, #info strong {
-        font-size: 0.98rem;
-    }
-    button#pagarBtn {
-        font-size: 1rem;
-        border-radius: 7px;
-        padding: 10px 0;
+    
+    .km-input-group {
+        grid-template-columns: 1fr;
     }
 }

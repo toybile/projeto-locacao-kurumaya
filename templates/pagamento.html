@@ -4,49 +4,73 @@
     <meta charset="UTF-8">
     <title>Pagamento</title>
     <link rel="stylesheet" href="/static/css/pgto.css">
-    <link rel="stylesheet" href="/static/css/header.css">
 </head>
 <body data-id="{{ vehicle.id }}">
+    <a href="javascript:history.back()" class="back-button">
+        ← Voltar
+    </a>
 
-    <header class="headerbar">
-        <div class="header-content">
-            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
-            <div id="menu_nav">
-                <a href="/frota" class="menu-item">Frota</a>
-                <a href="/solucoes" class="menu-item">Soluções</a>
-                <a href="/contato" class="menu-item">Contato</a>
-                <a href="/faq" class="menu-item">FAQ</a>
-                <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
-                <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
+    <div class="payment-container">
+        <div class="header-section">
+            <div class="security-badge">
+                🔒 Pagamento Seguro
             </div>
+            <h1>Confirmação de Aluguel</h1>
+            <p class="subtitle">Revise os detalhes e finalize sua reserva</p>
+        </div>
 
-            <div id="div_perfil">
-                <div id="div_botoes_header">
-                    <a href="/login"><button id="button_perfil">Entrar</button></a>
-                    <a href="/signin"><button id="button_criar">Criar conta</button></a>
-                    <a href="/logout"><button id="button_sair">Sair</button></a>
-                </div>
-                <p class="texto-funcionario">
-                    <a href="/funcionario/login">É funcionário? Logue aqui.</a>
-                </p>
+        <div class="vehicle-info">
+            <div class="info-row">
+                <span class="info-label">Veículo</span>
+                <span class="info-value" id="car-model"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Placa</span>
+                <span class="info-value" id="car-plate"></span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Preço por dia</span>
+                <span class="info-value">R$ <span id="car-price"></span></span>
             </div>
         </div>
-    </header>
-    <div id="line_title" class="animate-expand"></div>
 
-    <h1>Confirmação de Aluguel</h1>
+        <div class="form-group">
+            <label for="dias">Quantos dias você deseja alugar?</label>
+            <div class="input-wrapper">
+                <input type="number" id="dias" min="1" value="1" placeholder="Digite o número de dias">
+            </div>
+        </div>
 
-    <div id="info">
-        <p><strong>Modelo:</strong> <span id="car-model"></span></p>
-        <p><strong>Placa:</strong> <span id="car-plate"></span></p>
-        <p><strong>Preço por dia:</strong> R$ <span id="car-price"></span></p>
+        <div class="km-input-group">
+            <div class="form-group">
+                <label for="start-km">Km Inicial</label>
+                <input type="number" id="start-km" min="0" value="0" placeholder="Ex: 50000">
+            </div>
+        </div>
 
-        <label>Dias de aluguel:</label>
-        <input type="number" id="dias" min="1" value="1">
+        <div class="total-section">
+            <div class="total-label">Valor Total do Aluguel</div>
+            <div class="total-value">R$ <span id="total">0,00</span></div>
+        </div>
 
-        <p><strong>Total:</strong> R$ <span id="total">0</span></p>
+        <div class="deposit-info">
+            <span class="deposit-icon">💳</span>
+            <div class="deposit-text">
+                Será cobrado <span class="deposit-value">50% de caução</span> que será devolvida após a devolução do veículo
+            </div>
+        </div>
 
-        <button id="pagarBtn">Finalizar Pagamento</button>
+        <button id="pagarBtn" class="payment-button">
+            Confirmar e Pagar
+        </button>
+
+        <div class="security-footer">
+            <div class="security-icons">
+                <span>🔐 Criptografado</span>
+                <span>✓ Verificado</span>
+                <span>🛡️ Seguro</span>
+            </div>
+        </div>
     </div>
 
     <script src="/static/js/pagamento.js"></script>
