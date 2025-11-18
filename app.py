@@ -9,8 +9,18 @@ from utils.security import (
     validate_text_input, validate_number, validate_cnh
 )
 
+# =====================================
+#   CONFIGURAÇÃO DO FLASK
+# =====================================
+
 app = Flask(__name__)
 app.secret_key = "TROQUE_PARA_UMA_CHAVE_SECRETA_FORTE_E_ALEATÓRIA_AQUI"
+
+# Configuração de Sessions (segurança)
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SECURE"] = False  # Mudar para True em produção (HTTPS)
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["PERMANENT_SESSION_LIFETIME"] = 86400  # 24 horas
 
 # Rate limiting (proteção contra brute force)
 limiter = Limiter(
@@ -25,8 +35,9 @@ limiter = Limiter(
 # =====================================
 
 CLIENTS = []
+
 USERS = {
-    # Funcionários (senhas já hasheadas com bcrypt)
+    # Funcionários (senhas hasheadas com werkzeug)
     "admin@example.com": {
         "password": hash_password("123456"),
         "name": "Admin",
@@ -46,18 +57,20 @@ USERS = {
 
 VEHICLES = []
 RENTALS = []
+CONTACT_MESSAGES = []
 
 next_client_id = 1
 next_vehicle_id = 1
 next_rental_id = 1
-
+next_message_id = 1
 seeded = False
 
 # =====================================
-#   HELPERS
+#   DECORATORS (AUTENTICAÇÃO)
 # =====================================
 
 def client_required(f):
+    """Garante que apenas clientes logados podem acessar"""
     @wraps(f)
     def w(*a, **kw):
         user = session.get("user")
@@ -66,7 +79,9 @@ def client_required(f):
         return f(*a, **kw)
     return w
 
+
 def staff_required(f):
+    """Garante que apenas funcionários logados podem acessar"""
     @wraps(f)
     def w(*a, **kw):
         user = session.get("user")
@@ -76,7 +91,7 @@ def staff_required(f):
     return w
 
 # =====================================
-#   PÁGINAS
+#   PÁGINAS PÚBLICAS
 # =====================================
 
 @app.route("/")
@@ -99,15 +114,17 @@ def signin():
 def frota():
     return render_template("frota.html")
 
-@app.route("/funcionario")
-@staff_required
-def funcionario_index():
-    return render_template("funcionario/menufuncionario.html")
+@app.route("/contato")
+def contato():
+    return render_template("contact.html")
 
-@app.route("/veiculos")
-@staff_required
-def veiculos_admin():
-    return render_template("funcionario/veiculos.html")
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
+
+# =====================================
+#   PÁGINAS PROTEGIDAS (CLIENTES)
+# =====================================
 
 @app.route("/veiculo/<int:vid>")
 @client_required
@@ -132,28 +149,34 @@ def pagamento(vid):
 def historico():
     return render_template("historico.html")
 
-@app.route("/clientes")
-@staff_required
-def clientes_admin():
-    return render_template("funcionario/clientes.html")
-
 @app.route("/devolucao")
 @client_required
 def devolucao_cliente_page():
     return render_template("devolucao_cliente.html")
 
-@app.route("/contato")
-def contato():
-    return render_template("contact.html")
+# =====================================
+#   PÁGINAS PROTEGIDAS (FUNCIONÁRIOS)
+# =====================================
 
-@app.route("/faq")
-def faq():
-    return render_template("faq.html")
+@app.route("/funcionario")
+@staff_required
+def funcionario_index():
+    return render_template("funcionario/menufuncionario.html")
+
+@app.route("/veiculos")
+@staff_required
+def veiculos_admin():
+    return render_template("funcionario/veiculos.html")
+
+@app.route("/clientes")
+@staff_required
+def clientes_admin():
+    return render_template("funcionario/clientes.html")
 
 @app.route("/mensagens")
 @staff_required
 def mensagens():
-    return render_template("/funcionario/mensagens.html")
+    return render_template("funcionario/mensagens.html")
 
 # =====================================
 #   AUTENTICAÇÃO (COM SEGURANÇA)
@@ -162,57 +185,101 @@ def mensagens():
 @app.route("/auth/login", methods=["POST"])
 @limiter.limit("5 per minute")  # Proteção contra brute force
 def auth_login():
+    """Login seguro com validação e rate limiting"""
     data = request.form or request.json
-    email = sanitize_input(data.get("email", ""))
+    
+    # ✅ Extrai e sanitiza dados
+    email = sanitize_input(data.get("email", "")).strip()
     password = data.get("password", "")
-
-    # Validação de email
+    
+    # ✅ Validações
+    if not email or not password:
+        return jsonify({"ok": False, "error": "Email e senha são obrigatórios", "message": "Email e senha são obrigatórios"}), 400
+    
     if not validate_email_address(email):
-        return jsonify({"ok": False, "error": "Email inválido"})
-
-    # Verifica usuário
+        return jsonify({"ok": False, "error": "Email inválido", "message": "Email inválido"}), 400
+    
+    if len(email) > 255:
+        return jsonify({"ok": False, "error": "Email muito longo", "message": "Email muito longo"}), 400
+    
+    if len(password) > 500:
+        return jsonify({"ok": False, "error": "Senha muito longa", "message": "Senha muito longa"}), 400
+    
+    # ✅ Busca usuário
     user = USERS.get(email)
+    
     if not user or not check_password(password, user["password"]):
-        return jsonify({"ok": False, "error": "Email ou senha incorretos"})
-
-    session["user"] = {"email": email, "name": user["name"], "type": user["type"]}
-
+        # ✅ Log de tentativa falhada (não expõe se é email ou senha)
+        print(f"[SECURITY] Tentativa de login falha: {email}")
+        return jsonify({"ok": False, "error": "Email ou senha incorretos", "message": "Email ou senha incorretos"}), 401
+    
+    # ✅ Login bem-sucedido - cria sessão
+    session["user"] = {
+        "email": email,
+        "name": user["name"],
+        "type": user["type"]
+    }
+    session.permanent = False
+    
+    print(f"[SECURITY] Login bem-sucedido: {email} ({user['type']})")
+    
+    # ✅ Retorna resposta com ok=True e message
     if user["type"] == "staff":
-        return jsonify({"ok": True, "redirect": "/funcionario"})
-    return jsonify({"ok": True, "redirect": "/frota"})
+        return jsonify({
+            "ok": True,
+            "message": "✓ Login bem-sucedido!",
+            "redirect": "/funcionario"
+        })
+    else:
+        return jsonify({
+            "ok": True,
+            "message": "✓ Login bem-sucedido!",
+            "redirect": "/frota"
+        })
 
 @app.route("/auth/cadastro", methods=["POST"])
-@limiter.limit("3 per minute")
+@limiter.limit("10 per minute")
 def auth_cadastro():
+    """Registro de novo cliente com validações robustas"""
     global USERS
+    
     data = request.form or request.json
     
-    valid, name = validate_text_input(data.get("name", ""), "Nome", min_length=3, max_length=100)
+    # ✅ Validação de nome
+    valid, name = validate_text_input(
+        data.get("name", ""), "Nome",
+        min_length=3, max_length=100
+    )
     if not valid:
-        return jsonify({"ok": False, "error": name})
+        return jsonify({"ok": False, "error": name, "message": name}), 400
     
-    email = sanitize_input(data.get("email", ""))
+    # ✅ Validação de email
+    email = sanitize_input(data.get("email", "")).strip()
     if not validate_email_address(email):
-        return jsonify({"ok": False, "error": "Email inválido"})
+        return jsonify({"ok": False, "error": "Email inválido", "message": "Email inválido"}), 400
     
     if email in USERS:
-        return jsonify({"ok": False, "error": "Email já cadastrado"})
+        return jsonify({"ok": False, "error": "Email já cadastrado", "message": "Email já cadastrado"}), 400
     
+    # ✅ Validação de senha
     password = data.get("password", "")
     valid_pw, msg = validate_password_strength(password)
     if not valid_pw:
-        return jsonify({"ok": False, "error": msg})
+        return jsonify({"ok": False, "error": msg, "message": msg}), 400
     
-    phone = sanitize_input(data.get("phone", ""))
+    # ✅ Validação de telefone (opcional)
+    phone = sanitize_input(data.get("phone", "")).strip() if data.get("phone") else None
     if phone and not validate_phone(phone):
-        return jsonify({"ok": False, "error": "Telefone inválido"})
+        return jsonify({"ok": False, "error": "Telefone inválido", "message": "Telefone inválido"}), 400
     
-    cnh = data.get("cnh", "")
+    # ✅ Validação de CNH (opcional)
+    cnh = data.get("cnh", "").strip() if data.get("cnh") else None
     if cnh:
         valid_cnh, msg_cnh = validate_cnh(cnh)
         if not valid_cnh:
-            return jsonify({"ok": False, "error": msg_cnh})
+            return jsonify({"ok": False, "error": msg_cnh, "message": msg_cnh}), 400
     
+    # ✅ Cria novo usuário
     USERS[email] = {
         "name": name,
         "password": hash_password(password),
@@ -221,12 +288,24 @@ def auth_cadastro():
         "cnh": cnh
     }
     
+    # ✅ Cria sessão automaticamente
     session["user"] = {"email": email, "name": name, "type": "client"}
-    return jsonify({"ok": True, "redirect": "/frota"})
-
+    session.permanent = False
+    
+    print(f"[SECURITY] Novo cliente registrado: {email}")
+    
+    return jsonify({
+        "ok": True,
+        "message": "✓ Conta criada com sucesso!",
+        "redirect": "/frota"
+    })
 
 @app.route("/logout")
 def logout():
+    """Logout seguro"""
+    user = session.get("user")
+    if user:
+        print(f"[SECURITY] Logout: {user['email']}")
     session.clear()
     return redirect("/")
 
@@ -248,24 +327,35 @@ def auth_status():
 
 @app.route('/api/vehicles', methods=['GET', 'POST', 'PUT'])
 def api_vehicles():
+    """GET: lista todos | POST: cria novo | PUT: atualiza"""
     global VEHICLES, next_vehicle_id
-
+    
     if request.method == 'GET':
         return jsonify(VEHICLES)
-
+    
     if request.method == 'POST':
         data = request.json
-        plate = sanitize_input(data.get('plate', ''))
+        
+        # ✅ Validações
+        plate = sanitize_input(data.get('plate', '')).upper()
         model = sanitize_input(data.get('model', ''))
         brand = sanitize_input(data.get('brand', ''))
         year = data.get('year')
         category = sanitize_input(data.get('category', ''))
         price = data.get('price')
         image = data.get('image')
-
+        
         if not all([plate, model, brand, year, category, price]):
             return jsonify({'ok': False, 'error': 'Campos obrigatórios faltando'}), 400
-
+        
+        # ✅ Valida tipos
+        try:
+            year = int(year)
+            price = float(price)
+        except (ValueError, TypeError):
+            return jsonify({'ok': False, 'error': 'Ano e preço devem ser números'}), 400
+        
+        # ✅ Cria veículo
         obj = {
             'id': next_vehicle_id,
             'plate': plate,
@@ -277,45 +367,61 @@ def api_vehicles():
             'image': image or '/static/img/default-car.jpg',
             'status': 'available'
         }
+        
         next_vehicle_id += 1
         VEHICLES.append(obj)
-
-        return jsonify({'ok': True, 'vehicle': obj})
-
+        
+        return jsonify({'ok': True, 'vehicle': obj}), 201
+    
     if request.method == 'PUT':
         data = request.json
         vid = data.get('id')
         
         if vid is None:
             return jsonify({'ok': False, 'error': 'ID obrigatório'}), 400
-
+        
         for v in VEHICLES:
             if v['id'] == vid:
+                # ✅ Atualiza apenas campos permitidos
                 if 'status' in data:
                     v['status'] = sanitize_input(data['status'])
                 if 'price' in data:
-                    v['price'] = data['price']
+                    try:
+                        v['price'] = float(data['price'])
+                    except ValueError:
+                        return jsonify({'ok': False, 'error': 'Preço inválido'}), 400
                 if 'image' in data:
-                    v['image'] = data['image']
+                    v['image'] = sanitize_input(data['image'])
+                
                 return jsonify({'ok': True, 'vehicle': v})
-
+        
         return jsonify({'ok': False, 'error': 'Veículo não encontrado'}), 404
 
 @app.route("/api/vehicles/<int:vid>", methods=["DELETE"])
 @staff_required
 def delete_vehicle(vid):
+    """Deleta um veículo (apenas para funcionários)"""
     global VEHICLES
-    exists = any(v["id"] == vid for v in VEHICLES)
-
-    if not exists:
-        return jsonify({"error": "Veículo não encontrado"}), 404
-
+    
+    # ✅ Verifica se existe
+    vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
+    if not vehicle:
+        return jsonify({"ok": False, "error": "Veículo não encontrado"}), 404
+    
+    # ✅ Remove
     VEHICLES = [v for v in VEHICLES if v["id"] != vid]
-    return jsonify({"message": "Veículo removido"})
+    
+    print(f"[ADMIN] Veículo deletado: {vid}")
+    return jsonify({"ok": True, "message": "Veículo removido com sucesso"})
+
+# =====================================
+#   API — ALUGUÉIS
+# =====================================
 
 @app.route("/api/rentals/history", methods=["GET"])
 @client_required
 def rentals_history():
+    """Histórico de aluguéis do cliente"""
     user = session.get("user")
     email = user["email"]
     
@@ -334,55 +440,56 @@ def rentals_history():
                 "year": vehicle["year"],
                 "price_per_day": vehicle["price"],
                 "days": r["days"],
-                "total": r["total"]
+                "total": r["total"],
+                "status": r["status"]
             })
     
     return jsonify(result)
 
-# =====================================
-#   API — INICIAR ALUGUEL (RESERVA)
-# =====================================
-
 @app.route("/api/rent/reserve", methods=["POST"])
 @client_required
 def reserve_vehicle():
+    """Reserva um veículo"""
     data = request.json
     vid = data.get("id")
-
+    
     vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
     if not vehicle:
         return jsonify({"error": "Veículo não existe"}), 404
     
     if vehicle["status"] != "available":
         return jsonify({"error": "Veículo não está disponível"}), 400
-
+    
     vehicle["status"] = "reserved"
+    
     return jsonify({"ok": True, "redirect": f"/pagamento/{vid}"})
-
-# =====================================
-#   API — PAGAMENTO FICTÍCIO
-# =====================================
 
 @app.route("/api/rent/pay", methods=["POST"])
 @client_required
 def pay_vehicle():
+    """Pagamento e confirmação de aluguel"""
     global next_rental_id
+    
     data = request.json
     vid = data.get("id")
-    days = int(data.get("days"))
-
+    
+    try:
+        days = int(data.get("days", 1))
+    except (ValueError, TypeError):
+        return jsonify({"ok": False, "error": "Dias deve ser um número"}), 400
+    
     vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
     if not vehicle:
-        return jsonify(ok=False, error="Veículo não encontrado")
+        return jsonify({"ok": False, "error": "Veículo não encontrado"}), 404
+    
     if vehicle["status"] not in ["available", "reserved"]:
-        return jsonify(ok=False, error="Veículo não está disponível")
-
+        return jsonify({"ok": False, "error": "Veículo não está disponível"}), 400
+    
     daily_price = vehicle["price"]
     total = daily_price * days
     vehicle["status"] = "rented"
-
     deposit = total * 0.5
-
+    
     RENTALS.append({
         "rental_id": next_rental_id,
         "vehicle_id": vid,
@@ -399,73 +506,60 @@ def pay_vehicle():
         "final_total": total,
         "refund": 0
     })
-
+    
     next_rental_id += 1
-
-    return jsonify(ok=True, total=total, deposit=deposit)
-
-@app.route("/api/clients", methods=["GET"])
-@staff_required
-def api_clients():
-    clients_list = []
-    for email, user_data in USERS.items():
-        if user_data.get("type") == "client":
-            clients_list.append({
-                "email": email,
-                "name": user_data.get("name"),
-                "phone": user_data.get("phone", "Não informado")
-            })
-    return jsonify(clients_list)
+    
+    return jsonify({"ok": True, "total": total, "deposit": deposit})
 
 @app.route("/api/rent/return/preview", methods=["POST"])
 @client_required
 def preview_return():
+    """Preview de devolução com cálculos"""
     data = request.json
     rental_id = data.get("rental_id")
     end_km = data.get("end_km")
     damage_value = float(data.get("damage_value", 0) or 0)
-
+    
     if rental_id is None or end_km is None:
-        return jsonify(ok=False, error="ID do aluguel e km final são obrigatórios"), 400
-
+        return jsonify({"ok": False, "error": "ID do aluguel e km final são obrigatórios"}), 400
+    
     KM_LIMIT_PER_RENTAL = 300
     EXTRA_KM_PRICE = 1.5
-
+    
     rental = next((r for r in RENTALS if r["rental_id"] == rental_id), None)
     if not rental:
-        return jsonify(ok=False, error="Aluguel não encontrado"), 404
-
+        return jsonify({"ok": False, "error": "Aluguel não encontrado"}), 404
+    
     user = session.get("user")
     if not user or user["email"] != rental["client_email"]:
-        return jsonify(ok=False, error="Você não tem permissão para este aluguel"), 403
-
+        return jsonify({"ok": False, "error": "Você não tem permissão para este aluguel"}), 403
+    
     if rental.get("status") == "finished":
-        return jsonify(ok=False, error="Este aluguel já foi finalizado"), 400
-
+        return jsonify({"ok": False, "error": "Este aluguel já foi finalizado"}), 400
+    
     start_datetime = datetime.fromisoformat(rental["start_datetime"])
     end_datetime = datetime.now()
-    days_used = (end_datetime - start_datetime).days
-    if days_used < 1:
-        days_used = 1
-
+    days_used = max(1, (end_datetime - start_datetime).days)
+    
     extra_days = max(0, days_used - rental["days"])
     extra_days_fee = extra_days * rental["daily_price"]
-
+    
     start_km = float(rental.get("start_km", 0))
     end_km = float(end_km)
     total_km = max(0, end_km - start_km)
+    
     extra_km = max(0, total_km - KM_LIMIT_PER_RENTAL)
     extra_km_fee = extra_km * EXTRA_KM_PRICE
-
+    
     damage_fee = damage_value
-
+    
     base_total = rental["total"]
     additional_costs = extra_days_fee + extra_km_fee + damage_fee
     final_total = base_total + additional_costs
-
+    
     deposit = rental.get("deposit", 0)
     refund = final_total - deposit
-
+    
     return jsonify({
         "ok": True,
         "summary": {
@@ -489,56 +583,56 @@ def preview_return():
 @app.route("/api/rent/return/confirm", methods=["POST"])
 @client_required
 def confirm_return():
+    """Confirma devolução do veículo"""
     data = request.json
     rental_id = data.get("rental_id")
     end_km = data.get("end_km")
     damage_value = float(data.get("damage_value", 0) or 0)
-
+    
     if rental_id is None or end_km is None:
-        return jsonify(ok=False, error="Dados incompletos"), 400
-
+        return jsonify({"ok": False, "error": "Dados incompletos"}), 400
+    
     KM_LIMIT_PER_RENTAL = 300
     EXTRA_KM_PRICE = 1.5
-
+    
     rental = next((r for r in RENTALS if r["rental_id"] == rental_id), None)
     if not rental:
-        return jsonify(ok=False, error="Aluguel não encontrado"), 404
-
+        return jsonify({"ok": False, "error": "Aluguel não encontrado"}), 404
+    
     user = session.get("user")
     if not user or user["email"] != rental["client_email"]:
-        return jsonify(ok=False, error="Você não tem permissão para este aluguel"), 403
-
+        return jsonify({"ok": False, "error": "Você não tem permissão para este aluguel"}), 403
+    
     if rental.get("status") == "finished":
-        return jsonify(ok=False, error="Este aluguel já foi finalizado"), 400
-
+        return jsonify({"ok": False, "error": "Este aluguel já foi finalizado"}), 400
+    
     vehicle = next((v for v in VEHICLES if v["id"] == rental["vehicle_id"]), None)
     if not vehicle:
-        return jsonify(ok=False, error="Veículo não encontrado"), 404
-
+        return jsonify({"ok": False, "error": "Veículo não encontrado"}), 404
+    
     start_datetime = datetime.fromisoformat(rental["start_datetime"])
     end_datetime = datetime.now()
-    days_used = (end_datetime - start_datetime).days
-    if days_used < 1:
-        days_used = 1
-
+    days_used = max(1, (end_datetime - start_datetime).days)
+    
     extra_days = max(0, days_used - rental["days"])
     extra_days_fee = extra_days * rental["daily_price"]
-
+    
     start_km = float(rental.get("start_km", 0))
     end_km = float(end_km)
     total_km = max(0, end_km - start_km)
+    
     extra_km = max(0, total_km - KM_LIMIT_PER_RENTAL)
     extra_km_fee = extra_km * EXTRA_KM_PRICE
-
+    
     damage_fee = damage_value
-
+    
     base_total = rental["total"]
     additional_costs = extra_days_fee + extra_km_fee + damage_fee
     final_total = base_total + additional_costs
-
+    
     deposit = rental.get("deposit", 0)
     refund = max(0, deposit - additional_costs)
-
+    
     rental.update({
         "end_datetime": end_datetime.isoformat(),
         "end_km": end_km,
@@ -549,9 +643,11 @@ def confirm_return():
         "refund": refund,
         "status": "finished"
     })
-
+    
     vehicle["status"] = "available"
-
+    
+    print(f"[RENTAL] Devolução confirmada: rental_id={rental_id}, cliente={user['email']}")
+    
     return jsonify({
         "ok": True,
         "message": "Aluguel finalizado com sucesso.",
@@ -572,11 +668,23 @@ def confirm_return():
     })
 
 # =====================================
-#   BANCO DE DADOS - MENSAGENS
+#   API — CLIENTES
 # =====================================
 
-CONTACT_MESSAGES = []
-next_message_id = 1
+@app.route("/api/clients", methods=["GET"])
+@staff_required
+def api_clients():
+    """Lista todos os clientes (apenas funcionários)"""
+    clients_list = []
+    for email, user_data in USERS.items():
+        if user_data.get("type") == "client":
+            clients_list.append({
+                "email": email,
+                "name": user_data.get("name"),
+                "phone": user_data.get("phone", "Não informado"),
+                "cnh": user_data.get("cnh", "Não informada")
+            })
+    return jsonify(clients_list)
 
 # =====================================
 #   API — MENSAGENS DE CONTATO
@@ -586,21 +694,25 @@ next_message_id = 1
 def send_contact_message():
     """Envia uma mensagem de contato"""
     global next_message_id
+    
     data = request.json
     
-    name = data.get("name", "").strip()
-    email = data.get("email", "").strip()
-    phone = data.get("phone", "").strip()
-    message = data.get("message", "").strip()
+    name = sanitize_input(data.get("name", "")).strip()
+    email = sanitize_input(data.get("email", "")).strip()
+    phone = sanitize_input(data.get("phone", "")).strip()
+    message = sanitize_input(data.get("message", "")).strip()
     
-    # Validações
+    # ✅ Validações
     if not name or not email or not message:
         return jsonify({"ok": False, "error": "Nome, email e mensagem são obrigatórios"}), 400
+    
+    if not validate_email_address(email):
+        return jsonify({"ok": False, "error": "Email inválido"}), 400
     
     if len(message) < 10:
         return jsonify({"ok": False, "error": "A mensagem deve ter no mínimo 10 caracteres"}), 400
     
-    # Salva a mensagem
+    # ✅ Salva a mensagem
     CONTACT_MESSAGES.append({
         "id": next_message_id,
         "name": name,
@@ -610,17 +722,21 @@ def send_contact_message():
         "timestamp": datetime.now().isoformat(),
         "read": False
     })
+    
     next_message_id += 1
+    
+    print(f"[CONTACT] Nova mensagem: {email}")
     
     return jsonify({"ok": True, "message": "Mensagem enviada com sucesso!"})
 
 @app.route("/api/contact/messages", methods=["GET"])
+@staff_required
 def get_contact_messages():
-    """Retorna todas as mensagens de contato (apenas para funcionários)"""
-    # Adiciona verificação de autenticação se necessário
+    """Retorna todas as mensagens de contato (apenas funcionários)"""
     return jsonify(CONTACT_MESSAGES)
 
 @app.route("/api/contact/messages/<int:msg_id>/read", methods=["PUT"])
+@staff_required
 def mark_message_read(msg_id):
     """Marca uma mensagem como lida"""
     try:
@@ -628,36 +744,45 @@ def mark_message_read(msg_id):
             if msg["id"] == msg_id:
                 msg["read"] = True
                 return jsonify({"ok": True, "message": "Marcado como lida"})
+        
         return jsonify({"ok": False, "error": "Mensagem não encontrada"}), 404
     except Exception as e:
+        print(f"[ERROR] Erro ao marcar mensagem como lida: {str(e)}")
         return jsonify({"ok": False, "error": str(e)}), 500
 
 @app.route("/api/contact/messages/<int:msg_id>", methods=["DELETE"])
+@staff_required
 def delete_contact_message(msg_id):
     """Deleta uma mensagem de contato"""
     try:
         global CONTACT_MESSAGES
+        
         original_len = len(CONTACT_MESSAGES)
         CONTACT_MESSAGES = [msg for msg in CONTACT_MESSAGES if msg["id"] != msg_id]
         
         if len(CONTACT_MESSAGES) < original_len:
+            print(f"[ADMIN] Mensagem deletada: {msg_id}")
             return jsonify({"ok": True, "message": "Deletado com sucesso"})
         else:
             return jsonify({"ok": False, "error": "Mensagem não encontrada"}), 404
     except Exception as e:
+        print(f"[ERROR] Erro ao deletar mensagem: {str(e)}")
         return jsonify({"ok": False, "error": str(e)}), 500
-    
+
 # =====================================
-#   SEED
+#   SEED DE DADOS
 # =====================================
 
 @app.before_request
 def seed_data():
+    """Carrega dados iniciais"""
     global seeded, VEHICLES, next_vehicle_id
+    
     if seeded:
         return
+    
     seeded = True
-
+    
     VEHICLES = [
         {"id": 1, "plate": "ABC-1234", "model": "Corolla", "brand": "Toyota", "year": 2022, "category": "sedan", "price": 150, "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80", "status": "available"},
         {"id": 2, "plate": "XYZ-5678", "model": "Civic", "brand": "Honda", "year": 2023, "category": "sedan", "price": 180, "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80", "status": "available"},
@@ -683,6 +808,10 @@ def seed_data():
     ]
     
     next_vehicle_id = 22
+
+# =====================================
+#   INICIALIZAÇÃO
+# =====================================
 
 if __name__ == "__main__":
     app.run(debug=True)
