@@ -1,4 +1,3 @@
-// Menu 
 document.addEventListener("DOMContentLoaded", () => {
     const buttonnav = document.getElementById("button_point-point-point");
     const nav = document.getElementById("menu_nav");

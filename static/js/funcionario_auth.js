@@ -1,6 +1,4 @@
-// =====================================
-//   LOGIN DE FUNCIONÁRIO (STAFF) — SEGURO
-// =====================================
+//   LOGIN DE FUNCIONÁRIO (STAFF)
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form-login-funcionario");
@@ -10,11 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // ✅ Limpa mensagens anteriores
     const oldMessage = document.querySelector(".login-message");
     if (oldMessage) oldMessage.remove();
 
-    // ✅ Pega valores com validação
     const emailInput = document.getElementById("email_func");
     const passwordInput = document.getElementById("password_func");
 
@@ -26,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
-    // ✅ Validações no CLIENTE
     if (!email || !password) {
       showMessage("❌ Email e senha são obrigatórios!", "error");
       return;
@@ -47,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // ✅ Desabilita botão durante requisição
     const submitBtn = form.querySelector("button[type='submit']");
     if (submitBtn) {
       submitBtn.disabled = true;
@@ -55,19 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      // ✅ Envio seguro para o servidor
       const response = await fetch("/auth/login", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          // CSRF token se tiver implementado (opcional)
-          // "X-CSRF-Token": getCsrfToken()
         },
         body: JSON.stringify({ email, password }),
         credentials: "same-origin" // Envia cookies se existirem
       });
 
-      // ✅ Verifica se a resposta é JSON válida
       let json;
       try {
         json = await response.json();
@@ -81,21 +71,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✅ Valida se json.message existe
       if (json.message) {
         showMessage(json.message, response.ok ? "success" : "error");
       }
 
-      // ✅ Se login bem-sucedido, redireciona
       if (response.ok && json.ok) {
         console.log("✓ Login bem-sucedido");
-        // Redireciona sem delay para não roubar credenciais
         window.location.href = "/funcionario";
       } else {
-        // ✅ Mostra mensagem de erro
         console.warn("Login falhou:", json.error || json.message);
         
-        // Re-habilita botão para tentar novamente
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = "Entrar";
@@ -104,14 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Erro na requisição:", error);
       
-      // ✅ Não expõe detalhes do erro para o usuário
+      // Não expõe detalhes do erro para o usuário
       if (error.name === "TypeError") {
         showMessage("❌ Erro de conexão. Verifique sua internet.", "error");
       } else {
         showMessage("❌ Erro ao fazer login. Tente novamente.", "error");
       }
 
-      // Re-habilita botão
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Entrar";
@@ -119,15 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /**
-   * Mostra mensagem de forma segura
-   */
   function showMessage(message, type = "info") {
-    // ✅ Sanitiza o texto para evitar XSS
+    //  Sanitiza o texto para evitar XSS
     const messageDiv = document.createElement("div");
     messageDiv.className = `login-message login-${type}`;
     
-    // ✅ Usa textContent em vez de innerHTML para segurança
+    // Usa textContent em vez de innerHTML para segurança
     messageDiv.textContent = message;
     
     messageDiv.style.cssText = `
@@ -144,14 +125,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     `;
 
-    // Remove mensagem anterior se existir
     const oldMessage = document.querySelector(".login-message");
     if (oldMessage) oldMessage.remove();
 
-    // Insere nova mensagem no formulário
     form.parentNode.insertBefore(messageDiv, form);
 
-    // ✅ Remove automaticamente após 5 segundos
     setTimeout(() => {
       if (messageDiv.parentNode) {
         messageDiv.remove();

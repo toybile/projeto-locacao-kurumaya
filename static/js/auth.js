@@ -5,11 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Limpa mensagens de erro anteriores
         const errorElements = document.querySelectorAll(".error-message");
         errorElements.forEach(el => el.remove());
 
-        // Pega os valores
         const name = document.querySelector("input[name='name']")?.value.trim() || document.querySelector("#fullname")?.value.trim() || "";
         const email = document.querySelector("input[name='email']")?.value.trim() || document.querySelector("#emailsignup")?.value.trim() || "";
         const password = document.querySelector("input[name='password']")?.value || document.querySelector("#passwordsignup")?.value || "";
@@ -44,12 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
             errors.push("Senha deve conter pelo menos um número");
         }
 
-        // Validação de telefone (opcional, mas se preenchido deve ser válido)
+        // Validação de telefone
         if (phone && !/^\(\d{2}\)\s?\d{4,5}-?\d{4}$/.test(phone)) {
             errors.push("Telefone inválido. Use o formato: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX");
         }
 
-        // Validação de CNH (opcional, mas se preenchida deve ser válida)
+        // Validação de CNH
         if (cnh) {
             const cnh_only_digits = cnh.replace(/\D/g, "");
             if (cnh_only_digits.length !== 11) {
@@ -59,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // Se houver erros, mostra e não envia
         if (errors.length > 0) {
             const errorDiv = document.createElement("div");
             errorDiv.className = "error-message";
@@ -86,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Se passou em todas as validações, envia
         try {
             const response = await fetch("/auth/cadastro", {
                 method: "POST",
@@ -133,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Validação em tempo real (feedback imediato)
+    // Validação em tempo real
     const phoneInput = document.querySelector("input[name='phone']") || document.querySelector("#phonesignup");
     if (phoneInput) {
         phoneInput.addEventListener("blur", () => {
@@ -176,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Mostra dica de formato enquanto digita
         cnhInput.addEventListener("input", () => {
             const cnh = cnhInput.value.replace(/\D/g, "");
             if (cnh.length > 0) {

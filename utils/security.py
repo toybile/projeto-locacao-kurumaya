@@ -1,4 +1,3 @@
-# utils/security.py
 import bcrypt
 import re
 from email_validator import validate_email, EmailNotValidError
@@ -39,11 +38,11 @@ def validate_cnh(cnh):
     # Remove espaços ou caracteres especiais
     cnh = re.sub(r'\D', '', str(cnh))
     
-    # Verifica se tem exatamente 11 dígitos
+    # Verifica se tem 11 dígitos
     if len(cnh) != 11:
         return False, "CNH deve conter exatamente 11 dígitos"
     
-    # Verifica se não é uma sequência de números iguais (ex: 11111111111)
+    # Verifica sequências de números iguais
     if len(set(cnh)) == 1:
         return False, "CNH inválida (sequência repetida)"
     
@@ -85,11 +84,11 @@ def validate_cpf(cpf):
     # Remove espaços ou caracteres especiais
     cpf = re.sub(r'\D', '', str(cpf))
     
-    # Verifica se tem exatamente 11 dígitos
+    # Verifica se tem 11 dígitos
     if len(cpf) != 11:
         return False, "CPF deve conter exatamente 11 dígitos"
     
-    # Verifica se não é uma sequência de números iguais (ex: 11111111111)
+    # Verifica sequências de números iguais
     if len(set(cpf)) == 1:
         return False, "CPF inválido (sequência repetida)"
     

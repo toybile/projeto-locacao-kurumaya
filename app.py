@@ -16,7 +16,7 @@ from utils.security import (
 app = Flask(__name__)
 app.secret_key = "TROQUE_PARA_UMA_CHAVE_SECRETA_FORTE_E_ALEATÓRIA_AQUI"
 
-# Configuração de Sessions (segurança)
+# Configuração de Sessions
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SECURE"] = False  # Mudar para True em produção (HTTPS)
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -38,11 +38,6 @@ CLIENTS = []
 
 USERS = {
     # Funcionários (senhas hasheadas com werkzeug)
-    "admin@example.com": {
-        "password": hash_password("123456"),
-        "name": "Admin",
-        "type": "staff"
-    },
     "guilherme.bilibio@gmail.com": {
         "password": hash_password("toybife"),
         "name": "Guilherme",
@@ -192,11 +187,9 @@ def auth_login():
     """Login seguro com validação e rate limiting"""
     data = request.form or request.json
     
-    # ✅ Extrai e sanitiza dados
     email = sanitize_input(data.get("email", "")).strip()
     password = data.get("password", "")
     
-    # ✅ Validações
     if not email or not password:
         return jsonify({"ok": False, "error": "Email e senha são obrigatórios", "message": "Email e senha são obrigatórios"}), 400
     
@@ -209,15 +202,12 @@ def auth_login():
     if len(password) > 500:
         return jsonify({"ok": False, "error": "Senha muito longa", "message": "Senha muito longa"}), 400
     
-    # ✅ Busca usuário
     user = USERS.get(email)
     
     if not user or not check_password(password, user["password"]):
-        # ✅ Log de tentativa falhada (não expõe se é email ou senha)
         print(f"[SECURITY] Tentativa de login falha: {email}")
         return jsonify({"ok": False, "error": "Email ou senha incorretos", "message": "Email ou senha incorretos"}), 401
     
-    # ✅ Login bem-sucedido - cria sessão
     session["user"] = {
         "email": email,
         "name": user["name"],
@@ -227,7 +217,6 @@ def auth_login():
     
     print(f"[SECURITY] Login bem-sucedido: {email} ({user['type']})")
     
-    # ✅ Retorna resposta com ok=True e message
     if user["type"] == "staff":
         return jsonify({
             "ok": True,
@@ -249,7 +238,7 @@ def auth_cadastro():
     
     data = request.form or request.json
     
-    # ✅ Validação de nome
+    # Validação de nome
     valid, name = validate_text_input(
         data.get("name", ""), "Nome",
         min_length=3, max_length=100
@@ -257,7 +246,7 @@ def auth_cadastro():
     if not valid:
         return jsonify({"ok": False, "error": name, "message": name}), 400
     
-    # ✅ Validação de email
+    # Validação de email
     email = sanitize_input(data.get("email", "")).strip()
     if not validate_email_address(email):
         return jsonify({"ok": False, "error": "Email inválido", "message": "Email inválido"}), 400
@@ -265,25 +254,24 @@ def auth_cadastro():
     if email in USERS:
         return jsonify({"ok": False, "error": "Email já cadastrado", "message": "Email já cadastrado"}), 400
     
-    # ✅ Validação de senha
+    # Validação de senha
     password = data.get("password", "")
     valid_pw, msg = validate_password_strength(password)
     if not valid_pw:
         return jsonify({"ok": False, "error": msg, "message": msg}), 400
     
-    # ✅ Validação de telefone (opcional)
+    # Validação de telefone (opcional)
     phone = sanitize_input(data.get("phone", "")).strip() if data.get("phone") else None
     if phone and not validate_phone(phone):
         return jsonify({"ok": False, "error": "Telefone inválido", "message": "Telefone inválido"}), 400
     
-    # ✅ Validação de CNH (opcional)
+    # Validação de CNH (opcional)
     cnh = data.get("cnh", "").strip() if data.get("cnh") else None
     if cnh:
         valid_cnh, msg_cnh = validate_cnh(cnh)
         if not valid_cnh:
             return jsonify({"ok": False, "error": msg_cnh, "message": msg_cnh}), 400
     
-    # ✅ Cria novo usuário
     USERS[email] = {
         "name": name,
         "password": hash_password(password),
@@ -292,7 +280,6 @@ def auth_cadastro():
         "cnh": cnh
     }
     
-    # ✅ Cria sessão automaticamente
     session["user"] = {"email": email, "name": name, "type": "client"}
     session.permanent = False
     
@@ -340,7 +327,6 @@ def api_vehicles():
     if request.method == 'POST':
         data = request.json
         
-        # ✅ Validações
         plate = sanitize_input(data.get('plate', '')).upper()
         model = sanitize_input(data.get('model', ''))
         brand = sanitize_input(data.get('brand', ''))
@@ -352,14 +338,12 @@ def api_vehicles():
         if not all([plate, model, brand, year, category, price]):
             return jsonify({'ok': False, 'error': 'Campos obrigatórios faltando'}), 400
         
-        # ✅ Valida tipos
         try:
             year = int(year)
             price = float(price)
         except (ValueError, TypeError):
             return jsonify({'ok': False, 'error': 'Ano e preço devem ser números'}), 400
         
-        # ✅ Cria veículo
         obj = {
             'id': next_vehicle_id,
             'plate': plate,
@@ -386,7 +370,6 @@ def api_vehicles():
         
         for v in VEHICLES:
             if v['id'] == vid:
-                # ✅ Atualiza apenas campos permitidos
                 if 'status' in data:
                     v['status'] = sanitize_input(data['status'])
                 if 'price' in data:
@@ -407,12 +390,10 @@ def delete_vehicle(vid):
     """Deleta um veículo (apenas para funcionários)"""
     global VEHICLES
     
-    # ✅ Verifica se existe
     vehicle = next((v for v in VEHICLES if v["id"] == vid), None)
     if not vehicle:
         return jsonify({"ok": False, "error": "Veículo não encontrado"}), 404
     
-    # ✅ Remove
     VEHICLES = [v for v in VEHICLES if v["id"] != vid]
     
     print(f"[ADMIN] Veículo deletado: {vid}")
@@ -706,7 +687,6 @@ def send_contact_message():
     phone = sanitize_input(data.get("phone", "")).strip()
     message = sanitize_input(data.get("message", "")).strip()
     
-    # ✅ Validações
     if not name or not email or not message:
         return jsonify({"ok": False, "error": "Nome, email e mensagem são obrigatórios"}), 400
     
@@ -716,7 +696,6 @@ def send_contact_message():
     if len(message) < 10:
         return jsonify({"ok": False, "error": "A mensagem deve ter no mínimo 10 caracteres"}), 400
     
-    # ✅ Salva a mensagem
     CONTACT_MESSAGES.append({
         "id": next_message_id,
         "name": name,

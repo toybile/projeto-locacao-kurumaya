@@ -100,7 +100,6 @@
                 return;
             }
 
-            // Desabilita botão durante envio
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';
             submitBtn.textContent = 'Enviando...';
@@ -124,7 +123,6 @@
                 console.error('Erro:', error);
                 showMessage('❌ Erro ao enviar mensagem. Tente novamente.', 'error', messageDiv);
             } finally {
-                // Reabilita botão
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
                 submitBtn.textContent = 'Enviar';
