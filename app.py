@@ -1,9 +1,24 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from datetime import datetime
 from functools import wraps
+from utils.security import (
+    hash_password, check_password, validate_email_address,
+    validate_phone, validate_password_strength, sanitize_input,
+    validate_text_input, validate_number, validate_cnh
+)
 
 app = Flask(__name__)
-app.secret_key = "troque_essa_chave_para_algo_secreto"
+app.secret_key = "TROQUE_PARA_UMA_CHAVE_SECRETA_FORTE_E_ALEATÓRIA_AQUI"
+
+# Rate limiting (proteção contra brute force)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 # =====================================
 #   BANCO DE DADOS EM MEMÓRIA
@@ -11,10 +26,22 @@ app.secret_key = "troque_essa_chave_para_algo_secreto"
 
 CLIENTS = []
 USERS = {
-    # Funcionários
-    "admin@example.com": {"password": "123456", "name": "Admin", "type": "staff"},
-    "guilherme.bilibio@gmail.com": {"password": "toybife", "name": "Guilherme", "type": "staff"},
-    "henrique.daisuke@gmail.com": {"password": "123456", "name": "Henrique", "type": "staff"},
+    # Funcionários (senhas já hasheadas com bcrypt)
+    "admin@example.com": {
+        "password": hash_password("123456"),
+        "name": "Admin",
+        "type": "staff"
+    },
+    "guilherme.bilibio@gmail.com": {
+        "password": hash_password("toybife"),
+        "name": "Guilherme",
+        "type": "staff"
+    },
+    "henrique.daisuke@gmail.com": {
+        "password": hash_password("123456"),
+        "name": "Henrique",
+        "type": "staff"
+    },
 }
 
 VEHICLES = []
@@ -123,20 +150,25 @@ def contato():
 def faq():
     return render_template("faq.html")
 
-
 # =====================================
-#   AUTENTICAÇÃO
+#   AUTENTICAÇÃO (COM SEGURANÇA)
 # =====================================
 
 @app.route("/auth/login", methods=["POST"])
+@limiter.limit("5 per minute")  # Proteção contra brute force
 def auth_login():
     data = request.form or request.json
-    email = data.get("email")
-    password = data.get("password")
+    email = sanitize_input(data.get("email", ""))
+    password = data.get("password", "")
 
+    # Validação de email
+    if not validate_email_address(email):
+        return jsonify({"ok": False, "error": "Email inválido"})
+
+    # Verifica usuário
     user = USERS.get(email)
-    if not user or user["password"] != password:
-        return jsonify({"ok": False, "error": "Credenciais inválidas"})
+    if not user or not check_password(password, user["password"]):
+        return jsonify({"ok": False, "error": "Email ou senha incorretos"})
 
     session["user"] = {"email": email, "name": user["name"], "type": user["type"]}
 
@@ -145,36 +177,65 @@ def auth_login():
     return jsonify({"ok": True, "redirect": "/frota"})
 
 @app.route("/auth/cadastro", methods=["POST"])
+@limiter.limit("3 per minute")
 def auth_cadastro():
     global USERS
     data = request.form or request.json
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
-    phone = data.get("phone", "")  # Aceita telefone opcional
-
-    if not name or not email or not password:
-        return jsonify({"ok": False, "error": "Todos os campos são obrigatórios"})
-
+    
+    valid, name = validate_text_input(data.get("name", ""), "Nome", min_length=3, max_length=100)
+    if not valid:
+        return jsonify({"ok": False, "error": name})
+    
+    email = sanitize_input(data.get("email", ""))
+    if not validate_email_address(email):
+        return jsonify({"ok": False, "error": "Email inválido"})
+    
     if email in USERS:
         return jsonify({"ok": False, "error": "Email já cadastrado"})
-
+    
+    password = data.get("password", "")
+    valid_pw, msg = validate_password_strength(password)
+    if not valid_pw:
+        return jsonify({"ok": False, "error": msg})
+    
+    phone = sanitize_input(data.get("phone", ""))
+    if phone and not validate_phone(phone):
+        return jsonify({"ok": False, "error": "Telefone inválido"})
+    
+    cnh = data.get("cnh", "")
+    if cnh:
+        valid_cnh, msg_cnh = validate_cnh(cnh)
+        if not valid_cnh:
+            return jsonify({"ok": False, "error": msg_cnh})
+    
     USERS[email] = {
         "name": name,
-        "password": password,
+        "password": hash_password(password),
         "type": "client",
-        "phone": phone
+        "phone": phone,
+        "cnh": cnh
     }
+    
     session["user"] = {"email": email, "name": name, "type": "client"}
-
     return jsonify({"ok": True, "redirect": "/frota"})
-
 
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/")
+
+@app.route("/api/auth/status", methods=["GET"])
+def auth_status():
+    """Retorna o status de login do usuário"""
+    user = session.get("user")
+    if user:
+        return jsonify({
+            "logged_in": True,
+            "name": user["name"],
+            "type": user["type"]
+        })
+    return jsonify({"logged_in": False})
 
 # =====================================
 #   API — VEÍCULOS
@@ -189,11 +250,11 @@ def api_vehicles():
 
     if request.method == 'POST':
         data = request.json
-        plate = data.get('plate')
-        model = data.get('model')
-        brand = data.get('brand')
+        plate = sanitize_input(data.get('plate', ''))
+        model = sanitize_input(data.get('model', ''))
+        brand = sanitize_input(data.get('brand', ''))
         year = data.get('year')
-        category = data.get('category')
+        category = sanitize_input(data.get('category', ''))
         price = data.get('price')
         image = data.get('image')
 
@@ -226,7 +287,7 @@ def api_vehicles():
         for v in VEHICLES:
             if v['id'] == vid:
                 if 'status' in data:
-                    v['status'] = data['status']
+                    v['status'] = sanitize_input(data['status'])
                 if 'price' in data:
                     v['price'] = data['price']
                 if 'image' in data:
@@ -253,10 +314,8 @@ def rentals_history():
     user = session.get("user")
     email = user["email"]
     
-    # Filtra aluguéis do cliente logado
     user_rentals = [r for r in RENTALS if r["client_email"] == email]
     
-    # Junta informações do veículo
     result = []
     for r in user_rentals:
         vehicle = next((v for v in VEHICLES if v["id"] == r["vehicle_id"]), None)
@@ -274,8 +333,6 @@ def rentals_history():
             })
     
     return jsonify(result)
-
-
 
 # =====================================
 #   API — INICIAR ALUGUEL (RESERVA)
@@ -319,7 +376,6 @@ def pay_vehicle():
     total = daily_price * days
     vehicle["status"] = "rented"
 
-    # caução (ex.: 50% do valor previsto)
     deposit = total * 0.5
 
     RENTALS.append({
@@ -333,7 +389,6 @@ def pay_vehicle():
         "start_datetime": datetime.now().isoformat(),
         "start_km": data.get("start_km", 0),
         "status": "ongoing",
-        # campos de devolução, preenchidos depois
         "end_datetime": None,
         "end_km": None,
         "final_total": total,
@@ -344,11 +399,9 @@ def pay_vehicle():
 
     return jsonify(ok=True, total=total, deposit=deposit)
 
-
 @app.route("/api/clients", methods=["GET"])
 @staff_required
 def api_clients():
-    # Filtra apenas usuários do tipo "client" de USERS
     clients_list = []
     for email, user_data in USERS.items():
         if user_data.get("type") == "client":
@@ -362,8 +415,6 @@ def api_clients():
 @app.route("/api/rent/return/preview", methods=["POST"])
 @client_required
 def preview_return():
-    from datetime import datetime
-
     data = request.json
     rental_id = data.get("rental_id")
     end_km = data.get("end_km")
@@ -410,7 +461,6 @@ def preview_return():
     deposit = rental.get("deposit", 0)
     refund = final_total - deposit
 
-
     return jsonify({
         "ok": True,
         "summary": {
@@ -431,12 +481,9 @@ def preview_return():
         }
     })
 
-
 @app.route("/api/rent/return/confirm", methods=["POST"])
 @client_required
 def confirm_return():
-    from datetime import datetime
-
     data = request.json
     rental_id = data.get("rental_id")
     end_km = data.get("end_km")
@@ -519,8 +566,6 @@ def confirm_return():
         }
     })
 
-
-
 # =====================================
 #   SEED
 # =====================================
@@ -533,256 +578,30 @@ def seed_data():
     seeded = True
 
     VEHICLES = [
-        {
-            "id": 1,
-            "plate": "ABC-1234",
-            "model": "Corolla",
-            "brand": "Toyota",
-            "year": 2022,
-            "category": "sedan",
-            "price": 150,
-            "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 2,
-            "plate": "XYZ-5678",
-            "model": "Civic",
-            "brand": "Honda",
-            "year": 2023,
-            "category": "sedan",
-            "price": 180,
-            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 3,
-            "plate": "DEF-9012",
-            "model": "HR-V",
-            "brand": "Honda",
-            "year": 2021,
-            "category": "suv",
-            "price": 200,
-            "image": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 4,
-            "plate": "GHI-3456",
-            "model": "Onix",
-            "brand": "Chevrolet",
-            "year": 2023,
-            "category": "hatch",
-            "price": 120,
-            "image": "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80",
-            "status": "rented"
-        },
-        {
-            "id": 5,
-            "plate": "JKL-7890",
-            "model": "Compass",
-            "brand": "Jeep",
-            "year": 2022,
-            "category": "suv",
-            "price": 250,
-            "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 6,
-            "plate": "MNO-1122",
-            "model": "Gol",
-            "brand": "Volkswagen",
-            "year": 2020,
-            "category": "hatch",
-            "price": 100,
-            "image": "https://images.unsplash.com/photo-1590362891990-f8ddb41d006d?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 7,
-            "plate": "PQR-3344",
-            "model": "Nivus",
-            "brand": "Volkswagen",
-            "year": 2022,
-            "category": "suv",
-            "price": 190,
-            "image": "https://images.unsplash.com/photo-1581540222194-0def2dda95b8?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 8,
-            "plate": "STU-5566",
-            "model": "Tracker",
-            "brand": "Chevrolet",
-            "year": 2021,
-            "category": "suv",
-            "price": 210,
-            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
-            "status": "reserved"
-        },
-        {
-            "id": 9,
-            "plate": "VWX-7788",
-            "model": "Argo",
-            "brand": "Fiat",
-            "year": 2022,
-            "category": "hatch",
-            "price": 115,
-            "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 10,
-            "plate": "YZA-9900",
-            "model": "Cronos",
-            "brand": "Fiat",
-            "year": 2021,
-            "category": "sedan",
-            "price": 130,
-            "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 11,
-            "plate": "BCA-2233",
-            "model": "Kicks",
-            "brand": "Nissan",
-            "year": 2023,
-            "category": "suv",
-            "price": 220,
-            "image": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 12,
-            "plate": "DEF-4455",
-            "model": "Corolla Cross",
-            "brand": "Toyota",
-            "year": 2023,
-            "category": "suv",
-            "price": 260,
-            "image": "https://images.unsplash.com/photo-1606664515524-2134e2f37a85?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 13,
-            "plate": "GHI-6677",
-            "model": "HB20",
-            "brand": "Hyundai",
-            "year": 2021,
-            "category": "hatch",
-            "price": 110,
-            "image": "https://images.unsplash.com/photo-1485463611174-f302f6a5c1c9?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 14,
-            "plate": "JKL-8899",
-            "model": "Creta",
-            "brand": "Hyundai",
-            "year": 2022,
-            "category": "suv",
-            "price": 230,
-            "image": "https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80",
-            "status": "rented"
-        },
-        {
-            "id": 15,
-            "plate": "MNO-1357",
-            "model": "Renegade",
-            "brand": "Jeep",
-            "year": 2021,
-            "category": "suv",
-            "price": 240,
-            "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 16,
-            "plate": "PQR-2468",
-            "model": "Sandero",
-            "brand": "Renault",
-            "year": 2020,
-            "category": "hatch",
-            "price": 95,
-            "image": "https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 17,
-            "plate": "STU-3691",
-            "model": "Logan",
-            "brand": "Renault",
-            "year": 2021,
-            "category": "sedan",
-            "price": 115,
-            "image": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80",
-            "status": "maintenance"
-        },
-        {
-            "id": 18,
-            "plate": "VWX-4826",
-            "model": "Yaris",
-            "brand": "Toyota",
-            "year": 2022,
-            "category": "hatch",
-            "price": 140,
-            "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 19,
-            "plate": "YZA-5937",
-            "model": "City",
-            "brand": "Honda",
-            "year": 2022,
-            "category": "sedan",
-            "price": 170,
-            "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 20,
-            "plate": "BCA-6048",
-            "model": "T-Cross",
-            "brand": "Volkswagen",
-            "year": 2023,
-            "category": "suv",
-            "price": 245,
-            "image": "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80",
-            "status": "available"
-        },
-        {
-            "id": 21,
-            "plate": "DEF-7159",
-            "model": "Captur",
-            "brand": "Renault",
-            "year": 2021,
-            "category": "suv",
-            "price": 205,
-            "image": "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?w=800&q=80",
-            "status": "available"
-        }
+        {"id": 1, "plate": "ABC-1234", "model": "Corolla", "brand": "Toyota", "year": 2022, "category": "sedan", "price": 150, "image": "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80", "status": "available"},
+        {"id": 2, "plate": "XYZ-5678", "model": "Civic", "brand": "Honda", "year": 2023, "category": "sedan", "price": 180, "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80", "status": "available"},
+        {"id": 3, "plate": "DEF-9012", "model": "HR-V", "brand": "Honda", "year": 2021, "category": "suv", "price": 200, "image": "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?w=800&q=80", "status": "available"},
+        {"id": 4, "plate": "GHI-3456", "model": "Onix", "brand": "Chevrolet", "year": 2023, "category": "hatch", "price": 120, "image": "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80", "status": "rented"},
+        {"id": 5, "plate": "JKL-7890", "model": "Compass", "brand": "Jeep", "year": 2022, "category": "suv", "price": 250, "image": "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80", "status": "available"},
+        {"id": 6, "plate": "MNO-1122", "model": "Gol", "brand": "Volkswagen", "year": 2020, "category": "hatch", "price": 100, "image": "https://images.unsplash.com/photo-1590362891990-f8ddb41d006d?w=800&q=80", "status": "available"},
+        {"id": 7, "plate": "PQR-3344", "model": "Nivus", "brand": "Volkswagen", "year": 2022, "category": "suv", "price": 190, "image": "https://images.unsplash.com/photo-1581540222194-0def2dda95b8?w=800&q=80", "status": "available"},
+        {"id": 8, "plate": "STU-5566", "model": "Tracker", "brand": "Chevrolet", "year": 2021, "category": "suv", "price": 210, "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80", "status": "reserved"},
+        {"id": 9, "plate": "VWX-7788", "model": "Argo", "brand": "Fiat", "year": 2022, "category": "hatch", "price": 115, "image": "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80", "status": "available"},
+        {"id": 10, "plate": "YZA-9900", "model": "Cronos", "brand": "Fiat", "year": 2021, "category": "sedan", "price": 130, "image": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80", "status": "available"},
+        {"id": 11, "plate": "BCA-2233", "model": "Kicks", "brand": "Nissan", "year": 2023, "category": "suv", "price": 220, "image": "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80", "status": "available"},
+        {"id": 12, "plate": "DEF-4455", "model": "Corolla Cross", "brand": "Toyota", "year": 2023, "category": "suv", "price": 260, "image": "https://images.unsplash.com/photo-1606664515524-2134e2f37a85?w=800&q=80", "status": "available"},
+        {"id": 13, "plate": "GHI-6677", "model": "HB20", "brand": "Hyundai", "year": 2021, "category": "hatch", "price": 110, "image": "https://images.unsplash.com/photo-1485463611174-f302f6a5c1c9?w=800&q=80", "status": "available"},
+        {"id": 14, "plate": "JKL-8899", "model": "Creta", "brand": "Hyundai", "year": 2022, "category": "suv", "price": 230, "image": "https://images.unsplash.com/photo-1551830820-330a71b99659?w=800&q=80", "status": "rented"},
+        {"id": 15, "plate": "MNO-1357", "model": "Renegade", "brand": "Jeep", "year": 2021, "category": "suv", "price": 240, "image": "https://images.unsplash.com/photo-1606611013016-969c19d14311?w=800&q=80", "status": "available"},
+        {"id": 16, "plate": "PQR-2468", "model": "Sandero", "brand": "Renault", "year": 2020, "category": "hatch", "price": 95, "image": "https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=800&q=80", "status": "available"},
+        {"id": 17, "plate": "STU-3691", "model": "Logan", "brand": "Renault", "year": 2021, "category": "sedan", "price": 115, "image": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&q=80", "status": "maintenance"},
+        {"id": 18, "plate": "VWX-4826", "model": "Yaris", "brand": "Toyota", "year": 2022, "category": "hatch", "price": 140, "image": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&q=80", "status": "available"},
+        {"id": 19, "plate": "YZA-5937", "model": "City", "brand": "Honda", "year": 2022, "category": "sedan", "price": 170, "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80", "status": "available"},
+        {"id": 20, "plate": "BCA-6048", "model": "T-Cross", "brand": "Volkswagen", "year": 2023, "category": "suv", "price": 245, "image": "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80", "status": "available"},
+        {"id": 21, "plate": "DEF-7159", "model": "Captur", "brand": "Renault", "year": 2021, "category": "suv", "price": 205, "image": "https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?w=800&q=80", "status": "available"}
     ]
     
     next_vehicle_id = 22
-
-
-@app.route("/api/auth/status", methods=["GET"])
-def auth_status():
-    """Retorna o status de login do usuário"""
-    user = session.get("user")
-    if user:
-        return jsonify({
-            "logged_in": True,
-            "name": user["name"],
-            "type": user["type"]
-        })
-    return jsonify({"logged_in": False})
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
