@@ -4,14 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Frota — Kurumaya</title>
-
-    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/frota.css">
-    <link rel="stylesheet" href="/static/css/header.css">
 </head>
 
 <body>
-
     <header class="headerbar">
         <div class="header-content">
             <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
@@ -38,32 +35,28 @@
     </header>
     <div id="line_title" class="animate-expand"></div>
 
+    <main class="content">
+        <div class="frota-header">
+            <h2>Nossa Frota</h2>
+        </div>
 
-<main class="content">
+        <div id="vehiclesList" class="vehicle-grid">
+            <p class="loading-text">Carregando veículos...</p>
+        </div>
 
-    <h2>Lista da Frota</h2>
+        <div class="pagination-controls" id="paginationControls" style="display: none;">
+            <button id="prevPage" class="pagination-btn" disabled>
+                <span>←</span>
+            </button>
+            <span class="page-info" id="pageInfo">Página 1 de 1</span>
+            <button id="nextPage" class="pagination-btn" disabled>
+                <span>→</span>
+            </button>
+        </div>
+    </main>
 
-    <!-- Grid de veículos 3x3 (cards serão inseridos via JS) -->
-    <div id="vehiclesList" class="vehicle-grid">
-        <p class="loading-text">Carregando veículos...</p>
-    </div>
-
-    <!-- Controles de paginação (mostra setas e info de página) -->
-    <div class="pagination-controls" id="paginationControls" style="display: none;">
-        <button id="prevPage" class="pagination-btn" disabled>
-            <span>←</span>
-        </button>
-        <span class="page-info" id="pageInfo">Página 1 de 1</span>
-        <button id="nextPage" class="pagination-btn" disabled>
-            <span>→</span>
-        </button>
-    </div>
-
-</main>
-
-<script src="/static/js/frota.js"></script>
-<script src="/static/js/auth_ui.js"></script>
-<script src="/static/js/frota-nav.js"></script>
-
+    <script src="/static/js/frota.js"></script>
+    <script src="/static/js/auth_ui.js"></script>
+    <script src="/static/js/frota-nav.js"></script>
 </body>
 </html>

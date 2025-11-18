@@ -68,28 +68,46 @@ async function loadVehicles() {
 
         data.forEach(v => {
             const item = document.createElement("div");
-            item.classList.add("vehicle_item");
+            item.classList.add("vehicle-card");
 
             const imgSrc = v.image || "/static/img/default-car.jpg";
 
             item.innerHTML = `
-                <img src="${imgSrc}" alt="${v.model}" class="vehicle_image"
-                    onerror="this.onerror=null; this.src='/static/img/default-car.jpg';">
-                <div class="vehicle_info">
+                <div class="vehicle-image">
+                    <img src="${imgSrc}" alt="${v.model}"
+                        onerror="this.onerror=null; this.src='/static/img/default-car.jpg';">
+                </div>
+                <div class="vehicle-info">
                     <h3>${v.brand} ${v.model} (${v.year})</h3>
-                    <p><strong>Placa:</strong> ${v.plate}</p>
-                    <p><strong>Categoria:</strong> ${v.category}</p>
-                    <p><strong>Preço por dia:</strong> R$ ${Number(v.price).toFixed(2)}</p>
-                    <p><strong>Status:</strong> ${v.status}</p>
-                    <button class="remove_btn" data-id="${v.id}">Remover</button>
+                    <div class="vehicle-details">
+                        <div class="vehicle-detail">
+                            <strong>Placa:</strong>
+                            <span>${v.plate}</span>
+                        </div>
+                        <div class="vehicle-detail">
+                            <strong>Categoria:</strong>
+                            <span>${v.category}</span>
+                        </div>
+                        <div class="vehicle-detail">
+                            <strong>Preço/dia:</strong>
+                            <span>R$ ${Number(v.price).toFixed(2)}</span>
+                        </div>
+                        <div class="vehicle-detail">
+                            <strong>Status:</strong>
+                            <span>${v.status}</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-actions">
+                        <button class="btn-edit" data-id="${v.id}">Editar</button>
+                        <button class="btn-delete" data-id="${v.id}">Remover</button>
+                    </div>
                 </div>
             `;
-
 
             container.appendChild(item);
         });
 
-        document.querySelectorAll(".remove_btn").forEach(btn => {
+        document.querySelectorAll(".btn-delete").forEach(btn => {
             btn.addEventListener("click", async () => {
                 const id = Number(btn.dataset.id);
                 await deletarVeiculo(id);

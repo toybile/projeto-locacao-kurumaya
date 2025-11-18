@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>Clientes — Kurumaya</title>
+    <link rel="stylesheet" href="/static/css/funcionario/clientes.css">
 </head>
+
 <body>
-    <header>
-        <h1>Lista de Clientes</h1>
+    <header class="topbar">
+        <h1>Kurumaya — Clientes</h1>
         <nav>
-            <a href="{{ url_for('funcionario_index') }}">Menu Funcionário</a>
-            <a href="{{ url_for('logout') }}">Sair</a>
+            <a href="/funcionario">Menu Funcionário</a>
+            <a href="/veiculos">Veículos</a>
+            <a class="logout" href="/logout">Sair</a>
         </nav>
     </header>
 
-    <main>
-        <div id="clientes-container">
-            <p>Carregando clientes...</p>
+    <main class="content">
+        <div class="welcome-section">
+            <h1>Gerenciamento de Clientes</h1>
+        </div>
+
+        <div class="list-section">
+            <h2>Lista de Clientes</h2>
+            <div id="clientes-container" class="clients-list">
+                <p>Carregando clientes...</p>
+            </div>
         </div>
     </main>
 
-    <script src="{{ url_for('static', filename='js/clientes.js') }}"></script>
+    <script src="/static/js/clientes.js"></script>
 </body>
 </html>
