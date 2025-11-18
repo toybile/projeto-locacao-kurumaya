@@ -358,7 +358,7 @@ main {
     align-items: flex-end;
     flex: 1 1 auto;
     padding-top: 8rem;
-    margin-top: 4rem;
+    margin-top: -4rem;
     min-height: 600px;
     width: 100%;
 }
