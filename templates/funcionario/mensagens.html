@@ -4,280 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensagens de Contato - Kurumaya</title>
-    <link rel="stylesheet" href="/static/css/header.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #5a1f8c 0%, #2b0f22 35%, transparent 60%),
-                        linear-gradient(circle at bottom right, #b6291f 0%, #5a1414 35%, #1b0814 80%);
-            min-height: 100vh;
-        }
-
-        main {
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, #5a1f8c 0%, #2b0f22 35%, transparent 60%),
-                        linear-gradient(circle at bottom right, #b6291f 0%, #5a1414 35%, #1b0814 80%);
-            min-height: calc(100vh - 4rem);
-        }
-
-        .messages-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .messages-container h1 {
-            color: #bd3a7c;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            text-shadow: 0 2px 10px rgba(189, 58, 124, 0.3);
-        }
-
-        .stats {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(189, 58, 124, 0.2);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            display: flex;
-            gap: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.6s ease-out;
-        }
-
-        .stat-item {
-            text-align: center;
-            flex: 1;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #ff4f7d;
-            text-shadow: 0 2px 8px rgba(255, 79, 125, 0.4);
-        }
-
-        .stat-label {
-            color: #ddd;
-            font-size: 0.95rem;
-            margin-top: 8px;
-        }
-
-        .filter-buttons {
-            margin-bottom: 25px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .filter-buttons button {
-            padding: 12px 25px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            color: #ddd;
-            border: 2px solid rgba(189, 58, 124, 0.3);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(12px);
-        }
-
-        .filter-buttons button:hover {
-            border-color: rgba(189, 58, 124, 0.6);
-            background: rgba(189, 58, 124, 0.1);
-        }
-
-        .filter-buttons button.active {
-            background: linear-gradient(135deg, #bd3a7c, #ff4f7d);
-            color: white;
-            border-color: #ff4f7d;
-            box-shadow: 0 4px 15px rgba(189, 58, 124, 0.5);
-        }
-
-        .message-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(189, 58, 124, 0.2);
-            border-left: 4px solid #bd3a7c;
-            padding: 25px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideUp 0.6s ease-out forwards;
-        }
-
-        .message-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(189, 58, 124, 0.5);
-            box-shadow: 0 12px 40px rgba(189, 58, 124, 0.4);
-        }
-
-        .message-card.unread {
-            border-left-color: #ff4f7d;
-        }
-
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .message-sender {
-            font-weight: bold;
-            color: #fff;
-            font-size: 1.2rem;
-        }
-
-        .message-contact {
-            font-size: 0.9rem;
-            color: #aaa;
-            margin: 5px 0;
-        }
-
-        .message-timestamp {
-            font-size: 0.85rem;
-            color: #999;
-            margin-top: 5px;
-        }
-
-        .message-status {
-            font-size: 1.4rem;
-            margin-top: 5px;
-        }
-
-        .message-text {
-            margin: 18px 0;
-            color: #e0e0e0;
-            line-height: 1.7;
-            white-space: pre-wrap;
-            word-break: break-word;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            border-left: 3px solid #ff4f7d;
-        }
-
-        .message-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 18px;
-            border-top: 1px solid rgba(189, 58, 124, 0.2);
-            padding-top: 15px;
-        }
-
-        .btn {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-mark-read {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-        }
-
-        .btn-mark-read:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
-        }
-
-        .btn-delete {
-            background: linear-gradient(135deg, #dc3545, #ff6b6b);
-            color: white;
-        }
-
-        .btn-delete:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
-        }
-
-        .empty-message {
-            text-align: center;
-            padding: 50px 20px;
-            color: #aaa;
-            font-size: 1.1rem;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .messages-container h1 {
-                font-size: 1.5rem;
-            }
-
-            .stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .message-card {
-                padding: 18px;
-            }
-
-            .message-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/funcionario/mensagens.css">
 </head>
+
 <body>
-    <header class="headerbar">
-        <div class="header-content">
-            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
-        </div>
+    <header class="topbar">
+        <h1>Kurumaya — Mensagens</h1>
+        <nav>
+            <a href="/funcionario">Menu Funcionário</a>
+            <a href="/frota">Frota (Cliente)</a>
+            <a class="logout" href="/logout">Sair</a>
+        </nav>
     </header>
 
-    <div id="line_title" class="animate-expand"></div>
-
-    <main>
-        <div class="messages-container">
+    <main class="content">
+        <div class="welcome-section">
             <h1>📬 Mensagens de Contato</h1>
+        </div>
 
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-number" id="total-messages">0</div>
-                    <div class="stat-label">Total de Mensagens</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="unread-messages">0</div>
-                    <div class="stat-label">Não Lidas</div>
-                </div>
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="total-messages">0</div>
+                <div class="stat-label">Total</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-number" id="unread-messages">0</div>
+                <div class="stat-label">Não Lidas</div>
+            </div>
+        </div>
 
+        <div class="messages-container">
             <div class="filter-buttons">
-                <button class="active" data-filter="all">✓ Todas</button>
-                <button data-filter="unread">● Não Lidas</button>
-                <button data-filter="read">✓ Lidas</button>
+                <button class="filter-btn active" data-filter="all">📋 Todas</button>
+                <button class="filter-btn" data-filter="unread">● Não Lidas</button>
+                <button class="filter-btn" data-filter="read">✓ Lidas</button>
             </div>
 
             <div id="messages-list"></div>
@@ -285,132 +45,6 @@
     </main>
 
     <script src="/static/js/menu.js"></script>
-    <script>
-        let allMessages = [];
-        let currentFilter = 'all';
-
-        async function loadMessages() {
-            try {
-                const response = await fetch('/api/contact/messages');
-                if (!response.ok) throw new Error('Erro ao carregar mensagens');
-                
-                allMessages = await response.json();
-                renderMessages();
-                updateStats();
-            } catch (error) {
-                console.error('Erro:', error);
-                document.getElementById('messages-list').innerHTML = 
-                    '<p class="empty-message">❌ Erro ao carregar mensagens</p>';
-            }
-        }
-
-        document.querySelectorAll('.filter-buttons button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-buttons button').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                renderMessages();
-            });
-        });
-
-        function renderMessages() {
-            let filtered = allMessages;
-
-            if (currentFilter === 'unread') {
-                filtered = allMessages.filter(msg => !msg.read);
-            } else if (currentFilter === 'read') {
-                filtered = allMessages.filter(msg => msg.read);
-            }
-
-            const messagesList = document.getElementById('messages-list');
-
-            if (filtered.length === 0) {
-                messagesList.innerHTML = '<p class="empty-message">Nenhuma mensagem encontrada</p>';
-                return;
-            }
-
-            messagesList.innerHTML = filtered.map((msg, index) => {
-                const date = new Date(msg.timestamp).toLocaleString('pt-BR');
-                const statusEmoji = msg.read ? '✓' : '●';
-                const statusColor = msg.read ? '#28a745' : '#ff4f7d';
-                
-                return `
-                    <div class="message-card ${msg.read ? '' : 'unread'}" style="animation-delay: ${index * 0.1}s">
-                        <div class="message-header">
-                            <div>
-                                <div class="message-sender">${msg.name}</div>
-                                <div class="message-contact">📧 ${msg.email}</div>
-                                ${msg.phone ? `<div class="message-contact">📱 ${msg.phone}</div>` : ''}
-                                <div class="message-timestamp">${date}</div>
-                            </div>
-                            <span class="message-status" style="color: ${statusColor}">${statusEmoji}</span>
-                        </div>
-                        <div class="message-text">${escapeHtml(msg.message)}</div>
-                        <div class="message-actions">
-                            ${!msg.read ? `<button class="btn btn-mark-read" onclick="markAsRead(${msg.id})">✓ Marcar como Lida</button>` : ''}
-                            <button class="btn btn-delete" onclick="deleteMessage(${msg.id})">🗑️ Deletar</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        async function markAsRead(messageId) {
-            try {
-                const response = await fetch(`/api/contact/messages/${messageId}/read`, {
-                    method: 'PUT'
-                });
-                if (response.ok) {
-                    loadMessages();
-                } else {
-                    alert('Erro ao marcar como lida');
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao marcar como lida');
-            }
-        }
-
-        async function deleteMessage(messageId) {
-            if (confirm('Tem certeza que deseja deletar esta mensagem?')) {
-                try {
-                    const response = await fetch(`/api/contact/messages/${messageId}`, {
-                        method: 'DELETE'
-                    });
-                    if (response.ok) {
-                        loadMessages();
-                    } else {
-                        alert('Erro ao deletar mensagem');
-                    }
-                } catch (error) {
-                    console.error('Erro:', error);
-                    alert('Erro ao deletar mensagem');
-                }
-            }
-        }
-
-        function updateStats() {
-            const unread = allMessages.filter(msg => !msg.read).length;
-            document.getElementById('total-messages').textContent = allMessages.length;
-            document.getElementById('unread-messages').textContent = unread;
-        }
-
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, m => map[m]);
-        }
-
-        // Carrega mensagens ao abrir a página
-        loadMessages();
-
-        // Atualiza a cada 5 segundos
-        setInterval(loadMessages, 5000);
-    </script>
+    <script src="/static/js/funcionario/mensagens.js"></script>
 </body>
 </html>

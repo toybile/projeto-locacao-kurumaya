@@ -125,7 +125,10 @@ body {
     display: flex;
     gap: 0.6rem;
 }
-#button_perfil, #button_criar {
+
+#button_perfil,
+#button_criar,
+#button_sair {
     min-width: 80px;
     padding: 0.44rem 1.25rem;
     font-size: 1.03rem;
@@ -135,8 +138,9 @@ body {
     background: transparent;
     color: var(--texto-claro);
     cursor: pointer;
-    transition: background 0.22s, color 0.22s, transform 0.14s;
+    transition: all 0.22s ease;
 }
+
 #button_criar {
     background: linear-gradient(to right, var(--botao-primario), var(--rosa));
     color: #fff;
@@ -154,10 +158,7 @@ body {
 #button_sair {
     background: linear-gradient(135deg, #ff6961 0%, #b6291f 100%);
     border: 2px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
-    font-weight: bold;
     position: relative;
-    animation: pulseGlow 2s ease-in-out infinite;
 }
 
 #button_sair::after {
@@ -175,7 +176,6 @@ body {
 #button_sair:hover {
     transform: translateY(-3px) scale(1.08);
     box-shadow: 0 8px 20px rgba(182, 41, 31, 0.5);
-    animation: shake 0.5s ease-in-out;
 }
 
 #button_sair:hover::after {
