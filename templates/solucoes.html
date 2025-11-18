@@ -5,642 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soluções - AlugueCar</title>
     <link rel="stylesheet" href="/static/css/solucoes.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 60px 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ==================== SEÇÃO DE SOLUÇÕES ==================== */
-
-        .solutions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .solution-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #667eea;
-            cursor: pointer;
-        }
-
-        .solution-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-            border-left-color: #764ba2;
-        }
-
-        .solution-card .icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
-            display: block;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .solution-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .solution-card p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .solution-card .features {
-            list-style: none;
-            margin-bottom: 20px;
-        }
-
-        .solution-card .features li {
-            color: #555;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 0.95em;
-        }
-
-        .solution-card .features li:last-child {
-            border-bottom: none;
-        }
-
-        .solution-card .features li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #f0f2f5;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #e4e6eb;
-        }
-
-        /* ==================== SEÇÃO FAQ ==================== */
-
-        .faq-section {
-            margin: 60px 0;
-        }
-
-        .faq-section h2 {
-            font-size: 2em;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #333;
-        }
-
-        .faq-item {
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8f9fa;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-        }
-
-        .faq-question:hover {
-            background: #f0f2f5;
-        }
-
-        .faq-question.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .faq-toggle {
-            font-size: 1.5em;
-            transition: transform 0.3s ease;
-        }
-
-        .faq-toggle.active {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            padding: 0 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            background: #fafbfc;
-        }
-
-        .faq-answer.active {
-            padding: 20px;
-            max-height: 500px;
-        }
-
-        .faq-answer p {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 10px;
-        }
-
-        /* ==================== COMPARAÇÃO PLANOS ==================== */
-
-        .pricing-section {
-            margin: 60px 0;
-            text-align: center;
-        }
-
-        .pricing-section h2 {
-            font-size: 2em;
-            margin-bottom: 40px;
-            color: #333;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 12px;
-            padding: 40px 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            position: relative;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .pricing-card:hover {
-            transform: scale(1.05);
-            border-color: #667eea;
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
-        }
-
-        .pricing-card.popular {
-            border-color: #667eea;
-            transform: scale(1.05);
-        }
-
-        .pricing-card .badge {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.85em;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.5em;
-            margin: 20px 0 10px 0;
-            color: #333;
-        }
-
-        .pricing-card .price {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-        }
-
-        .pricing-card .price small {
-            font-size: 0.4em;
-            color: #999;
-        }
-
-        .pricing-card ul {
-            list-style: none;
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .pricing-card ul li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-
-        .pricing-card ul li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .pricing-card ul li.unavailable:before {
-            content: "✗ ";
-            color: #ddd;
-        }
-
-        .pricing-card ul li.unavailable {
-            color: #ccc;
-        }
-
-        /* ==================== CTA SECTION ==================== */
-
-        .cta-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 20px;
-            border-radius: 12px;
-            text-align: center;
-            margin: 60px 0;
-        }
-
-        .cta-section h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .cta-section p {
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            opacity: 0.95;
-        }
-
-        /* ==================== FOOTER ==================== */
-
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 60px;
-            font-size: 0.95em;
-        }
-
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* ==================== RESPONSIVO ==================== */
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            .solutions-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-card.popular {
-                transform: scale(1);
-            }
-
-            .pricing-card:hover {
-                transform: scale(1);
-            }
-
-            header {
-                padding: 40px 20px;
-            }
-
-            .cta-section h2 {
-                font-size: 1.5em;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/base.css">
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <div class="container">
-            <h1>🚗 Nossas Soluções</h1>
-            <p>Aluguel de veículos flexível e acessível para todas as suas necessidades</p>
+    <header class="headerbar">
+        <div class="header-content">
+            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
+            <div id="menu_nav">
+                <a href="/frota" class="menu-item">Frota</a>
+                <a href="/solucoes" class="menu-item active">Soluções</a>
+                <a href="/contato" class="menu-item">Contato</a>
+                <a href="/faq" class="menu-item">FAQ</a>
+                <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
+                <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
+            </div>
+
+            <div id="div_perfil">
+                <div id="div_botoes_header">
+                    <a href="/login"><button id="button_perfil">Entrar</button></a>
+                    <a href="/signin"><button id="button_criar">Criar conta</button></a>
+                    <a href="/logout"><button id="button_sair">Sair</button></a>
+                </div>
+                <p class="texto-funcionario">
+                    <a href="/funcionario/login">É funcionário? Logue aqui.</a>
+                </p>
+            </div>
         </div>
     </header>
+    <div id="line_title" class="animate-expand"></div>
 
-    <!-- MAIN CONTENT -->
-    <div class="container">
-        <!-- SOLUÇÕES PRINCIPAIS -->
-        <section class="solutions-grid">
-            <!-- Solução 1: Aluguel Diário -->
-            <div class="solution-card">
-                <span class="icon">📅</span>
-                <h3>Aluguel Diário</h3>
-                <p>Perfeito para quem precisa de um veículo por um ou alguns dias.</p>
-                <ul class="features">
-                    <li>Sem taxas ocultas</li>
-                    <li>Seguro incluído</li>
-                    <li>Frota variada</li>
-                    <li>Devolução flexível</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
-            </div>
-
-            <!-- Solução 2: Aluguel Semanal -->
-            <div class="solution-card">
-                <span class="icon">📆</span>
-                <h3>Aluguel Semanal</h3>
-                <p>Desconto especial para quem aluga por uma semana ou mais.</p>
-                <ul class="features">
-                    <li>Até 20% de desconto</li>
-                    <li>Entrega grátis</li>
-                    <li>Suporte 24/7</li>
-                    <li>GPS incluído</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
-            </div>
-
-            <!-- Solução 3: Aluguel Corporativo -->
-            <div class="solution-card">
-                <span class="icon">🏢</span>
-                <h3>Aluguel Corporativo</h3>
-                <p>Solução completa para empresas com frotas e uso contínuo.</p>
-                <ul class="features">
-                    <li>Contratos customizados</li>
-                    <li>Gerenciamento de frota</li>
-                    <li>Relatórios detalhados</li>
-                    <li>Atendimento dedicado</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
-            </div>
-
-            <!-- Solução 4: Aluguel com Condutor -->
-            <div class="solution-card">
-                <span class="icon">👨‍🔧</span>
-                <h3>Com Condutor</h3>
-                <p>Viaje com conforto enquanto nosso condutor cuida da estrada.</p>
-                <ul class="features">
-                    <li>Motorista profissional</li>
-                    <li>Serviço premium</li>
-                    <li>Roteiros personalizados</li>
-                    <li>Flexibilidade total</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
-            </div>
-
-            <!-- Solução 5: Fretamento -->
-            <div class="solution-card">
-                <span class="icon">🚌</span>
-                <h3>Fretamento</h3>
-                <p>Ônibus e vans para grupos, eventos e viagens em grupo.</p>
-                <ul class="features">
-                    <li>Capacidade de 15-50 pessoas</li>
-                    <li>Ar condicionado</li>
-                    <li>Equipamento de áudio</li>
-                    <li>Motorista experiente</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
-            </div>
-
-            <!-- Solução 6: Leasing Operacional -->
-            <div class="solution-card">
-                <span class="icon">💼</span>
-                <h3>Leasing Operacional</h3>
-                <p>Solução de longo prazo com todos os custos inclusos.</p>
-                <ul class="features">
-                    <li>Manutenção incluída</li>
-                    <li>Seguro completo</li>
-                    <li>Pneus e óleo</li>
-                    <li>Assistência 24/7</li>
-                </ul>
-                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+    <main class="main-solutions">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Nossas Soluções em Mobilidade</h1>
+                <p class="hero-subtitle">Encontre a solução perfeita para suas necessidades de transporte, seja pessoal ou corporativo</p>
             </div>
         </section>
 
-        <!-- COMPARAÇÃO DE PLANOS -->
-        <section class="pricing-section" id="pricing">
-            <h2>💰 Nossos Planos</h2>
-            <div class="pricing-grid">
-                <!-- Plano Básico -->
-                <div class="pricing-card">
-                    <h3>Básico</h3>
-                    <div class="price">R$ 120<small>/dia</small></div>
-                    <ul>
-                        <li>Veículos compactos</li>
-                        <li>Seguro básico</li>
-                        <li>Entrega em ponto</li>
-                        <li class="unavailable">GPS</li>
-                        <li class="unavailable">Condutor</li>
+        <div class="container">
+            <section class="solutions-grid">
+                <!-- Solução 1: Aluguel Diário -->
+                <article class="solution-card" data-aos="fade-up">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.6947 13.7H15.7037M15.6947 16.7H15.7037M11.9955 13.7H12.0045M11.9955 16.7H12.0045M8.29431 13.7H8.30329M8.29431 16.7H8.30329" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Aluguel Diário</h3>
+                    <p class="card-description">Flexibilidade total para suas necessidades de curto prazo. Ideal para viagens rápidas ou compromissos pontuais.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Sem taxas ocultas</li>
+                        <li><span class="check-icon">✓</span> Seguro incluso</li>
+                        <li><span class="check-icon">✓</span> Devolução flexível</li>
+                        <li><span class="check-icon">✓</span> Frota renovada</li>
                     </ul>
-                    <button class="btn">Contratar</button>
-                </div>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 89<span class="price-period">/dia</span></span>
+                    </div>
+                </article>
 
-                <!-- Plano Profissional -->
-                <div class="pricing-card popular">
-                    <div class="badge">🌟 POPULAR</div>
-                    <h3>Profissional</h3>
-                    <div class="price">R$ 180<small>/dia</small></div>
-                    <ul>
-                        <li>Todos os veículos</li>
-                        <li>Seguro premium</li>
-                        <li>Entrega grátis</li>
-                        <li>GPS incluído</li>
-                        <li class="unavailable">Condutor</li>
+                <!-- Solução 2: Aluguel Semanal -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-badge">Mais Popular</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 2V5M16 2V5M3.5 9.09H20.5M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Aluguel Semanal</h3>
+                    <p class="card-description">Economia garantida para períodos maiores. Perfeito para viagens prolongadas ou projetos temporários.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Desconto progressivo</li>
+                        <li><span class="check-icon">✓</span> Entrega gratuita</li>
+                        <li><span class="check-icon">✓</span> Quilometragem livre</li>
+                        <li><span class="check-icon">✓</span> GPS incluso</li>
                     </ul>
-                    <button class="btn">Contratar</button>
-                </div>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 69<span class="price-period">/dia</span></span>
+                    </div>
+                </article>
 
-                <!-- Plano Premium -->
-                <div class="pricing-card">
-                    <h3>Premium</h3>
-                    <div class="price">R$ 280<small>/dia</small></div>
-                    <ul>
-                        <li>Melhor da frota</li>
-                        <li>Seguro VIP</li>
-                        <li>Entrega express</li>
-                        <li>GPS + SOS</li>
-                        <li>Condutor opcional</li>
+                <!-- Solução 3: Aluguel Mensal -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.97 22C17.4928 22 21.97 17.5228 21.97 12C21.97 6.47715 17.4928 2 11.97 2C6.44712 2 1.96997 6.47715 1.96997 12C1.96997 17.5228 6.44712 22 11.97 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 8V12L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Aluguel Mensal</h3>
+                    <p class="card-description">Solução econômica de longo prazo com todos os benefícios. Mobilidade garantida sem compromisso de compra.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Manutenção inclusa</li>
+                        <li><span class="check-icon">✓</span> Sem fidelidade</li>
+                        <li><span class="check-icon">✓</span> Assistência 24h</li>
+                        <li><span class="check-icon">✓</span> Carro reserva</li>
                     </ul>
-                    <button class="btn">Contratar</button>
-                </div>
-            </div>
-        </section>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 1.899<span class="price-period">/mês</span></span>
+                    </div>
+                </article>
 
-        <!-- FAQ -->
-        <section class="faq-section" id="faq">
-            <h2>❓ Perguntas Frequentes</h2>
+                <!-- Solução 4: Corporativo -->
+                <article class="solution-card" data-aos="fade-up">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 22V11C8 8.79 9.79 7 12 7C14.21 7 16 8.79 16 11V22M3 9L12 2L21 9M8 22H16M8 22H3M16 22H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Soluções Corporativas</h3>
+                    <p class="card-description">Gestão de frota completa para sua empresa. Reduza custos e aumente a eficiência operacional.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Contratos flexíveis</li>
+                        <li><span class="check-icon">✓</span> Atendimento dedicado</li>
+                        <li><span class="check-icon">✓</span> Relatórios detalhados</li>
+                        <li><span class="check-icon">✓</span> Gestão online</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">Consulte</span>
+                        <span class="price-value">Condições<span class="price-period"></span></span>
+                    </div>
+                </article>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Qual é a idade mínima para alugar um veículo?</span>
-                    <span class="faq-toggle">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p>A idade mínima é 21 anos para a maioria dos veículos. Alguns veículos premium exigem 25 anos.</p>
-                </div>
-            </div>
+                <!-- Solução 5: Com Condutor -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.41003 22C3.41003 18.13 7.26003 15 12 15C12.96 15 13.89 15.13 14.76 15.37" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 18C22 18.32 21.96 18.63 21.88 18.93C21.79 19.33 21.63 19.72 21.42 20.06C20.73 21.22 19.46 22 18 22C16.97 22 16.04 21.61 15.34 20.97C15.04 20.71 14.78 20.4 14.58 20.06C14.21 19.46 14 18.75 14 18C14 16.92 14.43 15.93 15.13 15.21C15.86 14.46 16.88 14 18 14C19.18 14 20.25 14.51 20.97 15.33C21.61 16.04 22 16.98 22 18Z" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16.4399 18L17.4299 18.99L19.5599 17.02" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Aluguel com Condutor</h3>
+                    <p class="card-description">Viaje com conforto e segurança. Motoristas profissionais e experientes ao seu dispor.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Motoristas qualificados</li>
+                        <li><span class="check-icon">✓</span> Serviço executivo</li>
+                        <li><span class="check-icon">✓</span> Roteiros personalizados</li>
+                        <li><span class="check-icon">✓</span> Frota premium</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 149<span class="price-period">/dia</span></span>
+                    </div>
+                </article>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Que documentos são necessários?</span>
-                    <span class="faq-toggle">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Você precisará de:<br>• RG ou Passaporte<br>• CNH válida (categoria B ou superior)<br>• Comprovante de residência<br>• Cartão de crédito para caução</p>
-                </div>
-            </div>
+                <!-- Solução 6: Fretamento -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.99988 16C3.99988 16 4.99988 14 8.49988 14C11.9999 14 12.9999 16 15.9999 16C18.9999 16 19.9999 14 19.9999 14V4C19.9999 4 18.9999 6 15.9999 6C12.9999 6 11.9999 4 8.49988 4C4.99988 4 3.99988 6 3.99988 6V16ZM3.99988 16V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Fretamento</h3>
+                    <p class="card-description">Transporte coletivo para eventos, empresas e grupos. Ônibus e vans confortáveis e modernos.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Até 50 pessoas</li>
+                        <li><span class="check-icon">✓</span> Ar condicionado</li>
+                        <li><span class="check-icon">✓</span> Wi-Fi e áudio</li>
+                        <li><span class="check-icon">✓</span> Motorista incluso</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">Consulte</span>
+                        <span class="price-value">Valores<span class="price-period"></span></span>
+                    </div>
+                </article>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Como funciona a caução?</span>
-                    <span class="faq-toggle">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p>A caução é um depósito de segurança bloqueado no cartão de crédito. Ela é devolvida completamente se o veículo for devolvido em perfeito estado.</p>
-                </div>
-            </div>
+                <!-- Solução 7: Leasing Operacional -->
+                <article class="solution-card" data-aos="fade-up">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.75 2.45C11.44 1.86 12.57 1.86 13.27 2.45L14.85 3.81C15.15 4.07 15.71 4.28 16.11 4.28H17.81C18.87 4.28 19.74 5.15 19.74 6.21V7.91C19.74 8.3 19.95 8.87 20.21 9.17L21.57 10.75C22.16 11.44 22.16 12.57 21.57 13.27L20.21 14.85C19.95 15.15 19.74 15.71 19.74 16.11V17.81C19.74 18.87 18.87 19.74 17.81 19.74H16.11C15.72 19.74 15.15 19.95 14.85 20.21L13.27 21.57C12.58 22.16 11.45 22.16 10.75 21.57L9.17 20.21C8.87 19.95 8.31 19.74 7.91 19.74H6.18C5.12 19.74 4.25 18.87 4.25 17.81V16.1C4.25 15.71 4.04 15.15 3.79 14.85L2.44 13.26C1.86 12.57 1.86 11.45 2.44 10.76L3.79 9.17C4.04 8.87 4.25 8.3 4.25 7.91V6.2C4.25 5.14 5.12 4.27 6.18 4.27H7.91C8.3 4.27 8.87 4.06 9.17 3.8L10.75 2.45Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 12L10.5 13.5L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Leasing Operacional</h3>
+                    <p class="card-description">Solução completa de longo prazo. Todos os custos operacionais inclusos em uma mensalidade fixa.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Manutenção total</li>
+                        <li><span class="check-icon">✓</span> Seguro completo</li>
+                        <li><span class="check-icon">✓</span> Gestão de pneus</li>
+                        <li><span class="check-icon">✓</span> Renovação programada</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 2.499<span class="price-period">/mês</span></span>
+                    </div>
+                </article>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>O seguro está incluído no aluguel?</span>
-                    <span class="faq-toggle">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Sim! Todos os planos incluem seguro básico. O plano Premium oferece cobertura expandida com franquia zero.</p>
-                </div>
-            </div>
+                <!-- Solução 8: Assinatura -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-badge">Novidade</div>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 12L10.5 14.5L16 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Carro por Assinatura</h3>
+                    <p class="card-description">Tenha um carro novo todo ano sem compromisso. Flexibilidade total com zero entrada.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Sem entrada</li>
+                        <li><span class="check-icon">✓</span> Troca anual</li>
+                        <li><span class="check-icon">✓</span> Planos personalizados</li>
+                        <li><span class="check-icon">✓</span> Assistência premium</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 1.599<span class="price-period">/mês</span></span>
+                    </div>
+                </article>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Posso cancelar minha reserva?</span>
-                    <span class="faq-toggle">▼</span>
-                </div>
-                <div class="faq-answer">
-                    <p>Sim! Cancelamentos até 24 horas antes da data têm reembolso total. Cancelamentos com menos de 24h têm taxa de 20%.</p>
-                </div>
-            </div>
+                <!-- Solução 9: Motorhome -->
+                <article class="solution-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.87988 18.1501V16.0801M17.1199 18.1501V16.0801M10.6799 11.4199L8.61988 9.35986M15.3699 11.4199L17.4299 9.35986" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 11.4199V8.17993M10.62 5.99994H13.38C14.4 5.99994 15.23 6.82994 15.23 7.84994V8.55994C15.23 9.57994 14.4 10.4099 13.38 10.4099H10.62C9.6 10.4099 8.77 9.57994 8.77 8.55994V7.84994C8.77 6.82994 9.6 5.99994 10.62 5.99994Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12.8V13.88C2 16.17 2.02 16.17 4.22 17.45L5.52 18.17C6.38 18.63 7.82 18.63 8.68 18.17C8.88 18.06 9.09 17.96 9.3 17.88C10.22 17.52 11.26 17.49 12.19 17.82C12.45 17.92 12.7 18.03 12.95 18.15C13.78 18.6 15.2 18.6 16.04 18.15L17.36 17.41C19.59 16.13 19.61 16.13 19.61 13.87V9.20997C19.61 6.90997 19.59 6.90997 17.36 5.62997L16.04 4.88997C15.2 4.43997 13.78 4.43997 12.95 4.88997C12.7 5.00997 12.45 5.11997 12.19 5.21997C11.26 5.53997 10.22 5.51997 9.3 5.14997C9.09 5.06997 8.88 4.96997 8.68 4.85997C7.82 4.39997 6.38 4.39997 5.52 4.85997L4.22 5.57997C2.02 6.85997 2 6.85997 2 9.11997" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 22H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Motorhome Experience</h3>
+                    <p class="card-description">Liberdade para viajar e acampar com todo conforto. Viva experiências únicas em família.</p>
+                    <ul class="card-features">
+                        <li><span class="check-icon">✓</span> Motorhomes modernos</li>
+                        <li><span class="check-icon">✓</span> Utensílios inclusos</li>
+                        <li><span class="check-icon">✓</span> Suporte de viagem</li>
+                        <li><span class="check-icon">✓</span> Planos familiares</li>
+                    </ul>
+                    <div class="card-price">
+                        <span class="price-label">A partir de</span>
+                        <span class="price-value">R$ 399<span class="price-period">/dia</span></span>
+                    </div>
+                </article>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>Posso dirigir fora do estado?</span>
-                    <span class="faq-toggle">▼</span>
+            <section class="cta-section" data-aos="fade-up">
+                <div class="cta-content">
+                    <h2 class="cta-title">Pronto para começar?</h2>
+                    <p class="cta-description">Escolha a solução ideal e reserve seu veículo em minutos</p>
+                    <div class="cta-buttons">
+                        <a href="/frota" class="btn-primary">Ver Frota Completa</a>
+                        <a href="/contato" class="btn-secondary">Falar com Especialista</a>
+                    </div>
                 </div>
-                <div class="faq-answer">
-                    <p>Sim! Você pode dirigir para qualquer estado do Brasil. Apenas notifique-nos antecipadamente e verifique se há cobranças adicionais.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA SECTION -->
-        <section class="cta-section">
-            <h2>Pronto para alugar seu veículo?</h2>
-            <p>Escolha o plano que melhor se adequa às suas necessidades e aproveite as melhores condições do mercado</p>
-            <a href="/frota" class="btn">Ver Frota Disponível</a>
-            <a href="/contato" class="btn btn-secondary" style="margin-left: 15px;">Fale Conosco</a>
-        </section>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2025 AlugueCar. Todos os direitos reservados.</p>
-        <p><a href="/">Home</a> | <a href="/frota">Frota</a> | <a href="/contato">Contato</a></p>
-    </footer>
-
+            </section>
+        </div>
+    </main>
     <script>
-        function toggleFaq(element) {
-            const faqItem = element.parentElement;
-            const faqAnswer = faqItem.querySelector('.faq-answer');
-            const faqToggle = element.querySelector('.faq-toggle');
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -100px 0px'
+            };
 
-            // Remove active de outros itens
-            document.querySelectorAll('.faq-item').forEach(item => {
-                if (item !== faqItem) {
-                    item.querySelector('.faq-question').classList.remove('active');
-                    item.querySelector('.faq-answer').classList.remove('active');
-                    item.querySelector('.faq-toggle').classList.remove('active');
-                }
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('aos-animate');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('[data-aos]').forEach(element => {
+                observer.observe(element);
             });
-
-            // Toggle do item atual
-            element.classList.toggle('active');
-            faqAnswer.classList.toggle('active');
-            faqToggle.classList.toggle('active');
-        }
-
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
+        });
     </script>
 </body>
 </html>
