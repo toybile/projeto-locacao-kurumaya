@@ -151,6 +151,7 @@ def faq():
     return render_template("faq.html")
 
 @app.route("/mensagens")
+@staff_required
 def mensagens():
     return render_template("/funcionario/mensagens.html")
 
