@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soluções - AlugueCar</title>
+    <link rel="stylesheet" href="/static/css/solucoes.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ==================== SEÇÃO DE SOLUÇÕES ==================== */
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .solution-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+            cursor: pointer;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-left-color: #764ba2;
+        }
+
+        .solution-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .solution-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .solution-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .solution-card .features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .solution-card .features li {
+            color: #555;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+
+        .solution-card .features li:last-child {
+            border-bottom: none;
+        }
+
+        .solution-card .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e6eb;
+        }
+
+        /* ==================== SEÇÃO FAQ ==================== */
+
+        .faq-section {
+            margin: 60px 0;
+        }
+
+        .faq-section h2 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f0f2f5;
+        }
+
+        .faq-question.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .faq-toggle {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .faq-answer.active {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        /* ==================== COMPARAÇÃO PLANOS ==================== */
+
+        .pricing-section {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .pricing-section h2 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .pricing-card.popular {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .pricing-card .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5em;
+            margin: 20px 0 10px 0;
+            color: #333;
+        }
+
+        .pricing-card .price {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .pricing-card .price small {
+            font-size: 0.4em;
+            color: #999;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-card ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            color: #555;
+        }
+
+        .pricing-card ul li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .pricing-card ul li.unavailable:before {
+            content: "✗ ";
+            color: #ddd;
+        }
+
+        .pricing-card ul li.unavailable {
+            color: #ccc;
+        }
+
+        /* ==================== CTA SECTION ==================== */
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .cta-section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        /* ==================== FOOTER ==================== */
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+            font-size: 0.95em;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== RESPONSIVO ==================== */
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .solutions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+
+            .pricing-card:hover {
+                transform: scale(1);
+            }
+
+            header {
+                padding: 40px 20px;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <h1>🚗 Nossas Soluções</h1>
+            <p>Aluguel de veículos flexível e acessível para todas as suas necessidades</p>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- SOLUÇÕES PRINCIPAIS -->
+        <section class="solutions-grid">
+            <!-- Solução 1: Aluguel Diário -->
+            <div class="solution-card">
+                <span class="icon">📅</span>
+                <h3>Aluguel Diário</h3>
+                <p>Perfeito para quem precisa de um veículo por um ou alguns dias.</p>
+                <ul class="features">
+                    <li>Sem taxas ocultas</li>
+                    <li>Seguro incluído</li>
+                    <li>Frota variada</li>
+                    <li>Devolução flexível</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+
+            <!-- Solução 2: Aluguel Semanal -->
+            <div class="solution-card">
+                <span class="icon">📆</span>
+                <h3>Aluguel Semanal</h3>
+                <p>Desconto especial para quem aluga por uma semana ou mais.</p>
+                <ul class="features">
+                    <li>Até 20% de desconto</li>
+                    <li>Entrega grátis</li>
+                    <li>Suporte 24/7</li>
+                    <li>GPS incluído</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+
+            <!-- Solução 3: Aluguel Corporativo -->
+            <div class="solution-card">
+                <span class="icon">🏢</span>
+                <h3>Aluguel Corporativo</h3>
+                <p>Solução completa para empresas com frotas e uso contínuo.</p>
+                <ul class="features">
+                    <li>Contratos customizados</li>
+                    <li>Gerenciamento de frota</li>
+                    <li>Relatórios detalhados</li>
+                    <li>Atendimento dedicado</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+
+            <!-- Solução 4: Aluguel com Condutor -->
+            <div class="solution-card">
+                <span class="icon">👨‍🔧</span>
+                <h3>Com Condutor</h3>
+                <p>Viaje com conforto enquanto nosso condutor cuida da estrada.</p>
+                <ul class="features">
+                    <li>Motorista profissional</li>
+                    <li>Serviço premium</li>
+                    <li>Roteiros personalizados</li>
+                    <li>Flexibilidade total</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+
+            <!-- Solução 5: Fretamento -->
+            <div class="solution-card">
+                <span class="icon">🚌</span>
+                <h3>Fretamento</h3>
+                <p>Ônibus e vans para grupos, eventos e viagens em grupo.</p>
+                <ul class="features">
+                    <li>Capacidade de 15-50 pessoas</li>
+                    <li>Ar condicionado</li>
+                    <li>Equipamento de áudio</li>
+                    <li>Motorista experiente</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+
+            <!-- Solução 6: Leasing Operacional -->
+            <div class="solution-card">
+                <span class="icon">💼</span>
+                <h3>Leasing Operacional</h3>
+                <p>Solução de longo prazo com todos os custos inclusos.</p>
+                <ul class="features">
+                    <li>Manutenção incluída</li>
+                    <li>Seguro completo</li>
+                    <li>Pneus e óleo</li>
+                    <li>Assistência 24/7</li>
+                </ul>
+                <button class="btn" onclick="scrollToSection('pricing')">Saiba Mais</button>
+            </div>
+        </section>
+
+        <!-- COMPARAÇÃO DE PLANOS -->
+        <section class="pricing-section" id="pricing">
+            <h2>💰 Nossos Planos</h2>
+            <div class="pricing-grid">
+                <!-- Plano Básico -->
+                <div class="pricing-card">
+                    <h3>Básico</h3>
+                    <div class="price">R$ 120<small>/dia</small></div>
+                    <ul>
+                        <li>Veículos compactos</li>
+                        <li>Seguro básico</li>
+                        <li>Entrega em ponto</li>
+                        <li class="unavailable">GPS</li>
+                        <li class="unavailable">Condutor</li>
+                    </ul>
+                    <button class="btn">Contratar</button>
+                </div>
+
+                <!-- Plano Profissional -->
+                <div class="pricing-card popular">
+                    <div class="badge">🌟 POPULAR</div>
+                    <h3>Profissional</h3>
+                    <div class="price">R$ 180<small>/dia</small></div>
+                    <ul>
+                        <li>Todos os veículos</li>
+                        <li>Seguro premium</li>
+                        <li>Entrega grátis</li>
+                        <li>GPS incluído</li>
+                        <li class="unavailable">Condutor</li>
+                    </ul>
+                    <button class="btn">Contratar</button>
+                </div>
+
+                <!-- Plano Premium -->
+                <div class="pricing-card">
+                    <h3>Premium</h3>
+                    <div class="price">R$ 280<small>/dia</small></div>
+                    <ul>
+                        <li>Melhor da frota</li>
+                        <li>Seguro VIP</li>
+                        <li>Entrega express</li>
+                        <li>GPS + SOS</li>
+                        <li>Condutor opcional</li>
+                    </ul>
+                    <button class="btn">Contratar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section" id="faq">
+            <h2>❓ Perguntas Frequentes</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Qual é a idade mínima para alugar um veículo?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A idade mínima é 21 anos para a maioria dos veículos. Alguns veículos premium exigem 25 anos.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Que documentos são necessários?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Você precisará de:<br>• RG ou Passaporte<br>• CNH válida (categoria B ou superior)<br>• Comprovante de residência<br>• Cartão de crédito para caução</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Como funciona a caução?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>A caução é um depósito de segurança bloqueado no cartão de crédito. Ela é devolvida completamente se o veículo for devolvido em perfeito estado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>O seguro está incluído no aluguel?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sim! Todos os planos incluem seguro básico. O plano Premium oferece cobertura expandida com franquia zero.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Posso cancelar minha reserva?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sim! Cancelamentos até 24 horas antes da data têm reembolso total. Cancelamentos com menos de 24h têm taxa de 20%.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Posso dirigir fora do estado?</span>
+                    <span class="faq-toggle">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sim! Você pode dirigir para qualquer estado do Brasil. Apenas notifique-nos antecipadamente e verifique se há cobranças adicionais.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="cta-section">
+            <h2>Pronto para alugar seu veículo?</h2>
+            <p>Escolha o plano que melhor se adequa às suas necessidades e aproveite as melhores condições do mercado</p>
+            <a href="/frota" class="btn">Ver Frota Disponível</a>
+            <a href="/contato" class="btn btn-secondary" style="margin-left: 15px;">Fale Conosco</a>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 AlugueCar. Todos os direitos reservados.</p>
+        <p><a href="/">Home</a> | <a href="/frota">Frota</a> | <a href="/contato">Contato</a></p>
+    </footer>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const faqAnswer = faqItem.querySelector('.faq-answer');
+            const faqToggle = element.querySelector('.faq-toggle');
+
+            // Remove active de outros itens
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) {
+                    item.querySelector('.faq-question').classList.remove('active');
+                    item.querySelector('.faq-answer').classList.remove('active');
+                    item.querySelector('.faq-toggle').classList.remove('active');
+                }
+            });
+
+            // Toggle do item atual
+            element.classList.toggle('active');
+            faqAnswer.classList.toggle('active');
+            faqToggle.classList.toggle('active');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

@@ -122,6 +122,10 @@ def contato():
 def faq():
     return render_template("faq.html")
 
+@app.route("/solucoes")
+def solucoes():
+    return render_template("solucoes.html")
+
 # =====================================
 #   PÁGINAS PROTEGIDAS (CLIENTES)
 # =====================================
