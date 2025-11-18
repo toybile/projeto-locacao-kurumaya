@@ -14,15 +14,15 @@
 
     <header class="headerbar">
         <div class="header-content">
-            <div id="title"><a href="/">Kurumaya</a></div>
-                <div id="menu_nav">
-                    <a href="/frota" class="menu-item">Frota</a>
-                    <a href="/solucoes" class="menu-item">Soluções</a>
-                    <a href="/contato" class="menu-item">Contato</a>
-                    <a href="/faq" class="menu-item">FAQ</a>
-                    <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
-                    <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
-                </div>
+            <div id="title"><a href="/"><img src="../static/img/logo.png" alt="" id="logo"></a></div>
+            <div id="menu_nav">
+                <a href="/frota" class="menu-item">Frota</a>
+                <a href="/solucoes" class="menu-item">Soluções</a>
+                <a href="/contato" class="menu-item">Contato</a>
+                <a href="/faq" class="menu-item">FAQ</a>
+                <a href="{{ url_for('devolucao_cliente_page') }}" class="menu-item">Devolução</a>
+                <a href="{{ url_for('historico') }}" class="menu-item">Histórico de aluguéis</a>
+            </div>
 
             <div id="div_perfil">
                 <div id="div_botoes_header">
@@ -35,7 +35,8 @@
                 </p>
             </div>
         </div>
-    </header><div id="line_title" class="animate-expand"></div>
+    </header>
+    <div id="line_title" class="animate-expand"></div>
 
 
 <main class="content">

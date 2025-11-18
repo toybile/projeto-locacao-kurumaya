@@ -11,6 +11,13 @@ html, body {
     overflow: hidden;
 }
 
+#logo {
+    width: clamp(80px, 10.4vw, 200px);
+    height: auto;
+    max-width: 100%;
+}
+
+
 :root {
     --roxo-escuro: #471471;
     --roxo: #5a1f8c;
