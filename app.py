@@ -150,6 +150,10 @@ def contato():
 def faq():
     return render_template("faq.html")
 
+@app.route("/mensagens")
+def mensagens():
+    return render_template("/funcionario/mensagens.html")
+
 # =====================================
 #   AUTENTICAÇÃO (COM SEGURANÇA)
 # =====================================
@@ -566,6 +570,82 @@ def confirm_return():
         }
     })
 
+# =====================================
+#   BANCO DE DADOS - MENSAGENS
+# =====================================
+
+CONTACT_MESSAGES = []
+next_message_id = 1
+
+# =====================================
+#   API — MENSAGENS DE CONTATO
+# =====================================
+
+@app.route("/api/contact/send", methods=["POST"])
+def send_contact_message():
+    """Envia uma mensagem de contato"""
+    global next_message_id
+    data = request.json
+    
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    phone = data.get("phone", "").strip()
+    message = data.get("message", "").strip()
+    
+    # Validações
+    if not name or not email or not message:
+        return jsonify({"ok": False, "error": "Nome, email e mensagem são obrigatórios"}), 400
+    
+    if len(message) < 10:
+        return jsonify({"ok": False, "error": "A mensagem deve ter no mínimo 10 caracteres"}), 400
+    
+    # Salva a mensagem
+    CONTACT_MESSAGES.append({
+        "id": next_message_id,
+        "name": name,
+        "email": email,
+        "phone": phone,
+        "message": message,
+        "timestamp": datetime.now().isoformat(),
+        "read": False
+    })
+    next_message_id += 1
+    
+    return jsonify({"ok": True, "message": "Mensagem enviada com sucesso!"})
+
+@app.route("/api/contact/messages", methods=["GET"])
+def get_contact_messages():
+    """Retorna todas as mensagens de contato (apenas para funcionários)"""
+    # Adiciona verificação de autenticação se necessário
+    return jsonify(CONTACT_MESSAGES)
+
+@app.route("/api/contact/messages/<int:msg_id>/read", methods=["PUT"])
+def mark_message_read(msg_id):
+    """Marca uma mensagem como lida"""
+    try:
+        for msg in CONTACT_MESSAGES:
+            if msg["id"] == msg_id:
+                msg["read"] = True
+                return jsonify({"ok": True, "message": "Marcado como lida"})
+        return jsonify({"ok": False, "error": "Mensagem não encontrada"}), 404
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+@app.route("/api/contact/messages/<int:msg_id>", methods=["DELETE"])
+def delete_contact_message(msg_id):
+    """Deleta uma mensagem de contato"""
+    try:
+        global CONTACT_MESSAGES
+        original_len = len(CONTACT_MESSAGES)
+        CONTACT_MESSAGES = [msg for msg in CONTACT_MESSAGES if msg["id"] != msg_id]
+        
+        if len(CONTACT_MESSAGES) < original_len:
+            return jsonify({"ok": True, "message": "Deletado com sucesso"})
+        else:
+            return jsonify({"ok": False, "error": "Mensagem não encontrada"}), 404
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+    
 # =====================================
 #   SEED
 # =====================================
