@@ -14,11 +14,11 @@ from utils.security import (
 # =====================================
 
 app = Flask(__name__)
-app.secret_key = "TROQUE_PARA_UMA_CHAVE_SECRETA_FORTE_E_ALEATÓRIA_AQUI"
+app.secret_key = "jogodosdedosmelhordetodos1" # senha extremamente secreta
 
 # Configuração de Sessions
 app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SECURE"] = False  # Mudar para True em produção (HTTPS)
+app.config["SESSION_COOKIE_SECURE"] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["PERMANENT_SESSION_LIFETIME"] = 86400  # 24 horas
 

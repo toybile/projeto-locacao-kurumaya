@@ -90,7 +90,7 @@ def validate_cpf(cpf):
     
     # Verifica sequências de números iguais
     if len(set(cpf)) == 1:
-        return False, "CPF inválido (sequência repetida)"
+        return False, "CPF inválido"
     
     # Calcula primeiro dígito verificador
     sum_digits = sum(int(cpf[i]) * (10 - i) for i in range(9))
