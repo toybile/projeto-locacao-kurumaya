@@ -44,7 +44,7 @@ USERS = {
         "type": "staff"
     },
     "henrique.daisuke@gmail.com": {
-        "password": hash_password("123456"),
+        "password": hash_password("AkiyamaDAI@0201"),
         "name": "Henrique",
         "type": "staff"
     },
